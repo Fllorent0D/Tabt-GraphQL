@@ -1,0 +1,35 @@
+{
+  "name": "minimal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "dev": "npm-run-all --parallel start playground",
+    "playground": "graphql playground"
+  },
+  "keywords": [],
+  "author": "Devan Beitel",
+  "license": "ISC",
+  "dependencies": {
+    "@types/graphql": "^14.2.2",
+    "@types/node": "^12.6.2",
+    "@types/soap": "^0.21.0",
+    "axios": "^0.19.0",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "graphql": "^14.4.2",
+    "graphql-yoga": "^1.18.0",
+    "random-ipv4": "^1.0.2",
+    "reflect-metadata": "^0.1.13",
+    "soap": "^0.28.0",
+    "type-graphql": "^0.17.4",
+    "typedi": "^0.8.0"
+  },
+  "devDependencies": {
+    "graphql-cli": "2.17.0",
+    "npm-run-all": "4.1.5",
+    "ts-node": "6.2.0",
+    "typescript": "2.9.2"
+  }
+}
