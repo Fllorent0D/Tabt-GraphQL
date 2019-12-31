@@ -18,8 +18,6 @@ export class TeamMatchResolver {
     test.ShowDivisionName = DivisionNameType.Yes;
     const matches = await this.tabt.getMatches(test);
 
-    matches.map((match) => match.DivisionId = Number(match.DivisionId));
-
     return matches;
   }
 
@@ -43,6 +41,13 @@ export class TeamMatchResolver {
     const request = new GetDivisionsRequest();
     const divisions = await this.tabt.getDivisions(request);
     return divisions.find((division) => division.DivisionId === teamMatch.DivisionId)
+  }
+
+  @FieldResolver(returns => Division)
+  async VenueClubEntry(@Root() teamMatch: TeamMatch) {
+    const request = new GetClubsRequest();
+    request.Club = teamMatch.VenueClub;
+    return await this.tabt.getClub(request);
   }
 
 

@@ -29,6 +29,8 @@ import {MemberEntry} from "./models/MemberEntry";
 import {GetMatchesArgs} from "../type-definitions/GetMatchesArgs";
 import {Member} from "../type-definitions/Member";
 import {RankingEntry} from "../type-definitions/RankingEntry";
+import {TeamMatch} from "../type-definitions/TeamMatch";
+import {Team} from "../type-definitions/Team";
 
 @Service()
 export class TabtService {
@@ -43,16 +45,25 @@ export class TabtService {
     return this.callUrl('/seasons');
   }
 
-  public getClubTeams(args: GetClubTeamsRequest): Promise<TeamEntry[]> {
-    return this.callUrl(`/clubs/${args.Club}/teams`, args);
+  public async getClubTeams(args: GetClubTeamsRequest): Promise<Team[]> {
+    const teams: Team[] = await this.callUrl(`/clubs/${args.Club}/teams`, args);
+    teams.map(team => team.ClubIndex = args.Club);
+    return teams;
   }
 
   public getDivisionRanking(args: GetDivisionRankingRequest): Promise<RankingEntry[]> {
     return this.callUrl(`/divisions/${args.DivisionId}/ranking`, args);
   }
 
-  public getMatches(args: GetMatchesArgs): Promise<TeamMatchEntry[]> {
-    return this.callUrl('/matchs', args);
+  public async getMatches(args: GetMatchesArgs): Promise<TeamMatch[]> {
+    const matches = await this.callUrl('/matchs', args);
+    matches.map((match) => {
+      match.DivisionId = Number(match.DivisionId);
+      match.IsLocked = Boolean(match.IsLocked);
+      match.IsValidated = Boolean(match.IsValidated);
+      return match;
+    });
+    return matches
   }
 
   public getMembers(args: GetMembersRequest): Promise<Member[]> {

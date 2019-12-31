@@ -11,8 +11,9 @@ type Club {
   UniqueIndex: String
   VenueCount: Float
   VenueEntries: [Venue]
-  Members(season: Float): [Member]
+  Members: [Member]
   Teams: [Team]
+  Matches: [TeamMatch]
 }
 
 """
@@ -27,14 +28,28 @@ type Division {
   Level: Float
   MatchType: Float
   Ranking: [RankingEntry]
+  Matches: [TeamMatch]
+}
+
+type IndividualMatchResult {
+  Position: Float
+  HomePlayerMatchIndex: Float
+  AwayPlayerMatchIndex: Float
+  HomePlayer: Member
+  AwayPlayer: Member
+  HomeSetCount: Float
+  AwaySetCount: Float
+  IsHomeForfeited: Boolean
+  IsAwayForfeited: Boolean
+  Scores: String
 }
 
 type Member {
   Position: Float
   UniqueIndex: Int
   RankingIndex: Float
-  FirstName: String!
-  LastName: String!
+  FirstName: String
+  LastName: String
   Ranking: String
   Status: String
   Club: String
@@ -89,6 +104,7 @@ type Team {
   Team: String
   Ranking: [RankingEntry]
   Division: Division
+  Matches: [TeamMatch]
 }
 
 type TeamMatch {
@@ -108,6 +124,48 @@ type TeamMatch {
   PreviousWeekName: Float
   IsHomeForfeited: Boolean
   IsAwayForfeited: Boolean
+  MatchDetails: TeamMatchDetails
+  IsHomeWithdrawn: String
+  IsAwayWithdrawn: String
+  VenueClub: Club
+  IsValidated: Boolean
+  IsLocked: Boolean
+}
+
+type TeamMatchDetails {
+  DetailsCreated: Boolean
+  StartTime: String
+  EndTime: String
+  HomeCaptain: Float
+  AwayCaptain: Float
+  Referee: Float
+  HallCommissioner: Float
+  HomePlayers: TeamMatchPlayerList
+  AwayPlayers: TeamMatchPlayerList
+  IndividualMatchResults: [IndividualMatchResult]
+  MatchSystem: Float
+  HomeScore: Float
+  AwayScore: Float
+}
+
+type TeamMatchDoubleTeam {
+  Position: Float
+  Team: Float
+  IsForfeited: Boolean
+}
+
+type TeamMatchPlayer {
+  Player: Member
+  Position: Float
+  VictoryCount: Float
+  IsForfeited: Boolean
+}
+
+type TeamMatchPlayerList {
+  PlayerCount: Float
+  DoubleTeamCount: Float
+  Players: [TeamMatchPlayer]
+  DoubleTeams: [TeamMatchDoubleTeam]
 }
 
 type Venue {

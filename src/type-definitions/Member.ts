@@ -17,10 +17,10 @@ export class Member {
     @Field()
     public RankingIndex: number;
 
-    @Field({nullable: false})
+    @Field()
     public FirstName: string;
 
-    @Field({nullable: false})
+    @Field()
     public LastName: string;
 
     @Field()

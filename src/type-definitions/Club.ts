@@ -2,6 +2,7 @@ import {Venue} from "./Venue";
 import {Field, ObjectType} from "type-graphql";
 import {Member} from "./Member";
 import {Team} from "./Team";
+import {TeamMatch} from "./TeamMatch";
 
 /**
  * Created by florentcardoen on 22/12/17.
@@ -33,5 +34,8 @@ export class Club {
   public Members: Member[];
 
   @Field(returns => [Team])
-  public Teams: Team[]
+  public Teams: Team[];
+
+  @Field(returns => [TeamMatch])
+  Matches: TeamMatch[];
 }

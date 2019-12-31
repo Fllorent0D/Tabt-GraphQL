@@ -1,9 +1,10 @@
 import {Arg, Ctx, FieldResolver, Query, Resolver, Root} from "type-graphql";
 import {Club} from "../type-definitions/Club";
 import {TabtService} from "../tabt/tabt.service";
-import {GetClubsRequest, GetClubTeamsRequest, GetMembersRequest} from "../tabt/models";
+import {GetClubsRequest, GetClubTeamsRequest, GetMatchesRequest, GetMembersRequest} from "../tabt/models";
 import {Member} from "../type-definitions/Member";
 import {Team} from "../type-definitions/Team";
+import {TeamMatch} from "../type-definitions/TeamMatch";
 
 @Resolver(Club)
 export class ClubResolver {
@@ -43,10 +44,11 @@ export class ClubResolver {
   }
 
   @FieldResolver(returns => [Member])
-  async Members(@Root() club: Club, @Arg('season') season: number) {
+  async Members(@Root() club: Club) {
     const request = new GetMembersRequest();
 
     request.Club = club.UniqueIndex;
+    request.WithResults = true;
     const response = await this.tabtService.getMembers(request);
 
     return response || [];
@@ -57,5 +59,12 @@ export class ClubResolver {
     const request = new GetClubTeamsRequest();
     request.Club = club.UniqueIndex;
     return await this.tabtService.getClubTeams(request);
+  }
+
+  @FieldResolver(returns => [TeamMatch])
+  async Matches(@Root() club: Club) {
+    const request = new GetMatchesRequest();
+    request.Club = club.UniqueIndex;
+    return await this.tabtService.getMatches(request);
   }
 }
