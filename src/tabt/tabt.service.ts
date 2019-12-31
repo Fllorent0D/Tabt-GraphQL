@@ -31,6 +31,8 @@ import {Member} from "../type-definitions/Member";
 import {RankingEntry} from "../type-definitions/RankingEntry";
 import {TeamMatch} from "../type-definitions/TeamMatch";
 import {Team} from "../type-definitions/Team";
+import {GetTournamentArgs, GetTournamentsArgs} from "../type-definitions/GetTournamentsArgs";
+import {Tournament, TournamentSerie} from "../type-definitions/Tournament";
 
 @Service()
 export class TabtService {
@@ -86,12 +88,12 @@ export class TabtService {
     return this.callUrl('/divisions', args);
   }
 
-  public getTournaments(args: GetTournamentsRequest): Promise<TournamentEntry[]> {
+  public getTournaments(args: GetTournamentsArgs): Promise<Tournament[]> {
     return this.callUrl('/tournaments', args);
   }
 
-  public getTournament(tournamentId: string, args: GetTournamentsRequest): Promise<TournamentEntry[]> {
-    return this.callUrl(`/tournaments/${tournamentId}`, args);
+  public getTournament(args: GetTournamentArgs): Promise<Tournament> {
+    return this.callUrl(`/tournaments/${args.TournamentUniqueIndex}`, args);
   }
 
   public testRequest(args: TestRequest): Promise<TestResponse> {

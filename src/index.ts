@@ -12,6 +12,8 @@ import {DivisionResolver} from "./resolvers/DivisionResolver";
 import {RankingEntryResolver} from "./resolvers/RankingEntryResolver";
 import {TeamResolver} from "./resolvers/TeamResolver";
 import {IndividualMatchResultResolver} from "./resolvers/IndividualMatchResultResolver";
+import {TournamentResolver} from "./resolvers/TournamentResolver";
+import {TeamMatchPlayerResolver} from "./resolvers/TeamMatchPlayerResolver";
 
 const start = async () => {
   const schema = await buildSchema({
@@ -23,7 +25,9 @@ const start = async () => {
       DivisionResolver,
       RankingEntryResolver,
       TeamResolver,
-      IndividualMatchResultResolver
+      IndividualMatchResultResolver,
+      TournamentResolver,
+      TeamMatchPlayerResolver
     ],
     container: Container,
     emitSchemaFile: true,

@@ -35,13 +35,13 @@ type IndividualMatchResult {
   Position: Float
   HomePlayerMatchIndex: Float
   AwayPlayerMatchIndex: Float
-  HomePlayer: Member
-  AwayPlayer: Member
   HomeSetCount: Float
   AwaySetCount: Float
   IsHomeForfeited: Boolean
   IsAwayForfeited: Boolean
   Scores: String
+  HomePlayer: [TeamMatchPlayer]
+  AwayPlayer: [TeamMatchPlayer]
 }
 
 type Member {
@@ -82,6 +82,8 @@ type Query {
   club(clubCategory: Float, season: Float, club: String!): Club
   clubs(clubCategory: Float, season: Float): [Club]
   getMatches(DivisionId: Float, Club: String, Team: String, DivisionCategory: Float, Season: Float, WeekName: String, Level: Float, YearDateFrom: String, YearDateTo: String, MatchId: String, MatchUniqueId: Float): [TeamMatch]
+  getTournaments(Season: Float): [Tournament]
+  getTournament(Season: Float, TournamentUniqueIndex: Float): Tournament
 }
 
 type RankingEntry {
@@ -166,6 +168,22 @@ type TeamMatchPlayerList {
   DoubleTeamCount: Float
   Players: [TeamMatchPlayer]
   DoubleTeams: [TeamMatchDoubleTeam]
+}
+
+type Tournament {
+  UniqueIndex: Float
+  Name: String
+  ExternalIndex: String
+  DateFrom: DateTime
+  RegistrationDate: DateTime
+  Venue: Venue
+  Series: [TournamentSerie]
+}
+
+type TournamentSerie {
+  UniqueIndex: Float
+  Name: String
+  Results: [IndividualMatchResult]
 }
 
 type Venue {

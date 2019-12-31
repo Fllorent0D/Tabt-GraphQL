@@ -24,7 +24,7 @@ export class TeamMatchPlayer{
   public LastName: string;
   public Ranking: string;
 
-  @Field(returns => Member)
+  @Field(type => Member)
   public Player: Member;
 
   @Field()
@@ -49,12 +49,6 @@ export class IndividualMatchResult{
   @Field()
   public AwayPlayerMatchIndex: number;
 
-  @Field(returns => Member)
-  public HomePlayer: Member;
-
-  @Field(returns => Member)
-  public AwayPlayer: Member;
-
   public HomePlayerUniqueIndex: number;
   public AwayPlayerUniqueIndex: number;
 
@@ -72,6 +66,13 @@ export class IndividualMatchResult{
 
   @Field()
   public Scores: string;
+
+  @Field(type => [TeamMatchPlayer])
+  public HomePlayer: TeamMatchPlayer[];
+
+  @Field(type => [TeamMatchPlayer])
+  public AwayPlayer: TeamMatchPlayer[];
+
 }
 
 
@@ -84,10 +85,10 @@ export class TeamMatchPlayerList{
   @Field()
   public DoubleTeamCount: number;
 
-  @Field(returns => TeamMatchPlayer)
+  @Field(type => [TeamMatchPlayer])
   public Players: TeamMatchPlayer[];
 
-  @Field(returns => [TeamMatchDoubleTeam])
+  @Field(type => [TeamMatchDoubleTeam])
   public DoubleTeams: TeamMatchDoubleTeam[];
 }
 
@@ -115,13 +116,13 @@ export class TeamMatchDetails{
   @Field()
   public HallCommissioner: number;
 
-  @Field(returns => TeamMatchPlayerList)
+  @Field(type => TeamMatchPlayerList)
   public HomePlayers: TeamMatchPlayerList;
 
-  @Field(returns => TeamMatchPlayerList)
+  @Field(type => TeamMatchPlayerList)
   public AwayPlayers: TeamMatchPlayerList;
 
-  @Field(returns => [IndividualMatchResult])
+  @Field(type => [IndividualMatchResult])
   public IndividualMatchResults: IndividualMatchResult[];
 
   @Field()
@@ -191,7 +192,7 @@ export class TeamMatch {
   @Field()
   public IsAwayForfeited: boolean;
 
-  @Field(returns => TeamMatchDetails)
+  @Field(type => TeamMatchDetails)
   public MatchDetails: TeamMatchDetails;
 
   @Field()
@@ -203,7 +204,7 @@ export class TeamMatch {
   @Field()
   public VenueClub: string;
 
-  @Field(returns => Club, {name: "VenueClub"})
+  @Field(type => Club, {name: "VenueClub"})
   public VenueClubEntry: Club;
 
   @Field()
