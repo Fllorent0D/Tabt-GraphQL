@@ -13,7 +13,8 @@ import {RankingEntryResolver} from "./resolvers/RankingEntryResolver";
 import {TeamResolver} from "./resolvers/TeamResolver";
 import {IndividualMatchResultResolver} from "./resolvers/IndividualMatchResultResolver";
 import {TournamentResolver} from "./resolvers/TournamentResolver";
-import {TeamMatchPlayerResolver} from "./resolvers/TeamMatchPlayerResolver";
+import {TeamMatchPlayerRqlesolver} from "./resolvers/TeamMatchPlayerResolver";
+import { express as voyagerMiddleware } from 'graphql-voyager/middleware';
 
 const start = async () => {
   const schema = await buildSchema({
@@ -40,10 +41,13 @@ const start = async () => {
     context: (request) => ({request})
   });
 
+  server.express.use('/voyager', voyagerMiddleware({ endpointUrl: '/graphql' }));
   //Init services
   console.log('Starting services...');
 
-  server.start(() => console.log('Server is running on http://localhost:4000'))
+  server.start({
+    endpoint: '/graphql'
+  }, () => console.log('Server is running on http://localhost:4000'))
 
 };
 start();

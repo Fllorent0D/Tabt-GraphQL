@@ -19,6 +19,7 @@
     "body-parser": "^1.17.2",
     "express": "^4.15.4",
     "graphql": "^14.4.2",
+    "graphql-voyager": "^1.0.0-rc.28",
     "graphql-yoga": "^1.18.0",
     "random-ipv4": "^1.0.2",
     "reflect-metadata": "^0.1.13",
