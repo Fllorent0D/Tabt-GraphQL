@@ -13,7 +13,6 @@ import {RankingEntryResolver} from "./resolvers/RankingEntryResolver";
 import {TeamResolver} from "./resolvers/TeamResolver";
 import {IndividualMatchResultResolver} from "./resolvers/IndividualMatchResultResolver";
 import {TournamentResolver} from "./resolvers/TournamentResolver";
-import {TeamMatchPlayerRqlesolver} from "./resolvers/TeamMatchPlayerResolver";
 import { express as voyagerMiddleware } from 'graphql-voyager/middleware';
 
 const start = async () => {
@@ -27,8 +26,7 @@ const start = async () => {
       RankingEntryResolver,
       TeamResolver,
       IndividualMatchResultResolver,
-      TournamentResolver,
-      TeamMatchPlayerResolver
+      TournamentResolver
     ],
     container: Container,
     emitSchemaFile: true,
