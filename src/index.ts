@@ -1,37 +1,40 @@
-import "reflect-metadata";
-import {MemberResolver} from "./resolvers/MemberResolver";
-import {buildSchema} from "type-graphql";
-import {GraphQLServer} from "graphql-yoga";
-import {Container} from "typedi";
-import {TestMiddleware} from "./middlewares/test-middleware";
-import {ClubResolver} from "./resolvers/ClubResolver";
-import {TabtService} from "./tabt/tabt.service";
-import {PlayerResultResolver} from "./resolvers/PlayerResultResolver";
-import {TeamMatchResolver} from "./resolvers/TeamMatchResolver";
-import {DivisionResolver} from "./resolvers/DivisionResolver";
-import {RankingEntryResolver} from "./resolvers/RankingEntryResolver";
-import {TeamResolver} from "./resolvers/TeamResolver";
-import {IndividualMatchResultResolver} from "./resolvers/IndividualMatchResultResolver";
-import {TournamentResolver} from "./resolvers/TournamentResolver";
-import { express as voyagerMiddleware } from 'graphql-voyager/middleware';
+import 'reflect-metadata';
+import {buildSchema} from 'type-graphql';
+import {GraphQLServer} from 'graphql-yoga';
+import {Container} from 'typedi';
+import {TestMiddleware} from './middlewares/test-middleware';
+import {express as voyagerMiddleware} from 'graphql-voyager/middleware';
+import {Connection, createConnection, useContainer} from 'typeorm';
+import {ClubResolver} from './resolvers/club-resolver';
 
 const start = async () => {
+
+  console.clear();
+
   const schema = await buildSchema({
     resolvers: [
-      MemberResolver,
-      ClubResolver,
-      PlayerResultResolver,
-      TeamMatchResolver,
-      DivisionResolver,
-      RankingEntryResolver,
-      TeamResolver,
-      IndividualMatchResultResolver,
-      TournamentResolver
+      ClubResolver
     ],
     container: Container,
     emitSchemaFile: true,
     globalMiddlewares: [TestMiddleware],
-    nullableByDefault: true
+    nullableByDefault: true,
+  });
+
+  useContainer(Container);
+
+  const connection: Connection = await createConnection({
+    "name": "default",
+    "type": "mysql",
+    "host": "localhost",
+    "port": 3306,
+    "username": "root",
+    "password": "myRootpwd32",
+    "database": "tabt",
+    "synchronize": false,
+    "entities": [
+      "src/entities/*.ts"
+    ],
   });
 
   const server = new GraphQLServer({
@@ -39,13 +42,13 @@ const start = async () => {
     context: (request) => ({request})
   });
 
-  server.express.use('/voyager', voyagerMiddleware({ endpointUrl: '/graphql' }));
-  //Init services
+  server.express.use('/voyager', voyagerMiddleware({endpointUrl: '/graphql'}));
+  // Init services
   console.log('Starting services...');
 
   server.start({
-    endpoint: '/graphql'
-  }, () => console.log('Server is running on http://localhost:4000'))
-
+    endpoint: '/graphql',
+    tracing: true
+  }, () => console.log('Server is running on http://localhost:4000'));
 };
 start();

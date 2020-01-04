@@ -4,194 +4,50 @@
 # -----------------------------------------------
 
 type Club {
-  Category: Float
-  CategoryName: String
-  LongName: String
-  Name: String
-  UniqueIndex: String
-  VenueCount: Float
-  VenueEntries: [Venue]
-  Members: [Member]
-  Teams: [Team]
-  Matches: [TeamMatch]
+  id: ID
+  category: ClubCategory
+  name: String
+  short_name: String
+  indice: String
+  site: String
+  address: [Venue]
+  teams(clubId: String): String
+  members: [PlayerInfo]
+  membres: [PlayerInfo]
 }
 
-"""
-The javascript `Date` as string. Type represents date and time as the ISO Date string.
-"""
-scalar DateTime
-
-type Division {
-  DivisionId: Float
-  DivisionName: String
-  DivisionCategory: Float
-  Level: Float
-  MatchType: Float
-  Ranking: [RankingEntry]
-  Matches: [TeamMatch]
+type ClubCategory {
+  id: ID
+  name: String
+  clubs: [Club]
 }
 
-type IndividualMatchResult {
-  Position: Float
-  HomePlayerMatchIndex: Float
-  AwayPlayerMatchIndex: Float
-  HomeSetCount: Float
-  AwaySetCount: Float
-  IsHomeForfeited: Boolean
-  IsAwayForfeited: Boolean
-  Scores: String
-  HomePlayer: [TeamMatchPlayer]
-  AwayPlayer: [TeamMatchPlayer]
-}
-
-type Member {
-  Position: Float
-  UniqueIndex: Int
-  RankingIndex: Float
-  FirstName: String
-  LastName: String
-  Ranking: String
-  Status: String
-  Club: String
-  ClubEntry: Club
-  Gender: String
-  Category: String
-  BirthDate: String
-  MedicalAttestation: Boolean
-  RankingPointsCount: Float
-  Email: String
-  Phone: String
-  Address: String
-  ResultCount: String
-  ResultEntries: [PlayerResultEntryType]
-}
-
-type PlayerResultEntryType {
-  SetFor: Float
-  SetAgainst: Float
-  CompetitionType: String
-  Club: String
-  MatchId: String
-  Result: String
-  Date: DateTime
-  Opponent: Member
+type PlayerInfo {
+  id: ID
+  first_name: String
+  last_name: String
+  email: String
+  emailcc: String
+  photo_filename: String
+  birthdate: String
+  index: Float
+  vttl_index: Float
+  nationalNumber: String
+  club: Club
 }
 
 type Query {
-  user(nameSearch: String, playerCategory: Float, season: Float, club: String, uniqueIndex: Float): [Member!]
-  club(clubCategory: Float, season: Float, club: String!): Club
-  clubs(clubCategory: Float, season: Float): [Club]
-  getMatches(DivisionId: Float, Club: String, Team: String, DivisionCategory: Float, Season: Float, WeekName: String, Level: Float, YearDateFrom: String, YearDateTo: String, MatchId: String, MatchUniqueId: Float): [TeamMatch]
-  getTournaments(Season: Float): [Tournament]
-  getTournament(Season: Float, TournamentUniqueIndex: Float): Tournament
-}
-
-type RankingEntry {
-  Position: Float
-  Team: String
-  GamesPlayed: Float
-  GamesWon: Float
-  GamesLost: Float
-  GamesDraw: Float
-  IndividualMatchesWon: Float
-  IndividualMatchesLost: Float
-  IndividualSetsWon: Float
-  IndividualSetsLost: Float
-  Points: Float
-  Club: Club
-}
-
-type Team {
-  TeamId: String
-  Team: String
-  Ranking: [RankingEntry]
-  Division: Division
-  Matches: [TeamMatch]
-}
-
-type TeamMatch {
-  Division: Division
-  MatchId: String
-  WeekName: Float
-  Date: String
-  Time: String
-  Venue: Float
-  HomeTeam: String
-  AwayTeam: String
-  AwayClub: Club
-  HomeClub: Club
-  Score: String
-  MatchUniqueId: String
-  NextWeekName: Float
-  PreviousWeekName: Float
-  IsHomeForfeited: Boolean
-  IsAwayForfeited: Boolean
-  MatchDetails: TeamMatchDetails
-  IsHomeWithdrawn: String
-  IsAwayWithdrawn: String
-  VenueClub: Club
-  IsValidated: Boolean
-  IsLocked: Boolean
-}
-
-type TeamMatchDetails {
-  DetailsCreated: Boolean
-  StartTime: String
-  EndTime: String
-  HomeCaptain: Float
-  AwayCaptain: Float
-  Referee: Float
-  HallCommissioner: Float
-  HomePlayers: TeamMatchPlayerList
-  AwayPlayers: TeamMatchPlayerList
-  IndividualMatchResults: [IndividualMatchResult]
-  MatchSystem: Float
-  HomeScore: Float
-  AwayScore: Float
-}
-
-type TeamMatchDoubleTeam {
-  Position: Float
-  Team: Float
-  IsForfeited: Boolean
-}
-
-type TeamMatchPlayer {
-  Player: Member
-  Position: Float
-  VictoryCount: Float
-  IsForfeited: Boolean
-}
-
-type TeamMatchPlayerList {
-  PlayerCount: Float
-  DoubleTeamCount: Float
-  Players: [TeamMatchPlayer]
-  DoubleTeams: [TeamMatchDoubleTeam]
-}
-
-type Tournament {
-  UniqueIndex: Float
-  Name: String
-  ExternalIndex: String
-  DateFrom: DateTime
-  RegistrationDate: DateTime
-  Venue: Venue
-  Series: [TournamentSerie]
-}
-
-type TournamentSerie {
-  UniqueIndex: Float
-  Name: String
-  Results: [IndividualMatchResult]
+  club(season: Float, clubId: String): Club
 }
 
 type Venue {
-  ClubVenue: Float
-  Comment: String
-  Id: Float
-  Name: String
-  Phone: String
-  Street: String
-  Town: String
+  id: ID
+  club: Club
+  name: String
+  address: String
+  zip: Float
+  town: String
+  phone: String
+  fax: String
+  comment: String
 }
