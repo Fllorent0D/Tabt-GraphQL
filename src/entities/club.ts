@@ -17,6 +17,7 @@ import {ClubCategory} from './club-category';
 import {PlayerClub} from './playerClub';
 import {Field, ID, ObjectType} from 'type-graphql';
 import {PlayerInfo} from './player-info';
+import {ClubTeam} from './club-team';
 
 @ObjectType()
 @Entity('clubs', {schema: 'tabt'})
@@ -148,8 +149,9 @@ export class Club {
   @OneToMany(() => PlayerClub, playerClub => playerClub.club)
   playersClub: Promise<PlayerClub[]>;
 
-  @Field()
-  teams: string;
+  @Field(type => [ClubTeam])
+  @OneToMany(() => ClubTeam, team => team.club)
+  teams: Promise<ClubTeam[]>;
 
   @Field(() => [PlayerInfo])
   members: Promise<PlayerInfo[]>;

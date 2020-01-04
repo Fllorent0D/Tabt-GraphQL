@@ -1,8 +1,28 @@
-import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from 'typeorm'
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+  RelationId
+} from 'typeorm';
+import {Field, ID, ObjectType} from 'type-graphql';
+import {ClubTeam} from './club-team';
+import {Club} from './club';
+import {DivisionCategory} from './division-category';
 
-@Entity('divisioninfo', { schema: 'tabt' })
+@ObjectType()
+@Entity('divisioninfo', {schema: 'tabt'})
 @Index('id', ['id'])
-export class divisioninfo {
+export class Division {
+  @Field(() => ID)
   @PrimaryGeneratedColumn({
     type: 'int',
     unsigned: true,
@@ -10,9 +30,12 @@ export class divisioninfo {
   })
   id: number;
 
+  @Field(type => [ClubTeam])
+  @OneToMany(() => ClubTeam, team => team.division)
+  teams: Promise<ClubTeam[]>;
+
   @Column('tinyint', {
     nullable: false,
-    primary: true,
     default: () => "'0'",
     name: 'season'
   })
@@ -26,6 +49,7 @@ export class divisioninfo {
   })
   div_id: number;
 
+  @Field()
   @Column('char', {
     nullable: false,
     default: () => "'?'",
@@ -40,6 +64,7 @@ export class divisioninfo {
   })
   order: number;
 
+  @Field()
   @Column('tinyint', {
     nullable: false,
     unsigned: true,
@@ -48,14 +73,14 @@ export class divisioninfo {
   })
   level: number;
 
-  @Column('tinyint', {
-    nullable: false,
-    unsigned: true,
-    default: () => "'1'",
+  @Field(() => DivisionCategory)
+  @ManyToOne(() => DivisionCategory, category => category.divisions)
+  @JoinColumn({
     name: 'category'
   })
-  category: number;
+  category: Promise<DivisionCategory>;
 
+  @Field()
   @Column('int', {
     nullable: false,
     unsigned: true,
@@ -64,6 +89,7 @@ export class divisioninfo {
   })
   calendar_id: number;
 
+  @Field()
   @Column('mediumint', {
     nullable: false,
     unsigned: true,
@@ -72,6 +98,7 @@ export class divisioninfo {
   })
   calendardate_id: number;
 
+  @Field()
   @Column('smallint', {
     nullable: true,
     default: () => "'1'",
@@ -79,6 +106,7 @@ export class divisioninfo {
   })
   first_match_nb: number | null;
 
+  @Field()
   @Column('tinyint', {
     nullable: false,
     unsigned: true,

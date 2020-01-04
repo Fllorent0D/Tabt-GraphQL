@@ -1,7 +1,27 @@
-import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from 'typeorm'
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+  RelationId
+} from 'typeorm';
+import {Field, ObjectType} from 'type-graphql';
 
-@Entity('divisioncategories', { schema: 'tabt' })
-export class divisioncategories {
+import {Division} from './division';
+
+@ObjectType()
+@Entity('divisioncategories', {schema: 'tabt'})
+export class DivisionCategory {
+
+  @Field()
   @PrimaryGeneratedColumn({
     type: 'tinyint',
     unsigned: true,
@@ -9,6 +29,7 @@ export class divisioncategories {
   })
   id: number;
 
+  @Field()
   @Column('varchar', {
     nullable: false,
     length: 30,
@@ -54,4 +75,9 @@ export class divisioncategories {
     name: 'order'
   })
   order: number;
+
+  @Field(() => [Division])
+  @OneToMany(() => Division, division => division.category)
+  divisions: Promise<Division[]>;
+
 }

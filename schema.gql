@@ -11,7 +11,7 @@ type Club {
   indice: String
   site: String
   address: [Venue]
-  teams(clubId: String): String
+  teams: [ClubTeam]
   members: [PlayerInfo]
 }
 
@@ -19,6 +19,30 @@ type ClubCategory {
   id: ID
   name: String
   clubs: [Club]
+}
+
+type ClubTeam {
+  division: Division
+  club: Club
+  indice: String
+}
+
+type Division {
+  id: ID
+  teams: [ClubTeam]
+  serie: String
+  level: Float
+  category: DivisionCategory
+  calendar_id: Float
+  calendardate_id: Float
+  first_match_nb: Float
+  match_type_id: Float
+}
+
+type DivisionCategory {
+  id: Float
+  name: String
+  divisions: [Division]
 }
 
 type PlayerInfo {

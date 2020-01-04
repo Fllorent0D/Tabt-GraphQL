@@ -1,9 +1,32 @@
-import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from 'typeorm'
-import {ObjectType} from 'type-graphql';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+  RelationId
+} from 'typeorm';
+import {Field, ObjectType} from 'type-graphql';
+import {Division} from './division';
+import {Club} from './club';
 
 @ObjectType()
-@Entity('divisionteaminfo', { schema: 'tabt' })
+@Entity('divisionteaminfo', {schema: 'tabt'})
 export class ClubTeam {
+  @Field(() => Division)
+  @ManyToOne(type => Division, (division) => division.teams)
+  @JoinColumn({
+    name: 'div_id'
+  })
+  division: Promise<Division>;
+
   @Column('int', {
     nullable: false,
     primary: true,
@@ -12,6 +35,13 @@ export class ClubTeam {
     name: 'div_id'
   })
   div_id: number;
+
+  @Field(() => Club)
+  @ManyToOne(type => Club, (club) => club.teams)
+  @JoinColumn({
+    name: 'club_id'
+  })
+  club: Promise<Club>;
 
   @Column('tinyint', {
     nullable: false,
@@ -38,6 +68,7 @@ export class ClubTeam {
   })
   club_id: number | null;
 
+  @Field()
   @Column('char', {
     nullable: true,
     default: () => "'?'",

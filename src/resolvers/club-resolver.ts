@@ -28,15 +28,4 @@ export class ClubResolver {
     return Promise.all(playerClub.map((playerClub) => playerClub.player));
   }
 
-  @FieldResolver()
-  teams(
-    @Root() club: Club,
-    @Arg('clubId') clubId: string
-  ): string {
-    console.log(club);
-    console.log(clubId);
-    return "test";
-  }
-
-
 }

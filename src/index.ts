@@ -37,6 +37,8 @@ const start = async () => {
     "entities": [
       "src/entities/*.ts"
     ],
+    cache: true,
+    debug: false
   });
 
   const server = new GraphQLServer({
