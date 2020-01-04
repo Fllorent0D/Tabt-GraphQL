@@ -1,10 +1,10 @@
 import {Arg, Args, FieldResolver, Query, Resolver, Root} from 'type-graphql';
+import {OrmRepository} from 'typeorm-typedi-extensions';
+import {Repository} from 'typeorm';
 
 import {Club} from '../entities/club';
-import {Repository} from 'typeorm';
 import {PlayerInfo} from '../entities/player-info';
 import {PlayerClub} from '../entities/playerClub';
-import {OrmRepository} from 'typeorm-typedi-extensions';
 
 @Resolver(Club)
 export class ClubResolver {
@@ -23,9 +23,7 @@ export class ClubResolver {
   }
 
   @FieldResolver(returns => [PlayerInfo])
-  async membres(
-    @Root() club: Club
-  ): Promise<PlayerInfo[]> {
+  async members(@Root() club: Club): Promise<PlayerInfo[]> {
     const playerClub = await this.playerClubRepository.find({club_id: club.id, season: 17});
     return Promise.all(playerClub.map((playerClub) => playerClub.player));
   }

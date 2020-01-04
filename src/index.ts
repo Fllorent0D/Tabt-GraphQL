@@ -6,6 +6,7 @@ import {TestMiddleware} from './middlewares/test-middleware';
 import {express as voyagerMiddleware} from 'graphql-voyager/middleware';
 import {Connection, createConnection, useContainer} from 'typeorm';
 import {ClubResolver} from './resolvers/club-resolver';
+import {PlayerInfoResolver} from './resolvers/player-resolver';
 
 const start = async () => {
 
@@ -13,7 +14,8 @@ const start = async () => {
 
   const schema = await buildSchema({
     resolvers: [
-      ClubResolver
+      ClubResolver,
+      PlayerInfoResolver
     ],
     container: Container,
     emitSchemaFile: true,

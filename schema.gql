@@ -13,7 +13,6 @@ type Club {
   address: [Venue]
   teams(clubId: String): String
   members: [PlayerInfo]
-  membres: [PlayerInfo]
 }
 
 type ClubCategory {
