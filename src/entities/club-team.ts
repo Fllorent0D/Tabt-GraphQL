@@ -20,6 +20,7 @@ import {Club} from './club';
 @ObjectType()
 @Entity('divisionteaminfo', {schema: 'tabt'})
 export class ClubTeam {
+
   @Field(() => Division)
   @ManyToOne(type => Division, (division) => division.teams)
   @JoinColumn({

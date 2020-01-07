@@ -1,7 +1,27 @@
-import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from 'typeorm'
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+  RelationId
+} from 'typeorm';
+import {Field, ID, ObjectType} from 'type-graphql';
+import {Division} from './division';
+import {MatchSystemPlayer} from './matchSystemPlayer';
 
-@Entity('matchtypeinfo', { schema: 'tabt' })
-export class matchtypeinfo {
+@ObjectType()
+@Entity('matchtypeinfo', {schema: 'tabt'})
+export class MatchSystem {
+
+  @Field(() => ID)
   @Column('tinyint', {
     nullable: false,
     primary: true,
@@ -73,4 +93,12 @@ export class matchtypeinfo {
     name: 'nb_single_optional'
   })
   nb_single_optional: number | null;
+
+  @Field(() => [MatchSystemPlayer])
+  @OneToMany(() => MatchSystemPlayer, game => game.matchSystem)
+  players: Promise<MatchSystemPlayer[]>;
+
+  @Field(() => [Division])
+  @OneToMany(() => Division, division => division.matchSystem)
+  divisions: Promise<Division[]>;
 }

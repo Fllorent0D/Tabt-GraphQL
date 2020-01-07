@@ -15,6 +15,7 @@ import {
 } from 'typeorm';
 import {Club} from './club';
 import {Field, ID, ObjectType} from 'type-graphql';
+import {Level} from './level';
 
 @ObjectType()
 @Entity('clubcategories', {schema: 'tabt'})
@@ -40,7 +41,10 @@ export class ClubCategory {
     default: () => "':1:2:'",
     name: 'levels'
   })
-  levels: string;
+  levels_ids: string;
+
+  @Field(() => [Level])
+  levels: Level[];
 
   @Column('tinyint', {
     nullable: false,

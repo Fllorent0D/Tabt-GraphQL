@@ -7,6 +7,10 @@ import {express as voyagerMiddleware} from 'graphql-voyager/middleware';
 import {Connection, createConnection, useContainer} from 'typeorm';
 import {ClubResolver} from './resolvers/club-resolver';
 import {PlayerInfoResolver} from './resolvers/player-resolver';
+import {LevelResolver} from './resolvers/level-resolver';
+import {ClubCategoryResolver} from './resolvers/club-category-resolver';
+import {DivisionResolver} from './resolvers/division-resolver';
+import {MatchResultResolver} from './resolvers/match-result-resolver';
 
 const start = async () => {
 
@@ -15,7 +19,11 @@ const start = async () => {
   const schema = await buildSchema({
     resolvers: [
       ClubResolver,
-      PlayerInfoResolver
+      PlayerInfoResolver,
+      LevelResolver,
+      ClubCategoryResolver,
+      DivisionResolver,
+      MatchResultResolver
     ],
     container: Container,
     emitSchemaFile: true,
@@ -38,7 +46,7 @@ const start = async () => {
       "src/entities/*.ts"
     ],
     cache: true,
-    debug: false
+    logging: ["info", "error", "query"]
   });
 
   const server = new GraphQLServer({
@@ -56,3 +64,4 @@ const start = async () => {
   }, () => console.log('Server is running on http://localhost:4000'));
 };
 start();
+

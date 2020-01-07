@@ -15,8 +15,11 @@ import {
 } from 'typeorm';
 import {Field, ID, ObjectType} from 'type-graphql';
 import {ClubTeam} from './club-team';
-import {Club} from './club';
+
 import {DivisionCategory} from './division-category';
+import {Level} from './level';
+import {MatchSystem} from './matchSystem';
+import {MatchResult} from './matchResult';
 
 @ObjectType()
 @Entity('divisioninfo', {schema: 'tabt'})
@@ -64,14 +67,12 @@ export class Division {
   })
   order: number;
 
-  @Field()
-  @Column('tinyint', {
-    nullable: false,
-    unsigned: true,
-    default: () => "'1'",
+  @Field(() => Level)
+  @ManyToOne(() => Level, level => level.divisions)
+  @JoinColumn({
     name: 'level'
   })
-  level: number;
+  level: Promise<Level>;
 
   @Field(() => DivisionCategory)
   @ManyToOne(() => DivisionCategory, category => category.divisions)
@@ -106,14 +107,12 @@ export class Division {
   })
   first_match_nb: number | null;
 
-  @Field()
-  @Column('tinyint', {
-    nullable: false,
-    unsigned: true,
-    default: () => "'0'",
+  @Field(() => MatchSystem)
+  @ManyToOne(() => MatchSystem, matchSystem => matchSystem.divisions)
+  @JoinColumn({
     name: 'match_type_id'
   })
-  match_type_id: number;
+  matchSystem: Promise<MatchSystem>;
 
   @Column('tinyint', {
     nullable: false,
@@ -343,4 +342,10 @@ export class Division {
     name: 'validated_by'
   })
   validated_by: number | null;
+
+  @Field(() => [MatchResult])
+  @OneToMany(() => MatchResult, matchResult => matchResult.division)
+  matches: Promise<MatchResult[]>;
+
+
 }

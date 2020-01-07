@@ -1,7 +1,10 @@
 import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from 'typeorm'
+import {Field, ObjectType} from 'type-graphql';
+import {MatchSystem} from './matchSystem';
 
+@ObjectType()
 @Entity('matchtypeplayer', { schema: 'tabt' })
-export class matchtypeplayer {
+export class MatchSystemPlayer {
   @Column('tinyint', {
     nullable: false,
     primary: true,
@@ -11,6 +14,7 @@ export class matchtypeplayer {
   })
   match_type_id: number;
 
+  @Field()
   @Column('tinyint', {
     nullable: false,
     primary: true,
@@ -20,6 +24,7 @@ export class matchtypeplayer {
   })
   game_nb: number;
 
+  @Field()
   @Column('tinyint', {
     nullable: false,
     primary: true,
@@ -29,6 +34,7 @@ export class matchtypeplayer {
   })
   player_nb: number;
 
+  @Field()
   @Column('tinyint', {
     nullable: false,
     unsigned: true,
@@ -37,6 +43,7 @@ export class matchtypeplayer {
   })
   home_player: number;
 
+  @Field()
   @Column('tinyint', {
     nullable: false,
     unsigned: true,
@@ -45,6 +52,7 @@ export class matchtypeplayer {
   })
   away_player: number;
 
+  @Field()
   @Column('int', {
     nullable: true,
     unsigned: true,
@@ -52,6 +60,7 @@ export class matchtypeplayer {
   })
   game_group: number | null;
 
+  @Field()
   @Column('enum', {
     nullable: false,
     default: () => "'N'",
@@ -59,4 +68,11 @@ export class matchtypeplayer {
     name: 'allow_substitute'
   })
   allow_substitute: string;
+
+  @Field(() => MatchSystem)
+  @ManyToOne(() => MatchSystem, matchSystem => matchSystem.players)
+  @JoinColumn({
+    name: 'match_type_id'
+  })
+  matchSystem: Promise<MatchSystem>;
 }

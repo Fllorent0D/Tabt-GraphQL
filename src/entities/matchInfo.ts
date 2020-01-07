@@ -1,7 +1,11 @@
 import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from 'typeorm'
+import {Field, ID, ObjectType} from 'type-graphql';
+import {MatchResult} from './matchResult';
 
+@ObjectType()
 @Entity('matchinfo', { schema: 'tabt' })
-export class matchinfo {
+export class MatchInfo {
+  @Field(() => ID)
   @PrimaryGeneratedColumn({
     type: 'int',
     unsigned: true,
@@ -16,6 +20,7 @@ export class matchinfo {
   })
   season: number;
 
+  @Field()
   @Column('tinyint', {
     nullable: false,
     unsigned: true,
@@ -24,6 +29,7 @@ export class matchinfo {
   })
   competition_id: number;
 
+  @Field()
   @Column('tinyint', {
     nullable: false,
     unsigned: true,
@@ -40,6 +46,7 @@ export class matchinfo {
   })
   match_type_id: number;
 
+  @Field()
   @Column('smallint', {
     nullable: false,
     unsigned: true,
@@ -48,12 +55,14 @@ export class matchinfo {
   })
   home_club: number;
 
+  @Field()
   @Column('char', {
     nullable: false,
     name: 'home_indice'
   })
   home_indice: string;
 
+  @Field()
   @Column('smallint', {
     nullable: false,
     unsigned: true,
@@ -62,12 +71,14 @@ export class matchinfo {
   })
   away_club: number;
 
+  @Field()
   @Column('char', {
     nullable: false,
     name: 'away_indice'
   })
   away_indice: string;
 
+  @Field()
   @Column('tinyint', {
     nullable: false,
     unsigned: true,
@@ -76,6 +87,7 @@ export class matchinfo {
   })
   home_score: number;
 
+  @Field()
   @Column('tinyint', {
     nullable: false,
     unsigned: true,
@@ -84,6 +96,7 @@ export class matchinfo {
   })
   away_score: number;
 
+  @Field()
   @Column('enum', {
     nullable: false,
     default: () => "'N'",
@@ -92,6 +105,7 @@ export class matchinfo {
   })
   match_ok: string;
 
+  @Field()
   @Column('int', {
     nullable: true,
     unsigned: true,
@@ -99,6 +113,7 @@ export class matchinfo {
   })
   home_captain_player_id: number | null;
 
+  @Field()
   @Column('int', {
     nullable: true,
     unsigned: true,
@@ -106,6 +121,7 @@ export class matchinfo {
   })
   away_captain_player_id: number | null;
 
+  @Field()
   @Column('int', {
     nullable: true,
     unsigned: true,
@@ -113,6 +129,13 @@ export class matchinfo {
   })
   referee_player_id: number | null;
 
+  @OneToOne(() => MatchResult, matchResult => matchResult.matchInfo)
+  @JoinColumn({
+    name:'id'
+  })
+  matchResult: Promise<MatchResult>;
+
+  @Field()
   @Column('int', {
     nullable: true,
     unsigned: true,
@@ -120,6 +143,7 @@ export class matchinfo {
   })
   room_responsible_player_id: number | null;
 
+  @Field()
   @Column('timestamp', {
     nullable: true,
     name: 'end_time'

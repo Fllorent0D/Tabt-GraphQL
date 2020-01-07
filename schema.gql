@@ -18,6 +18,7 @@ type Club {
 type ClubCategory {
   id: ID
   name: String
+  levels: [Level]
   clubs: [Club]
 }
 
@@ -27,22 +28,76 @@ type ClubTeam {
   indice: String
 }
 
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
 type Division {
   id: ID
   teams: [ClubTeam]
   serie: String
-  level: Float
+  level: Level
   category: DivisionCategory
   calendar_id: Float
   calendardate_id: Float
   first_match_nb: Float
-  match_type_id: Float
+  matchSystem: MatchSystem
+  matches: [MatchResult]
 }
 
 type DivisionCategory {
   id: Float
   name: String
   divisions: [Division]
+}
+
+type Level {
+  id: ID
+  name: String
+  divisions: [Division]
+}
+
+type MatchInfo {
+  id: ID
+  competition_id: Float
+  category: Float
+  home_club: Float
+  home_indice: String
+  away_club: Float
+  away_indice: String
+  home_score: Float
+  away_score: Float
+  match_ok: String
+  home_captain_player_id: Float
+  away_captain_player_id: Float
+  referee_player_id: Float
+  room_responsible_player_id: Float
+  end_time: DateTime
+}
+
+type MatchResult {
+  matchInfo: MatchInfo
+  division: Division
+  match_id: Float
+  awayTeam: ClubTeam
+  homeTeam: ClubTeam
+}
+
+type MatchSystem {
+  id: ID
+  players: [MatchSystemPlayer]
+  divisions: [Division]
+}
+
+type MatchSystemPlayer {
+  game_nb: Float
+  player_nb: Float
+  home_player: Float
+  away_player: Float
+  game_group: Float
+  allow_substitute: String
+  matchSystem: MatchSystem
 }
 
 type PlayerInfo {
@@ -61,6 +116,10 @@ type PlayerInfo {
 
 type Query {
   club(season: Float, clubId: String): Club
+  level(id: Float): Level
+  levels: [Level]
+  divisions: [Division]
+  division(divisionId: Float): Division
 }
 
 type Venue {

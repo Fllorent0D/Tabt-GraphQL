@@ -1,7 +1,11 @@
 import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from 'typeorm'
+import {Field, ID, ObjectType} from 'type-graphql';
+import {Division} from './division';
 
+@ObjectType()
 @Entity('levelinfo', { schema: 'tabt' })
-export class levelinfo {
+export class Level {
+  @Field(() => ID)
   @PrimaryGeneratedColumn({
     type: 'tinyint',
     unsigned: true,
@@ -9,6 +13,7 @@ export class levelinfo {
   })
   id: number;
 
+  @Field()
   @Column('varchar', {
     nullable: false,
     length: 50,
@@ -74,4 +79,9 @@ export class levelinfo {
     name: 'last_season'
   })
   last_season: number | null;
+
+  @Field(() => [Division])
+  @OneToMany(() => Division, division => division.level)
+  divisions: Promise<Division[]>
+
 }

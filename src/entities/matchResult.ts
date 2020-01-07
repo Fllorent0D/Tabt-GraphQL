@@ -1,20 +1,46 @@
-import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from 'typeorm'
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+  RelationId
+} from 'typeorm';
+import {Field, ObjectType} from 'type-graphql';
+import {Division} from './division';
+import {ClubTeam} from './club-team';
+import {Club} from './club';
+import {MatchInfo} from './matchInfo';
 
-@Entity('divisionresults', { schema: 'tabt' })
+@ObjectType()
+@Entity('divisionresults', {schema: 'tabt'})
 @Index('match_id', ['match_id'])
-export class divisionresults {
-  @Column('int', {
-    nullable: false,
-    primary: true,
-    unsigned: true,
-    default: () => "'0'",
+export class MatchResult {
+
+  @Field(() => MatchInfo)
+  @OneToOne(() => MatchInfo, match => match.matchResult)
+  @JoinColumn({
+    name:'match_id'
+  })
+  matchInfo: Promise<MatchInfo>;
+
+
+  @Field(() => Division)
+  @ManyToOne(() => Division, division => division.matches)
+  @JoinColumn({
     name: 'div_id'
   })
-  div_id: number;
+  division: Promise<Division>;
 
   @Column('tinyint', {
     nullable: false,
-    primary: true,
     default: () => "'0'",
     name: 'season'
   })
@@ -22,7 +48,6 @@ export class divisionresults {
 
   @Column('tinyint', {
     nullable: false,
-    primary: true,
     unsigned: true,
     default: () => "'0'",
     name: 'week'
@@ -31,7 +56,6 @@ export class divisionresults {
 
   @Column('tinyint', {
     nullable: false,
-    primary: true,
     unsigned: true,
     default: () => "'0'",
     name: 'match_nb'
@@ -70,7 +94,8 @@ export class divisionresults {
   })
   sets_away: number;
 
-  @Column('int', {
+  @Field()
+  @PrimaryColumn('int', {
     nullable: false,
     unsigned: true,
     default: () => "'0'",
@@ -141,4 +166,11 @@ export class divisionresults {
     name: 'last_modified'
   })
   last_modified: Date;
+
+  @Field(() => ClubTeam, {nullable: true})
+  awayTeam: ClubTeam;
+
+  @Field(() => ClubTeam, {nullable: true})
+  homeTeam: ClubTeam;
+
 }
