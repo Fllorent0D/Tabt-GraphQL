@@ -34,7 +34,6 @@ export class Division {
   id: number;
 
   @Field(type => [ClubTeam])
-  @OneToMany(() => ClubTeam, team => team.division)
   teams: Promise<ClubTeam[]>;
 
   @Column('tinyint', {

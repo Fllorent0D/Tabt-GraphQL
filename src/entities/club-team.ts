@@ -38,11 +38,7 @@ export class ClubTeam {
   div_id: number;
 
   @Field(() => Club)
-  @ManyToOne(type => Club, (club) => club.teams)
-  @JoinColumn({
-    name: 'club_id'
-  })
-  club: Promise<Club>;
+  club: Club;
 
   @Column('tinyint', {
     nullable: false,
@@ -63,6 +59,7 @@ export class ClubTeam {
 
   @Column('smallint', {
     nullable: true,
+    primary: true,
     unsigned: true,
     default: () => "'0'",
     name: 'club_id'

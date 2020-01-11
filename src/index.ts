@@ -11,6 +11,11 @@ import {LevelResolver} from './resolvers/level-resolver';
 import {ClubCategoryResolver} from './resolvers/club-category-resolver';
 import {DivisionResolver} from './resolvers/division-resolver';
 import {MatchResultResolver} from './resolvers/match-result-resolver';
+import {GraphQLDatabaseLoader} from '@mando75/typeorm-graphql-loader';
+import {ClubTeam} from './entities/club-team';
+import {TeamResolver} from './resolvers/team-resolver';
+import {clubTeamsLoader, divisionTeamsLoader} from './loaders/team.loader';
+import {teamClubLoader} from './loaders/club.loader';
 
 const start = async () => {
 
@@ -23,7 +28,8 @@ const start = async () => {
       LevelResolver,
       ClubCategoryResolver,
       DivisionResolver,
-      MatchResultResolver
+      MatchResultResolver,
+      TeamResolver
     ],
     container: Container,
     emitSchemaFile: true,
@@ -51,7 +57,13 @@ const start = async () => {
 
   const server = new GraphQLServer({
     schema,
-    context: (request) => ({request})
+    context: (request) => ({
+      request,
+      loader: new GraphQLDatabaseLoader(connection),
+      divisionClubTeamsLoader: divisionTeamsLoader(),
+      teamClubLoader: teamClubLoader(),
+      clubTeamsLoader: clubTeamsLoader()
+    })
   });
 
   server.express.use('/voyager', voyagerMiddleware({endpointUrl: '/graphql'}));

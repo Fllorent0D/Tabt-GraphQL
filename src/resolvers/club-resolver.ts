@@ -1,10 +1,12 @@
-import {Arg, Args, FieldResolver, Query, Resolver, Root} from 'type-graphql';
+import {Arg, Args, Ctx, FieldResolver, Info, Query, Resolver, Root} from 'type-graphql';
 import {OrmRepository} from 'typeorm-typedi-extensions';
-import {Repository} from 'typeorm';
+import {In, Repository} from 'typeorm';
 
 import {Club} from '../entities/club';
 import {PlayerInfo} from '../entities/player-info';
 import {PlayerClub} from '../entities/playerClub';
+import {GraphQLResolveInfo} from 'graphql';
+import {ClubTeam} from '../entities/club-team';
 
 @Resolver(Club)
 export class ClubResolver {
@@ -23,9 +25,24 @@ export class ClubResolver {
   }
 
   @FieldResolver(returns => [PlayerInfo])
-  async members(@Root() club: Club): Promise<PlayerInfo[]> {
-    const playerClub = await this.playerClubRepository.find({club_id: club.id, season: 17});
-    return Promise.all(playerClub.map((playerClub) => playerClub.player));
+  async members(
+    @Root() club: Club,
+    @Ctx() context: any,
+    @Info() info: GraphQLResolveInfo
+  ): Promise<PlayerInfo[]> {
+    const playerClub: PlayerClub[] = await this.playerClubRepository.find({club_id: club.id, season: 17});
+    const allIds = playerClub.map((pClub) => pClub.player_id);
+    return context.loader.loadMany(PlayerInfo, {id: In(allIds)}, info);
+    // return Promise.all(playerClub.map((playerClub) => playerClub.player));
+  }
+
+  @FieldResolver(returns => [ClubTeam])
+  async teams(
+    @Root() club: Club,
+    @Ctx() context: any,
+    @Info() info: GraphQLResolveInfo
+  ): Promise<PlayerInfo[]> {
+    return context.clubTeamsLoader.load(club.id);
   }
 
 }
