@@ -14,18 +14,13 @@ export class LevelResolver {
   }
 
   @Query(returns => Level)
-  async level(
-    @Arg('id') id: number,
-    @Ctx() context: any,
-    @Info() info: GraphQLResolveInfo
-  ): Promise<Level> {
-    return context.loader.loadOne(Level, {id}, info);
+  async level(@Arg('id') id: number, @Ctx() context: any): Promise<Level> {
+    return context.levelLoader.load(id);
   }
 
   @Query(returns => [Level])
-  async levels(@Ctx() context: any,
-               @Info() info: GraphQLResolveInfo): Promise<Level[]> {
-    return context.loader.loadMany(Level, {}, info);
+  async levels(): Promise<Level[]> {
+    return this.levelRepo.find();
   }
 
 

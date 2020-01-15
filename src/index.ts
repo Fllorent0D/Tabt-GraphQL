@@ -14,8 +14,14 @@ import {MatchResultResolver} from './resolvers/match-result-resolver';
 import {GraphQLDatabaseLoader} from '@mando75/typeorm-graphql-loader';
 import {ClubTeam} from './entities/club-team';
 import {TeamResolver} from './resolvers/team-resolver';
-import {clubTeamsLoader, divisionTeamsLoader} from './loaders/team.loader';
-import {teamClubLoader} from './loaders/club.loader';
+import {
+  clubCategoryLoader,
+  clubLoader,
+  clubTeamsLoader,
+  clubVenueLoader,
+  divisionTeamsLoader,
+  levelLoader
+} from './dataloaders';
 
 const start = async () => {
 
@@ -61,8 +67,11 @@ const start = async () => {
       request,
       loader: new GraphQLDatabaseLoader(connection),
       divisionClubTeamsLoader: divisionTeamsLoader(),
-      teamClubLoader: teamClubLoader(),
-      clubTeamsLoader: clubTeamsLoader()
+      clubLoader: clubLoader(),
+      clubTeamsLoader: clubTeamsLoader(),
+      levelLoader: levelLoader(),
+      categoryLoader: clubCategoryLoader(),
+      venueLoader: clubVenueLoader()
     })
   });
 

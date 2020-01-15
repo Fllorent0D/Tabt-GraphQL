@@ -4,7 +4,9 @@ import {OrmRepository} from 'typeorm-typedi-extensions';
 import {Repository} from 'typeorm';
 import {GraphQLResolveInfo} from 'graphql';
 import {ClubTeam} from '../entities/club-team';
-import {divisionTeamsLoader} from '../loaders/team.loader';
+import {divisionTeamsLoader} from '../dataloaders/team.loader';
+import {Level} from '../entities/level';
+import {ClubCategory} from '../entities/club-category';
 
 @Resolver(Division)
 export class DivisionResolver {
@@ -14,27 +16,28 @@ export class DivisionResolver {
   }
 
   @Query(() => [Division])
-  async divisions(@Ctx() context: any,
-                  @Info() info: GraphQLResolveInfo): Promise<Division[]> {
-    return context.loader.loadMany(Division, {}, info);
+  async divisions(): Promise<Division[]> {
+    return this.divisionRepository.find();
   }
 
   @Query(() => Division)
-  async division(
-    @Arg('divisionId') divisionId: number,
-    @Ctx() context: any,
-    @Info() info: GraphQLResolveInfo
-  ): Promise<Division> {
-    return context.loader.loadOne(Division, {id: divisionId}, info);
+  async division(@Arg('divisionId') divisionId: number): Promise<Division> {
+    return this.divisionRepository.findOne({id: divisionId});
   }
 
   @FieldResolver(() => [ClubTeam])
-  async teams(
-    @Root() division: Division,
-    @Ctx() context: any,
-    @Info() info: GraphQLResolveInfo
-  ): Promise<ClubTeam[]> {
+  async teams(@Root() division: Division, @Ctx() context: any): Promise<ClubTeam[]> {
     return context.divisionClubTeamsLoader.load(division.id);
+  }
+
+  @FieldResolver(() => Level)
+  async level(@Root() division: Division, @Ctx() context: any): Promise<Level> {
+    return context.levelLoader.load(division.level_id);
+  }
+
+ @FieldResolver(() => ClubCategory)
+  async category(@Root() division: Division, @Ctx() context: any): Promise<ClubCategory> {
+    return context.categoryLoader.load(division.category_id);
   }
 
 }

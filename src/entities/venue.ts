@@ -14,11 +14,10 @@ export class Venue {
   id: number;
 
   @Field(() => Club)
-  @ManyToOne(type => Club, (club) => club.address)
-  @JoinColumn({
+  @Column({
     name: 'club_id'
   })
-  club: Promise<Club>;
+  clubId: number;
 
   @Column('tinyint', {
     nullable: false,

@@ -1,4 +1,4 @@
-import {FieldResolver, Resolver, Root} from 'type-graphql';
+import {Ctx, FieldResolver, Resolver, Root} from 'type-graphql';
 import {ClubCategory} from '../entities/club-category';
 import {OrmRepository} from 'typeorm-typedi-extensions';
 import {Level} from '../entities/level';
@@ -12,14 +12,10 @@ export class ClubCategoryResolver {
   }
 
   @FieldResolver(() => [Level])
-  async levels(@Root() category: ClubCategory): Promise<Level[]> {
+  async levels(@Root() category: ClubCategory, @Ctx() context: any): Promise<Level[]> {
     // ids are stored :1:2:3:
-    const ids = category.levels_ids.split(':');
-    return this.levelRepo.find({
-      where: {
-        id: In(ids)
-      }
-    })
+    const ids = category.levels_ids.split(':').map(Number);
+    return context.levelLoader.loadMany(ids);
   }
 
 

@@ -31,9 +31,11 @@ export class Club {
   readonly id: number;
 
   @Field(() => ClubCategory)
-  @ManyToOne(type => ClubCategory)
-  @JoinColumn({name: "category"})
-  category: Promise<ClubCategory>;
+  @Column({name: "category"})
+  categoryId: number;
+
+  @Field(() => ClubCategory)
+  category: ClubCategory;
 
   @Field()
   @Column('varchar', {
@@ -143,16 +145,13 @@ export class Club {
   is_category_default: string | null;
 
   @Field(() => [Venue])
-  @OneToMany(() => Venue, (addressinfo) => addressinfo.club)
-  address: Promise<Venue[]>;
+  address: Venue[];
 
-  @OneToMany(() => PlayerClub, playerClub => playerClub.club)
   playersClub: Promise<PlayerClub[]>;
 
   @Field(type => [ClubTeam])
-  @OneToMany(() => ClubTeam, team => team.club)
-  teams: Promise<ClubTeam[]>;
+  teams: ClubTeam[];
 
   @Field(() => [PlayerInfo])
-  members: Promise<PlayerInfo[]>;
+  members: PlayerInfo[];
 }

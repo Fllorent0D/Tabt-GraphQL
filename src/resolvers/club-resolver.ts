@@ -7,6 +7,8 @@ import {PlayerInfo} from '../entities/player-info';
 import {PlayerClub} from '../entities/playerClub';
 import {GraphQLResolveInfo} from 'graphql';
 import {ClubTeam} from '../entities/club-team';
+import {ClubCategory} from '../entities/club-category';
+import {Venue} from '../entities/venue';
 
 @Resolver(Club)
 export class ClubResolver {
@@ -22,6 +24,11 @@ export class ClubResolver {
     @Arg('season') season: number
   ): Promise<Club> {
     return this.clubRepository.findOne({indice: clubId});
+  }
+
+  @Query(() => [Club])
+  async clubs(): Promise<Club[]> {
+    return this.clubRepository.find();
   }
 
   @FieldResolver(returns => [PlayerInfo])
@@ -43,6 +50,16 @@ export class ClubResolver {
     @Info() info: GraphQLResolveInfo
   ): Promise<PlayerInfo[]> {
     return context.clubTeamsLoader.load(club.id);
+  }
+
+  @FieldResolver(() => ClubCategory)
+  async category(@Root() club: Club, @Ctx() context: any) {
+    return context.categoryLoader.load(club.categoryId);
+  }
+
+  @FieldResolver(() => [Venue])
+  async address(@Root()club: Club, @Ctx() context: any) {
+    return context.venueLoader.load(club.id)
   }
 
 }

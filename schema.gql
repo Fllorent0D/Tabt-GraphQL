@@ -5,6 +5,7 @@
 
 type Club {
   id: ID
+  categoryId: ClubCategory
   category: ClubCategory
   name: String
   short_name: String
@@ -42,7 +43,6 @@ type Division {
   calendar_id: Float
   calendardate_id: Float
   first_match_nb: Float
-  matchSystem: MatchSystem
   matches: [MatchResult]
 }
 
@@ -84,22 +84,6 @@ type MatchResult {
   homeTeam: ClubTeam
 }
 
-type MatchSystem {
-  id: ID
-  players: [MatchSystemPlayer]
-  divisions: [Division]
-}
-
-type MatchSystemPlayer {
-  game_nb: Float
-  player_nb: Float
-  home_player: Float
-  away_player: Float
-  game_group: Float
-  allow_substitute: String
-  matchSystem: MatchSystem
-}
-
 type PlayerInfo {
   id: ID
   first_name: String
@@ -116,6 +100,7 @@ type PlayerInfo {
 
 type Query {
   club(season: Float, clubId: String): Club
+  clubs: [Club]
   level(id: Float): Level
   levels: [Level]
   divisions: [Division]
@@ -124,7 +109,7 @@ type Query {
 
 type Venue {
   id: ID
-  club: Club
+  clubId: Club
   name: String
   address: String
   zip: Float

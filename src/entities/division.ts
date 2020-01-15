@@ -34,7 +34,7 @@ export class Division {
   id: number;
 
   @Field(type => [ClubTeam])
-  teams: Promise<ClubTeam[]>;
+  teams: ClubTeam[];
 
   @Column('tinyint', {
     nullable: false,
@@ -66,19 +66,21 @@ export class Division {
   })
   order: number;
 
-  @Field(() => Level)
-  @ManyToOne(() => Level, level => level.divisions)
-  @JoinColumn({
+  @Column({
     name: 'level'
   })
-  level: Promise<Level>;
+  level_id: number;
 
-  @Field(() => DivisionCategory)
-  @ManyToOne(() => DivisionCategory, category => category.divisions)
-  @JoinColumn({
+  @Field(() => Level)
+  level: Level;
+
+  @Column({
     name: 'category'
   })
-  category: Promise<DivisionCategory>;
+  category_id: number;
+
+  @Field(() => DivisionCategory)
+  category: DivisionCategory;
 
   @Field()
   @Column('int', {
@@ -106,12 +108,10 @@ export class Division {
   })
   first_match_nb: number | null;
 
-  @Field(() => MatchSystem)
-  @ManyToOne(() => MatchSystem, matchSystem => matchSystem.divisions)
-  @JoinColumn({
+  @Column('smallint', {
     name: 'match_type_id'
   })
-  matchSystem: Promise<MatchSystem>;
+  match_type_id: Promise<MatchSystem>;
 
   @Column('tinyint', {
     nullable: false,
@@ -343,7 +343,6 @@ export class Division {
   validated_by: number | null;
 
   @Field(() => [MatchResult])
-  @OneToMany(() => MatchResult, matchResult => matchResult.division)
   matches: Promise<MatchResult[]>;
 
 
