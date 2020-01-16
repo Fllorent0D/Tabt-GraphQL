@@ -18,7 +18,7 @@ import {
   clubCategoryLoader,
   clubLoader,
   clubTeamsLoader,
-  clubVenueLoader,
+  clubVenueLoader, levelDivisionsLoader,
   divisionTeamsLoader,
   levelLoader
 } from './dataloaders';
@@ -67,6 +67,7 @@ const start = async () => {
       request,
       loader: new GraphQLDatabaseLoader(connection),
       divisionClubTeamsLoader: divisionTeamsLoader(),
+      divisionLoader: levelDivisionsLoader(),
       clubLoader: clubLoader(),
       clubTeamsLoader: clubTeamsLoader(),
       levelLoader: levelLoader(),

@@ -22,11 +22,7 @@ import {Club} from './club';
 export class ClubTeam {
 
   @Field(() => Division)
-  @ManyToOne(type => Division, (division) => division.teams)
-  @JoinColumn({
-    name: 'div_id'
-  })
-  division: Promise<Division>;
+  division: Division;
 
   @Column('int', {
     nullable: false,

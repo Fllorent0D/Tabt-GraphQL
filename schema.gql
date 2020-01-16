@@ -36,14 +36,14 @@ scalar DateTime
 
 type Division {
   id: ID
-  teams: [ClubTeam]
   serie: String
-  level: Level
-  category: DivisionCategory
   calendar_id: Float
   calendardate_id: Float
   first_match_nb: Float
   matches: [MatchResult]
+  teams: [ClubTeam]
+  level: Level
+  category: DivisionCategory
 }
 
 type DivisionCategory {
@@ -74,6 +74,7 @@ type MatchInfo {
   referee_player_id: Float
   room_responsible_player_id: Float
   end_time: DateTime
+  matchResult: MatchResult
 }
 
 type MatchResult {
@@ -82,6 +83,22 @@ type MatchResult {
   match_id: Float
   awayTeam: ClubTeam
   homeTeam: ClubTeam
+}
+
+type MatchSystem {
+  id: ID
+  players: [MatchSystemPlayer]
+  divisions: [Division]
+}
+
+type MatchSystemPlayer {
+  game_nb: Float
+  player_nb: Float
+  home_player: Float
+  away_player: Float
+  game_group: Float
+  allow_substitute: String
+  matchSystem: MatchSystem
 }
 
 type PlayerInfo {

@@ -1,9 +1,23 @@
-import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from 'typeorm'
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+  RelationId
+} from 'typeorm';
 import {Field, ID, ObjectType} from 'type-graphql';
 import {MatchResult} from './matchResult';
 
 @ObjectType()
-@Entity('matchinfo', { schema: 'tabt' })
+@Entity('matchinfo', {schema: 'tabt'})
 export class MatchInfo {
   @Field(() => ID)
   @PrimaryGeneratedColumn({
@@ -129,11 +143,10 @@ export class MatchInfo {
   })
   referee_player_id: number | null;
 
-  @OneToOne(() => MatchResult, matchResult => matchResult.matchInfo)
-  @JoinColumn({
-    name:'id'
+  @Column({
+    name: 'id'
   })
-  matchResult: Promise<MatchResult>;
+  matchResultId: number;
 
   @Field()
   @Column('int', {
@@ -149,4 +162,8 @@ export class MatchInfo {
     name: 'end_time'
   })
   end_time: Date | null;
+
+  @Field(() => MatchResult)
+  matchResult: MatchResult;
+
 }

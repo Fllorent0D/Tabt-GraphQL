@@ -6,8 +6,9 @@ import {ClubCategory} from '../entities/club-category';
 import {Venue} from '../entities/venue';
 import {Level} from '../entities/level';
 import {ClubTeam} from '../entities/club-team';
+import {Division} from '../entities/division';
 
-export const oneToManyBatchFunction = <T>(repository: Repository<T>, key: string): (ids: number[]) => Promise<T[][]> => async (ids) => {
+export const loadManyForKeyBatchFunction = <T>(repository: Repository<T>, key: string): (ids: number[]) => Promise<T[][]> => async (ids) => {
   const entities = await repository
     .createQueryBuilder()
     .where({[key]: In(ids)})
@@ -16,7 +17,7 @@ export const oneToManyBatchFunction = <T>(repository: Repository<T>, key: string
   return ids.map((entityId) => entities.filter((entity) => entity[key] === entityId));
 };
 
-export const manyToOneBatchFunction = <T>(repository: Repository<T>, key: string): (ids: number[]) => Promise<T[]> => async (ids) => {
+export const loadOneForKeyBatchFunction = <T>(repository: Repository<T>, key: string): (ids: number[]) => Promise<T[]> => async (ids) => {
   const entities = await repository
     .createQueryBuilder()
     .where({[key]: In(ids)})
@@ -27,13 +28,16 @@ export const manyToOneBatchFunction = <T>(repository: Repository<T>, key: string
 
 
 // Club
-export const clubLoader = () => new DataLoader(oneToManyBatchFunction(getRepository(Club), 'club_id'));
-export const clubCategoryLoader = () => new DataLoader(manyToOneBatchFunction(getRepository(ClubCategory), 'id'));
-export const clubVenueLoader = () => new DataLoader(oneToManyBatchFunction(getRepository(Venue), 'clubId'));
+export const clubLoader = () => new DataLoader(loadManyForKeyBatchFunction(getRepository(Club), 'club_id'));
+export const clubCategoryLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(ClubCategory), 'id'));
+export const clubVenueLoader = () => new DataLoader(loadManyForKeyBatchFunction(getRepository(Venue), 'clubId'));
 
 // Level
-export const levelLoader = () => new DataLoader(manyToOneBatchFunction(getRepository(Level), 'id'));
+export const levelLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(Level), 'id'));
 
 //Teams
-export const divisionTeamsLoader = () => new DataLoader(oneToManyBatchFunction(getRepository(ClubTeam), 'div_id'));
-export const clubTeamsLoader = () => new DataLoader(oneToManyBatchFunction(getRepository(ClubTeam), 'club_id'));
+export const divisionTeamsLoader = () => new DataLoader(loadManyForKeyBatchFunction(getRepository(ClubTeam), 'div_id'));
+export const clubTeamsLoader = () => new DataLoader(loadManyForKeyBatchFunction(getRepository(ClubTeam), 'club_id'));
+
+//Divisions
+export const levelDivisionsLoader = () => new DataLoader(loadManyForKeyBatchFunction(getRepository(Division), 'level_id'));

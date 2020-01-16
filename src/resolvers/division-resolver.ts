@@ -2,9 +2,7 @@ import {Arg, Ctx, FieldResolver, Info, Query, Resolver, Root} from 'type-graphql
 import {Division} from '../entities/division';
 import {OrmRepository} from 'typeorm-typedi-extensions';
 import {Repository} from 'typeorm';
-import {GraphQLResolveInfo} from 'graphql';
 import {ClubTeam} from '../entities/club-team';
-import {divisionTeamsLoader} from '../dataloaders/team.loader';
 import {Level} from '../entities/level';
 import {ClubCategory} from '../entities/club-category';
 
@@ -35,7 +33,7 @@ export class DivisionResolver {
     return context.levelLoader.load(division.level_id);
   }
 
- @FieldResolver(() => ClubCategory)
+  @FieldResolver(() => ClubCategory)
   async category(@Root() division: Division, @Ctx() context: any): Promise<ClubCategory> {
     return context.categoryLoader.load(division.category_id);
   }

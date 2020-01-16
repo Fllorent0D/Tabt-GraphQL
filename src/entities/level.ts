@@ -1,9 +1,23 @@
-import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from 'typeorm'
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+  RelationId
+} from 'typeorm';
 import {Field, ID, ObjectType} from 'type-graphql';
 import {Division} from './division';
 
 @ObjectType()
-@Entity('levelinfo', { schema: 'tabt' })
+@Entity('levelinfo', {schema: 'tabt'})
 export class Level {
   @Field(() => ID)
   @PrimaryGeneratedColumn({
@@ -81,7 +95,6 @@ export class Level {
   last_season: number | null;
 
   @Field(() => [Division])
-  @OneToMany(() => Division, division => division.level)
-  divisions: Promise<Division[]>
+  divisions: Division[];
 
 }

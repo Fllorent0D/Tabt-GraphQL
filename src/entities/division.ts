@@ -33,8 +33,6 @@ export class Division {
   })
   id: number;
 
-  @Field(type => [ClubTeam])
-  teams: ClubTeam[];
 
   @Column('tinyint', {
     nullable: false,
@@ -71,16 +69,12 @@ export class Division {
   })
   level_id: number;
 
-  @Field(() => Level)
-  level: Level;
 
   @Column({
     name: 'category'
   })
   category_id: number;
 
-  @Field(() => DivisionCategory)
-  category: DivisionCategory;
 
   @Field()
   @Column('int', {
@@ -111,7 +105,7 @@ export class Division {
   @Column('smallint', {
     name: 'match_type_id'
   })
-  match_type_id: Promise<MatchSystem>;
+  match_type_id: MatchSystem;
 
   @Column('tinyint', {
     nullable: false,
@@ -343,7 +337,14 @@ export class Division {
   validated_by: number | null;
 
   @Field(() => [MatchResult])
-  matches: Promise<MatchResult[]>;
+  matches: MatchResult[];
 
+  @Field(type => [ClubTeam])
+  teams: ClubTeam[];
 
+  @Field(() => Level)
+  level: Level;
+
+  @Field(() => DivisionCategory)
+  category: DivisionCategory;
 }
