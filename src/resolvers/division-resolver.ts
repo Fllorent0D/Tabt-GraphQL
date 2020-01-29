@@ -5,6 +5,8 @@ import {Repository} from 'typeorm';
 import {ClubTeam} from '../entities/club-team';
 import {Level} from '../entities/level';
 import {ClubCategory} from '../entities/club-category';
+import {GraphQlContext} from '../index';
+import {MatchResult} from '../entities/matchResult';
 
 @Resolver(Division)
 export class DivisionResolver {
@@ -36,6 +38,10 @@ export class DivisionResolver {
   @FieldResolver(() => ClubCategory)
   async category(@Root() division: Division, @Ctx() context: any): Promise<ClubCategory> {
     return context.categoryLoader.load(division.category_id);
+  }
+  @FieldResolver(() => [MatchResult])
+  async matches(@Root() division: Division, @Ctx() context: GraphQlContext): Promise<MatchResult[]> {
+    return context.divisionMatchResultsLoader.load(division.id);
   }
 
 }

@@ -15,7 +15,8 @@ export class ClubResolver {
 
   constructor(
     @OrmRepository(Club) private clubRepository: Repository<Club>,
-    @OrmRepository(PlayerClub) private playerClubRepository: Repository<PlayerClub>) {
+    @OrmRepository(PlayerClub) private playerClubRepository: Repository<PlayerClub>,
+    @OrmRepository(PlayerInfo) private playerInfoRepository: Repository<PlayerInfo>) {
   }
 
   @Query(() => Club)
@@ -34,20 +35,32 @@ export class ClubResolver {
   @FieldResolver(returns => [PlayerInfo])
   async members(
     @Root() club: Club,
-    @Ctx() context: any,
-    @Info() info: GraphQLResolveInfo
+    @Ctx() context: any
   ): Promise<PlayerInfo[]> {
-    const playerClub: PlayerClub[] = await this.playerClubRepository.find({club_id: club.id, season: 17});
+    const players = await this.playerInfoRepository
+      .createQueryBuilder('player_info')
+      .leftJoinAndMapOne('player_club', PlayerClub, 'player_club', 'player_info.id = player_club.player_id')
+      .where('player_club.season = :season', {season: 17})
+      .getMany();
+
+    console.log(players);
+
+    return players;
+    /*
+    const playerClub: PlayerClub[] = await this.playerClubRepository.find({
+      club_id: club.id,
+      season: 17
+    }, {relations: ["player"]});
     const allIds = playerClub.map((pClub) => pClub.player_id);
-    return context.loader.loadMany(PlayerInfo, {id: In(allIds)}, info);
+    return this.playerInfoRepository.find({id: In(allIds)});
+    */
     // return Promise.all(playerClub.map((playerClub) => playerClub.player));
   }
 
   @FieldResolver(returns => [ClubTeam])
   async teams(
     @Root() club: Club,
-    @Ctx() context: any,
-    @Info() info: GraphQLResolveInfo
+    @Ctx() context: any
   ): Promise<PlayerInfo[]> {
     return context.clubTeamsLoader.load(club.id);
   }
@@ -59,7 +72,7 @@ export class ClubResolver {
 
   @FieldResolver(() => [Venue])
   async address(@Root()club: Club, @Ctx() context: any) {
-    return context.venueLoader.load(club.id)
+    return context.venueLoader.load(club.id);
   }
 
 }

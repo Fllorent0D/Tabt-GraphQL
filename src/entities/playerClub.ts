@@ -30,16 +30,16 @@ export class PlayerClub {
   })
   club_id: number;
 
-  @ManyToOne(type => Club, club => club.playersClub)
+  @ManyToOne(type => Club)
   @JoinColumn({
     name: 'club_id'
   })
-  club: Promise<Club>;
+  club: Club;
 
-  @ManyToOne(type => PlayerInfo, club => club.playerClubs)
+  @ManyToOne(type => PlayerInfo)
   @JoinColumn({
     name: 'player_id'
   })
-  player: Promise<PlayerInfo>;
+  player: PlayerInfo;
 
 }

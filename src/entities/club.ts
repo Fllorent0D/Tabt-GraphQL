@@ -147,11 +147,10 @@ export class Club {
   @Field(() => [Venue])
   address: Venue[];
 
-  playersClub: Promise<PlayerClub[]>;
-
   @Field(type => [ClubTeam])
   teams: ClubTeam[];
 
   @Field(() => [PlayerInfo])
   members: PlayerInfo[];
+
 }

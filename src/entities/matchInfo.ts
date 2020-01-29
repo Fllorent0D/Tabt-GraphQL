@@ -15,6 +15,7 @@ import {
 } from 'typeorm';
 import {Field, ID, ObjectType} from 'type-graphql';
 import {MatchResult} from './matchResult';
+import {PlayerInfo} from './player-info';
 
 @ObjectType()
 @Entity('matchinfo', {schema: 'tabt'})
@@ -69,14 +70,12 @@ export class MatchInfo {
   })
   home_club: number;
 
-  @Field()
   @Column('char', {
     nullable: false,
     name: 'home_indice'
   })
   home_indice: string;
 
-  @Field()
   @Column('smallint', {
     nullable: false,
     unsigned: true,
@@ -85,7 +84,6 @@ export class MatchInfo {
   })
   away_club: number;
 
-  @Field()
   @Column('char', {
     nullable: false,
     name: 'away_indice'
@@ -101,7 +99,6 @@ export class MatchInfo {
   })
   home_score: number;
 
-  @Field()
   @Column('tinyint', {
     nullable: false,
     unsigned: true,
@@ -110,7 +107,6 @@ export class MatchInfo {
   })
   away_score: number;
 
-  @Field()
   @Column('enum', {
     nullable: false,
     default: () => "'N'",
@@ -119,7 +115,6 @@ export class MatchInfo {
   })
   match_ok: string;
 
-  @Field()
   @Column('int', {
     nullable: true,
     unsigned: true,
@@ -127,7 +122,6 @@ export class MatchInfo {
   })
   home_captain_player_id: number | null;
 
-  @Field()
   @Column('int', {
     nullable: true,
     unsigned: true,
@@ -135,7 +129,6 @@ export class MatchInfo {
   })
   away_captain_player_id: number | null;
 
-  @Field()
   @Column('int', {
     nullable: true,
     unsigned: true,
@@ -148,7 +141,6 @@ export class MatchInfo {
   })
   matchResultId: number;
 
-  @Field()
   @Column('int', {
     nullable: true,
     unsigned: true,
@@ -162,8 +154,4 @@ export class MatchInfo {
     name: 'end_time'
   })
   end_time: Date | null;
-
-  @Field(() => MatchResult)
-  matchResult: MatchResult;
-
 }

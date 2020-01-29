@@ -14,7 +14,7 @@ export class PlayerInfoResolver {
 
   @FieldResolver(returns => Club)
   async club(@Root() playerInfo: PlayerInfo, @Ctx() context: any): Promise<Club> {
-    const playerClub = await this.playerClubRepo.findOne({player_id: playerInfo.id, season: 17});
+    const playerClub = await this.playerClubRepo.findOne({player_id: playerInfo.id, season: 17}, {relations: ["club"]});
     return playerClub.club;
   }
 

@@ -13,31 +13,23 @@ import {
   PrimaryGeneratedColumn,
   RelationId
 } from 'typeorm';
-import {Field, ObjectType} from 'type-graphql';
+import {Field, ID, ObjectType} from 'type-graphql';
 import {Division} from './division';
 import {ClubTeam} from './club-team';
 import {Club} from './club';
 import {MatchInfo} from './matchInfo';
+import {PlayerInfo} from './player-info';
 
 @ObjectType()
 @Entity('divisionresults', {schema: 'tabt'})
 @Index('match_id', ['match_id'])
 export class MatchResult {
 
-  @Field(() => MatchInfo)
-  @OneToOne(() => MatchInfo, match => match.matchResult)
-  @JoinColumn({
-    name:'match_id'
-  })
-  matchInfo: Promise<MatchInfo>;
-
-
   @Field(() => Division)
-  @ManyToOne(() => Division, division => division.matches)
-  @JoinColumn({
+  @Column({
     name: 'div_id'
   })
-  division: Promise<Division>;
+  div_id: number;
 
   @Column('tinyint', {
     nullable: false,
@@ -46,6 +38,7 @@ export class MatchResult {
   })
   season: number;
 
+  @Field()
   @Column('tinyint', {
     nullable: false,
     unsigned: true,
@@ -62,39 +55,43 @@ export class MatchResult {
   })
   match_nb: number;
 
+  @Field()
   @Column('tinyint', {
     nullable: false,
     unsigned: true,
     default: () => "'0'",
     name: 'home'
   })
-  home: number;
+  homeScore: number;
 
+  @Field()
   @Column('tinyint', {
     nullable: false,
     unsigned: true,
     default: () => "'0'",
     name: 'away'
   })
-  away: number;
+  awayScore: number;
 
+  @Field()
   @Column('tinyint', {
     nullable: false,
     unsigned: true,
     default: () => "'0'",
     name: 'sets_home'
   })
-  sets_home: number;
+  homeSets: number;
 
+  @Field()
   @Column('tinyint', {
     nullable: false,
     unsigned: true,
     default: () => "'0'",
     name: 'sets_away'
   })
-  sets_away: number;
+  awaySets: number;
 
-  @Field()
+  @Field(() => ID)
   @PrimaryColumn('int', {
     nullable: false,
     unsigned: true,
@@ -173,4 +170,18 @@ export class MatchResult {
   @Field(() => ClubTeam, {nullable: true})
   homeTeam: ClubTeam;
 
+  @Field()
+  scoreModified: boolean;
+
+  @Field(() => PlayerInfo)
+  homeCaptain: PlayerInfo;
+
+  @Field(() => PlayerInfo)
+  awayCaptain: PlayerInfo;
+
+  @Field(() => PlayerInfo)
+  referee: PlayerInfo;
+
+  @Field(() => PlayerInfo)
+  roomResponsible: PlayerInfo;
 }

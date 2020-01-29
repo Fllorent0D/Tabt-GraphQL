@@ -180,9 +180,9 @@ export class PlayerInfo {
   })
   is_anonymous: string;
 
-  @OneToMany(type => PlayerClub, playerClub => playerClub.player)
-  playerClubs: PlayerClub[];
-
   @Field(() => Club)
-  club: Club
+  club: Club;
+
+  player_club: PlayerClub;
+
 }

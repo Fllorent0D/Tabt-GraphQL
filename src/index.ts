@@ -15,75 +15,108 @@ import {GraphQLDatabaseLoader} from '@mando75/typeorm-graphql-loader';
 import {ClubTeam} from './entities/club-team';
 import {TeamResolver} from './resolvers/team-resolver';
 import {
-  clubCategoryLoader,
-  clubLoader,
-  clubTeamsLoader,
-  clubVenueLoader, levelDivisionsLoader,
-  divisionTeamsLoader,
-  levelLoader
+	clubCategoryLoader,
+	clubLoader,
+	clubTeamsLoader,
+	clubVenuesLoader, levelDivisionsLoader,
+	divisionTeamsLoader,
+	levelLoader, matchResultsLoader, divisionMatchResultsLoader, matchInfoLoader, memberLoader
 } from './dataloaders';
+import {Request} from 'express';
+import * as DataLoader from 'dataloader';
+import {Division} from './entities/division';
+import {Level} from './entities/level';
+import {ClubCategory} from './entities/club-category';
+import {Venue} from './entities/venue';
+import {Club} from './entities/club';
+import {MatchResult} from './entities/matchResult';
+import {clubTeamLoader} from './dataloaders/teams.dataloader';
+import {MatchInfo} from './entities/matchInfo';
+import {PlayerInfo} from './entities/player-info';
+import {MatchInfoResolver} from './resolvers/match_info_resolver';
+
+export interface GraphQlContext {
+	request: Request;
+	divisionClubTeamsLoader: DataLoader<number, ClubTeam[], number>;
+	divisionLoader: DataLoader<number, Division[], number>;
+	clubLoader: DataLoader<number, Club, number>;
+	clubTeamsLoader: DataLoader<number, ClubTeam[], number>;
+	levelLoader: DataLoader<number, Level, number>;
+	categoryLoader: DataLoader<number, ClubCategory, number>;
+	venueLoader: DataLoader<number, Venue[], number>,
+	matchResultsLoader: DataLoader<number, MatchResult[], number>,
+	divisionMatchResultsLoader: DataLoader<number, MatchResult[]>,
+	clubTeamLoader: DataLoader<string, ClubTeam>,
+	matchInfoLoader: DataLoader<any, MatchInfo>,
+	memberLoader: DataLoader<number, PlayerInfo>
+}
 
 const start = async () => {
 
-  console.clear();
+	console.clear();
 
-  const schema = await buildSchema({
-    resolvers: [
-      ClubResolver,
-      PlayerInfoResolver,
-      LevelResolver,
-      ClubCategoryResolver,
-      DivisionResolver,
-      MatchResultResolver,
-      TeamResolver
-    ],
-    container: Container,
-    emitSchemaFile: true,
-    globalMiddlewares: [TestMiddleware],
-    nullableByDefault: true,
-  });
+	const schema = await buildSchema({
+		resolvers: [
+			ClubResolver,
+			PlayerInfoResolver,
+			LevelResolver,
+			ClubCategoryResolver,
+			DivisionResolver,
+			MatchResultResolver,
+			TeamResolver,
+			MatchInfoResolver
+		],
+		container: Container,
+		emitSchemaFile: true,
+		globalMiddlewares: [],
+		nullableByDefault: true
+	});
 
-  useContainer(Container);
+	useContainer(Container);
 
-  const connection: Connection = await createConnection({
-    "name": "default",
-    "type": "mysql",
-    "host": "localhost",
-    "port": 3306,
-    "username": "root",
-    "password": "myRootpwd32",
-    "database": "tabt",
-    "synchronize": false,
-    "entities": [
-      "src/entities/*.ts"
-    ],
-    cache: true,
-    logging: ["info", "error", "query"]
-  });
+	const connection: Connection = await createConnection({
+		"name": "default",
+		"type": "mysql",
+		"host": "localhost",
+		"port": 3306,
+		"username": "root",
+		"password": "myRootpwd32",
+		"database": "tabt",
+		"synchronize": false,
+		"entities": [
+			"src/entities/*.ts"
+		],
+		cache: true,
+		logging: ["info", "error", "query"]
+	});
 
-  const server = new GraphQLServer({
-    schema,
-    context: (request) => ({
-      request,
-      loader: new GraphQLDatabaseLoader(connection),
-      divisionClubTeamsLoader: divisionTeamsLoader(),
-      divisionLoader: levelDivisionsLoader(),
-      clubLoader: clubLoader(),
-      clubTeamsLoader: clubTeamsLoader(),
-      levelLoader: levelLoader(),
-      categoryLoader: clubCategoryLoader(),
-      venueLoader: clubVenueLoader()
-    })
-  });
+	const server = new GraphQLServer({
+		schema,
+		context: ({request}) => ({
+			request,
+			divisionClubTeamsLoader: divisionTeamsLoader(),
+			divisionLoader: levelDivisionsLoader(),
+			clubLoader: clubLoader(),
+			clubTeamsLoader: clubTeamsLoader(),
+			levelLoader: levelLoader(),
+			categoryLoader: clubCategoryLoader(),
+			venueLoader: clubVenuesLoader(),
+			matchResultsLoader: matchResultsLoader(),
+			divisionMatchResultsLoader: divisionMatchResultsLoader(),
+			clubTeamLoader: clubTeamLoader(),
+			matchInfoLoader: matchInfoLoader(),
+			memberLoader: memberLoader()
+		} as GraphQlContext)
+	});
 
-  server.express.use('/voyager', voyagerMiddleware({endpointUrl: '/graphql'}));
-  // Init services
-  console.log('Starting services...');
+	server.express.use('/voyager', voyagerMiddleware({endpointUrl: '/graphql'}));
+	// Init services
+	console.log('Starting services...');
 
-  server.start({
-    endpoint: '/graphql',
-    tracing: true
-  }, () => console.log('Server is running on http://localhost:4000'));
+	server.start({
+		endpoint: '/graphql',
+		tracing: true
+	}, () => console.log('Server is running on http://localhost:4000'));
 };
 start();
 

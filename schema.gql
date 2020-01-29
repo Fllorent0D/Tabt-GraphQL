@@ -63,26 +63,26 @@ type MatchInfo {
   competition_id: Float
   category: Float
   home_club: Float
-  home_indice: String
-  away_club: Float
-  away_indice: String
   home_score: Float
-  away_score: Float
-  match_ok: String
-  home_captain_player_id: Float
-  away_captain_player_id: Float
-  referee_player_id: Float
-  room_responsible_player_id: Float
   end_time: DateTime
-  matchResult: MatchResult
 }
 
 type MatchResult {
-  matchInfo: MatchInfo
-  division: Division
-  match_id: Float
+  div_id: Division
+  week: Float
+  homeScore: Float
+  awayScore: Float
+  homeSets: Float
+  awaySets: Float
+  match_id: ID
   awayTeam: ClubTeam
   homeTeam: ClubTeam
+  scoreModified: Boolean
+  homeCaptain: PlayerInfo
+  awayCaptain: PlayerInfo
+  referee: PlayerInfo
+  roomResponsible: PlayerInfo
+  matchInfo: MatchInfo
 }
 
 type MatchSystem {

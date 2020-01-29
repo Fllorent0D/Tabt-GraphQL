@@ -7,6 +7,9 @@ import {Venue} from '../entities/venue';
 import {Level} from '../entities/level';
 import {ClubTeam} from '../entities/club-team';
 import {Division} from '../entities/division';
+import {MatchResult} from '../entities/matchResult';
+import {MatchInfo} from '../entities/matchInfo';
+import {PlayerInfo} from '../entities/player-info';
 
 export const loadManyForKeyBatchFunction = <T>(repository: Repository<T>, key: string): (ids: number[]) => Promise<T[][]> => async (ids) => {
   const entities = await repository
@@ -28,10 +31,10 @@ export const loadOneForKeyBatchFunction = <T>(repository: Repository<T>, key: st
 
 
 // Club
-export const clubLoader = () => new DataLoader(loadManyForKeyBatchFunction(getRepository(Club), 'club_id'));
+export const clubLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(Club), 'id'));
 export const clubCategoryLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(ClubCategory), 'id'));
-export const clubVenueLoader = () => new DataLoader(loadManyForKeyBatchFunction(getRepository(Venue), 'clubId'));
-
+export const clubVenuesLoader = () => new DataLoader(loadManyForKeyBatchFunction(getRepository(Venue), 'clubId'));
+// export const clubMembersLoader = () => new DataLoader();
 // Level
 export const levelLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(Level), 'id'));
 
@@ -41,3 +44,11 @@ export const clubTeamsLoader = () => new DataLoader(loadManyForKeyBatchFunction(
 
 //Divisions
 export const levelDivisionsLoader = () => new DataLoader(loadManyForKeyBatchFunction(getRepository(Division), 'level_id'));
+
+//MatchResult
+export const matchResultsLoader = () => new DataLoader(loadManyForKeyBatchFunction(getRepository(MatchResult), 'match_id'));
+export const divisionMatchResultsLoader = () => new DataLoader(loadManyForKeyBatchFunction(getRepository(MatchResult), 'div_id'));
+export const matchInfoLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(MatchInfo), 'id'));
+
+// Player
+export const memberLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(PlayerInfo), 'id'));
