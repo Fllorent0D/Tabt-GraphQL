@@ -1,78 +1,54 @@
-import {Arg, Args, Ctx, FieldResolver, Info, Query, Resolver, Root} from 'type-graphql';
+import {Arg, Ctx, FieldResolver, Info, Query, Resolver, Root} from 'type-graphql';
 import {OrmRepository} from 'typeorm-typedi-extensions';
-import {In, Repository} from 'typeorm';
+import {Repository} from 'typeorm';
 
 import {Club} from '../entities/club';
 import {PlayerInfo} from '../entities/player-info';
-import {PlayerClub} from '../entities/playerClub';
-import {GraphQLResolveInfo} from 'graphql';
 import {ClubTeam} from '../entities/club-team';
 import {ClubCategory} from '../entities/club-category';
 import {Venue} from '../entities/venue';
+import {GraphQlContext} from '../index';
 
 @Resolver(Club)
 export class ClubResolver {
 
-  constructor(
-    @OrmRepository(Club) private clubRepository: Repository<Club>,
-    @OrmRepository(PlayerClub) private playerClubRepository: Repository<PlayerClub>,
-    @OrmRepository(PlayerInfo) private playerInfoRepository: Repository<PlayerInfo>) {
-  }
+	constructor(
+		@OrmRepository(Club) private clubRepository: Repository<Club>
+	) {
+	}
 
-  @Query(() => Club)
-  async club(
-    @Arg('clubId') clubId: string,
-    @Arg('season') season: number
-  ): Promise<Club> {
-    return this.clubRepository.findOne({indice: clubId});
-  }
+	@Query(() => Club)
+	async club(
+		@Arg('clubId') clubIndex: string,
+		@Ctx() context: GraphQlContext): Promise<Club> {
+		return context.clubIndexLoader.load(clubIndex);
+	}
 
-  @Query(() => [Club])
-  async clubs(): Promise<Club[]> {
-    return this.clubRepository.find();
-  }
+	@Query(() => [Club])
+	async clubs(): Promise<Club[]> {
+		return this.clubRepository.find();
+	}
 
-  @FieldResolver(returns => [PlayerInfo])
-  async members(
-    @Root() club: Club,
-    @Ctx() context: any
-  ): Promise<PlayerInfo[]> {
-    const players = await this.playerInfoRepository
-      .createQueryBuilder('player_info')
-      .leftJoinAndMapOne('player_club', PlayerClub, 'player_club', 'player_info.id = player_club.player_id')
-      .where('player_club.season = :season', {season: 17})
-      .getMany();
+	@FieldResolver(() => [PlayerInfo])
+	async members(@Root() club: Club, @Ctx() context: GraphQlContext
+	): Promise<PlayerInfo[]> {
+		return context.memberClubLoader.load(club.id);
+	}
 
-    console.log(players);
+	@FieldResolver(() => [ClubTeam])
+	async teams(@Root() club: Club, @Ctx() context: GraphQlContext
+	): Promise<ClubTeam[]> {
+		return context.clubTeamsLoader.load(club.id);
+	}
 
-    return players;
-    /*
-    const playerClub: PlayerClub[] = await this.playerClubRepository.find({
-      club_id: club.id,
-      season: 17
-    }, {relations: ["player"]});
-    const allIds = playerClub.map((pClub) => pClub.player_id);
-    return this.playerInfoRepository.find({id: In(allIds)});
-    */
-    // return Promise.all(playerClub.map((playerClub) => playerClub.player));
-  }
+	@FieldResolver(() => ClubCategory)
+	async category(@Root() club: Club, @Ctx() context: GraphQlContext) {
+		return context.categoryLoader.load(club.categoryId);
+	}
 
-  @FieldResolver(returns => [ClubTeam])
-  async teams(
-    @Root() club: Club,
-    @Ctx() context: any
-  ): Promise<PlayerInfo[]> {
-    return context.clubTeamsLoader.load(club.id);
-  }
-
-  @FieldResolver(() => ClubCategory)
-  async category(@Root() club: Club, @Ctx() context: any) {
-    return context.categoryLoader.load(club.categoryId);
-  }
-
-  @FieldResolver(() => [Venue])
-  async address(@Root()club: Club, @Ctx() context: any) {
-    return context.venueLoader.load(club.id);
-  }
+	@FieldResolver(() => [Venue])
+	async address(@Root()club: Club, @Ctx() context: GraphQlContext) {
+		return context.venueLoader.load(club.id);
+	}
 
 }

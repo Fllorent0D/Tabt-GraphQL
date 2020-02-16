@@ -3,7 +3,7 @@ import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, M
 @Entity('matchplayer', { schema: 'tabt' })
 @Index('home_player_id', ['home_player_id'])
 @Index('away_player_id', ['away_player_id'])
-export class matchplayer {
+export class MatchPlayer {
   @Column('int', {
     nullable: false,
     primary: true,

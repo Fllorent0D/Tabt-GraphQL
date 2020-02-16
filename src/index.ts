@@ -33,13 +33,17 @@ import {MatchResult} from './entities/matchResult';
 import {clubTeamLoader} from './dataloaders/teams.dataloader';
 import {MatchInfo} from './entities/matchInfo';
 import {PlayerInfo} from './entities/player-info';
-import {MatchInfoResolver} from './resolvers/match_info_resolver';
+import {MatchPlayerListResolver} from './resolvers/match_info_resolver';
+import {membersClubDataloader, playerListDataloader} from './dataloaders/members.dataloader';
+import {clubIndexLoader, clubMemberLoader} from './dataloaders/clubs.dataloader';
+import {MatchPlayer} from './entities/matchPlayer';
 
 export interface GraphQlContext {
 	request: Request;
 	divisionClubTeamsLoader: DataLoader<number, ClubTeam[], number>;
 	divisionLoader: DataLoader<number, Division[], number>;
 	clubLoader: DataLoader<number, Club, number>;
+	clubIndexLoader: DataLoader<string, Club, string>;
 	clubTeamsLoader: DataLoader<number, ClubTeam[], number>;
 	levelLoader: DataLoader<number, Level, number>;
 	categoryLoader: DataLoader<number, ClubCategory, number>;
@@ -48,8 +52,13 @@ export interface GraphQlContext {
 	divisionMatchResultsLoader: DataLoader<number, MatchResult[]>,
 	clubTeamLoader: DataLoader<string, ClubTeam>,
 	matchInfoLoader: DataLoader<any, MatchInfo>,
-	memberLoader: DataLoader<number, PlayerInfo>
+	memberLoader: DataLoader<number, PlayerInfo>,
+	memberClubLoader: DataLoader<number, PlayerInfo[], number>
+	clubMemberLoader: DataLoader<number, Club, number>;
+	playerListLoader: DataLoader<number, MatchPlayer[], number>
 }
+
+export const CURRENT_SEASON = 17;
 
 const start = async () => {
 
@@ -64,7 +73,7 @@ const start = async () => {
 			DivisionResolver,
 			MatchResultResolver,
 			TeamResolver,
-			MatchInfoResolver
+			MatchPlayerListResolver
 		],
 		container: Container,
 		emitSchemaFile: true,
@@ -81,7 +90,7 @@ const start = async () => {
 		"port": 3306,
 		"username": "root",
 		"password": "myRootpwd32",
-		"database": "tabt",
+		"database": "Tabt",
 		"synchronize": false,
 		"entities": [
 			"src/entities/*.ts"
@@ -97,6 +106,7 @@ const start = async () => {
 			divisionClubTeamsLoader: divisionTeamsLoader(),
 			divisionLoader: levelDivisionsLoader(),
 			clubLoader: clubLoader(),
+			clubIndexLoader: clubIndexLoader(),
 			clubTeamsLoader: clubTeamsLoader(),
 			levelLoader: levelLoader(),
 			categoryLoader: clubCategoryLoader(),
@@ -105,7 +115,10 @@ const start = async () => {
 			divisionMatchResultsLoader: divisionMatchResultsLoader(),
 			clubTeamLoader: clubTeamLoader(),
 			matchInfoLoader: matchInfoLoader(),
-			memberLoader: memberLoader()
+			memberLoader: memberLoader(),
+			memberClubLoader: membersClubDataloader(),
+			clubMemberLoader: clubMemberLoader(),
+			playerListLoader: playerListDataloader()
 		} as GraphQlContext)
 	});
 
@@ -119,4 +132,3 @@ const start = async () => {
 	}, () => console.log('Server is running on http://localhost:4000'));
 };
 start();
-

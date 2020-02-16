@@ -153,4 +153,7 @@ export class Club {
   @Field(() => [PlayerInfo])
   members: PlayerInfo[];
 
+
+  // Do not use
+  players_club?: PlayerClub[];
 }

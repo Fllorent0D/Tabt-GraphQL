@@ -4,19 +4,13 @@ import {OrmRepository} from 'typeorm-typedi-extensions';
 import {PlayerClub} from '../entities/playerClub';
 import {Repository} from 'typeorm';
 import {Club} from '../entities/club';
+import {GraphQlContext} from '../index';
 
 @Resolver(PlayerInfo)
 export class PlayerInfoResolver {
-  constructor(
-    @OrmRepository(PlayerClub) private playerClubRepo: Repository<PlayerClub>
-  ) {
-  }
-
-  @FieldResolver(returns => Club)
-  async club(@Root() playerInfo: PlayerInfo, @Ctx() context: any): Promise<Club> {
-    const playerClub = await this.playerClubRepo.findOne({player_id: playerInfo.id, season: 17}, {relations: ["club"]});
-    return playerClub.club;
-  }
-
+	@FieldResolver(returns => Club)
+	async club(@Root() playerInfo: PlayerInfo, @Ctx() context: GraphQlContext): Promise<Club> {
+		return context.clubMemberLoader.load(playerInfo.id);
+	}
 
 }

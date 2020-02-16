@@ -67,6 +67,11 @@ type MatchInfo {
   end_time: DateTime
 }
 
+type MatchPlayerList {
+  player: PlayerInfo
+  isWalkover: Boolean
+}
+
 type MatchResult {
   div_id: Division
   week: Float
@@ -78,11 +83,13 @@ type MatchResult {
   awayTeam: ClubTeam
   homeTeam: ClubTeam
   scoreModified: Boolean
-  homeCaptain: PlayerInfo
-  awayCaptain: PlayerInfo
-  referee: PlayerInfo
-  roomResponsible: PlayerInfo
+  homePlayers: [MatchPlayerList]
+  awayPlayers: [MatchPlayerList]
   matchInfo: MatchInfo
+  homeCaptain: PlayerInfoOrNot
+  awayCaptain: PlayerInfoOrNot
+  referee: PlayerInfoOrNot
+  roomResponsible: PlayerInfoOrNot
 }
 
 type MatchSystem {
@@ -101,6 +108,10 @@ type MatchSystemPlayer {
   matchSystem: MatchSystem
 }
 
+type NoPlayerIdRegisteredException {
+  message: String
+}
+
 type PlayerInfo {
   id: ID
   first_name: String
@@ -115,8 +126,10 @@ type PlayerInfo {
   club: Club
 }
 
+union PlayerInfoOrNot = PlayerInfo | NoPlayerIdRegisteredException
+
 type Query {
-  club(season: Float, clubId: String): Club
+  club(clubId: String): Club
   clubs: [Club]
   level(id: Float): Level
   levels: [Level]

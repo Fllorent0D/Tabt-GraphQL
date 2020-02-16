@@ -1,4 +1,4 @@
-import {getRepository, In, Repository} from 'typeorm';
+import {FindOperator, getRepository, In, Repository} from 'typeorm';
 import DataLoader = require('dataloader');
 
 import {Club} from '../entities/club';

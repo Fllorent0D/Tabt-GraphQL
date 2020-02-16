@@ -16,9 +16,8 @@ import {
 import {Field, ID, ObjectType} from 'type-graphql';
 import {Division} from './division';
 import {ClubTeam} from './club-team';
-import {Club} from './club';
-import {MatchInfo} from './matchInfo';
 import {PlayerInfo} from './player-info';
+import {NoPlayerIdRegisteredException, PlayerInfoOrNotUnion} from '../exceptions/NoPlayerIdRegisteredException';
 
 @ObjectType()
 @Entity('divisionresults', {schema: 'tabt'})
@@ -173,15 +172,21 @@ export class MatchResult {
   @Field()
   scoreModified: boolean;
 
-  @Field(() => PlayerInfo)
-  homeCaptain: PlayerInfo;
+  @Field(() => [MatchPlayerList])
+  homePlayers: MatchPlayerList[];
+
+  @Field(() => [MatchPlayerList])
+  awayPlayers: MatchPlayerList[];
+}
+
+@ObjectType()
+export class MatchPlayerList {
+  player_id: number;
 
   @Field(() => PlayerInfo)
-  awayCaptain: PlayerInfo;
+  player: PlayerInfo;
 
-  @Field(() => PlayerInfo)
-  referee: PlayerInfo;
+  @Field()
+  isWalkover: boolean
 
-  @Field(() => PlayerInfo)
-  roomResponsible: PlayerInfo;
 }
