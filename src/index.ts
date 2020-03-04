@@ -2,9 +2,9 @@ import 'reflect-metadata';
 import {buildSchema} from 'type-graphql';
 import {GraphQLServer} from 'graphql-yoga';
 import {Container} from 'typedi';
-import {TestMiddleware} from './middlewares/test-middleware';
+import {verifyToken} from './middlewares/verify-token';
 import {express as voyagerMiddleware} from 'graphql-voyager/middleware';
-import {Connection, createConnection, useContainer} from 'typeorm';
+import {Connection, createConnection, getRepository, useContainer} from 'typeorm';
 import {ClubResolver} from './resolvers/club-resolver';
 import {PlayerInfoResolver} from './resolvers/player-resolver';
 import {LevelResolver} from './resolvers/level-resolver';
@@ -18,9 +18,16 @@ import {
 	clubCategoryLoader,
 	clubLoader,
 	clubTeamsLoader,
-	clubVenuesLoader, levelDivisionsLoader,
+	clubVenuesLoader,
+	levelDivisionsLoader,
 	divisionTeamsLoader,
-	levelLoader, matchResultsLoader, divisionMatchResultsLoader, matchInfoLoader, memberLoader
+	levelLoader,
+	matchResultsLoader,
+	divisionMatchResultsLoader,
+	matchInfoLoader,
+	memberLoader,
+	matchSetsLoader,
+	matchSystemPlayerLoader, divisionsLoader, playerELOLoader
 } from './dataloaders';
 import {Request} from 'express';
 import * as DataLoader from 'dataloader';
@@ -29,19 +36,30 @@ import {Level} from './entities/level';
 import {ClubCategory} from './entities/club-category';
 import {Venue} from './entities/venue';
 import {Club} from './entities/club';
-import {MatchResult} from './entities/matchResult';
+import {MatchResult, IndividualMatchResult} from './entities/matchResult';
 import {clubTeamLoader} from './dataloaders/teams.dataloader';
 import {MatchInfo} from './entities/matchInfo';
 import {PlayerInfo} from './entities/player-info';
-import {MatchPlayerListResolver} from './resolvers/match_info_resolver';
+import {MatchPlayerListResolver} from './resolvers/match-player-list-resolver';
 import {membersClubDataloader, playerListDataloader} from './dataloaders/members.dataloader';
 import {clubIndexLoader, clubMemberLoader} from './dataloaders/clubs.dataloader';
 import {MatchPlayer} from './entities/matchPlayer';
+import {MatchSet} from './entities/matchSet';
+import {AuthUser} from './entities/auth_user';
+import * as crypto from 'crypto';
+import {AuthUserResolver} from './resolvers/auth-user-resolver';
+import {MatchSystemPlayer} from './entities/matchSystemPlayer';
+import {IndividualMatchResultResolver} from './resolvers/IndividualMatchResult.resolver';
+import {PlayerLastELO} from './entities/playerLastELO';
+import {customAuthChecker, UserRights} from './middlewares/auth-checker';
 
 export interface GraphQlContext {
 	request: Request;
+	claims: UserRights[],
+	authenticated: boolean,
 	divisionClubTeamsLoader: DataLoader<number, ClubTeam[], number>;
-	divisionLoader: DataLoader<number, Division[], number>;
+	levelDivisionLoader: DataLoader<number, Division[], number>;
+	divisionLoader: DataLoader<number, Division, number>;
 	clubLoader: DataLoader<number, Club, number>;
 	clubIndexLoader: DataLoader<string, Club, string>;
 	clubTeamsLoader: DataLoader<number, ClubTeam[], number>;
@@ -55,7 +73,10 @@ export interface GraphQlContext {
 	memberLoader: DataLoader<number, PlayerInfo>,
 	memberClubLoader: DataLoader<number, PlayerInfo[], number>
 	clubMemberLoader: DataLoader<number, Club, number>;
-	playerListLoader: DataLoader<number, MatchPlayer[], number>
+	playerListLoader: DataLoader<number, MatchPlayer[], number>;
+	matchSetsLoader: DataLoader<number, MatchSet[], number>
+	matchSystemPlayerLoader: DataLoader<number, MatchSystemPlayer[], number>,
+	playerELOLoader: DataLoader<number, PlayerLastELO>
 }
 
 export const CURRENT_SEASON = 17;
@@ -65,6 +86,7 @@ const start = async () => {
 	console.clear();
 
 	const schema = await buildSchema({
+		authChecker: customAuthChecker,
 		resolvers: [
 			ClubResolver,
 			PlayerInfoResolver,
@@ -73,12 +95,14 @@ const start = async () => {
 			DivisionResolver,
 			MatchResultResolver,
 			TeamResolver,
-			MatchPlayerListResolver
+			MatchPlayerListResolver,
+			AuthUserResolver,
+			IndividualMatchResultResolver
 		],
 		container: Container,
 		emitSchemaFile: true,
 		globalMiddlewares: [],
-		nullableByDefault: true
+		nullableByDefault: true,
 	});
 
 	useContainer(Container);
@@ -103,8 +127,10 @@ const start = async () => {
 		schema,
 		context: ({request}) => ({
 			request,
+			claims: request['jwt']?.claims,
+			authenticated: !!request['jwt'],
 			divisionClubTeamsLoader: divisionTeamsLoader(),
-			divisionLoader: levelDivisionsLoader(),
+			levelDivisionLoader: levelDivisionsLoader(),
 			clubLoader: clubLoader(),
 			clubIndexLoader: clubIndexLoader(),
 			clubTeamsLoader: clubTeamsLoader(),
@@ -118,10 +144,14 @@ const start = async () => {
 			memberLoader: memberLoader(),
 			memberClubLoader: membersClubDataloader(),
 			clubMemberLoader: clubMemberLoader(),
-			playerListLoader: playerListDataloader()
+			playerListLoader: playerListDataloader(),
+			matchSetsLoader: matchSetsLoader(),
+			matchSystemPlayerLoader: matchSystemPlayerLoader(),
+			divisionLoader: divisionsLoader(),
+			playerELOLoader: playerELOLoader()
 		} as GraphQlContext)
 	});
-
+	server.express.use('/graphql', verifyToken);
 	server.express.use('/voyager', voyagerMiddleware({endpointUrl: '/graphql'}));
 	// Init services
 	console.log('Starting services...');

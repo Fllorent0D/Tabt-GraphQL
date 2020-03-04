@@ -2,7 +2,7 @@ import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, M
 
 @Entity('matchresults', { schema: 'tabt' })
 @Index('match_id', ['match_id', 'game_id'])
-export class matchresults {
+export class MatchSet {
   @Column('int', {
     nullable: false,
     primary: true,

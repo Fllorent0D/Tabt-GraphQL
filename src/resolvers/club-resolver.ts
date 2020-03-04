@@ -1,4 +1,4 @@
-import {Arg, Ctx, FieldResolver, Info, Query, Resolver, Root} from 'type-graphql';
+import {Arg, Authorized, Ctx, FieldResolver, Info, Query, Resolver, Root} from 'type-graphql';
 import {OrmRepository} from 'typeorm-typedi-extensions';
 import {Repository} from 'typeorm';
 
@@ -8,6 +8,7 @@ import {ClubTeam} from '../entities/club-team';
 import {ClubCategory} from '../entities/club-category';
 import {Venue} from '../entities/venue';
 import {GraphQlContext} from '../index';
+import {UserRights} from '../middlewares/auth-checker';
 
 @Resolver(Club)
 export class ClubResolver {

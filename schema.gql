@@ -52,10 +52,39 @@ type DivisionCategory {
   divisions: [Division]
 }
 
+type IndividualMatchResult {
+  matchNumber: Float
+  homePlayer: PlayerInfo
+  awayPlayer: PlayerInfo
+  homeSets: Float
+  awaySets: Float
+  homePlayerIndex: Float
+  awayPlayerIndex: Float
+  sets: [IndividualMatchSets]
+}
+
+type IndividualMatchSets {
+  setNumber: Float
+  homePoints: Float
+  awayPoints: Float
+  homeWO: Boolean
+  awayWO: Boolean
+}
+
 type Level {
   id: ID
   name: String
   divisions: [Division]
+}
+
+union LoginResults = LoginSuccessful | LoginUnsuccessful
+
+type LoginSuccessful {
+  access_token: String
+}
+
+type LoginUnsuccessful {
+  message: String
 }
 
 type MatchInfo {
@@ -70,6 +99,8 @@ type MatchInfo {
 type MatchPlayerList {
   player: PlayerInfo
   isWalkover: Boolean
+  position: Float
+  victory: Float
 }
 
 type MatchResult {
@@ -85,6 +116,7 @@ type MatchResult {
   scoreModified: Boolean
   homePlayers: [MatchPlayerList]
   awayPlayers: [MatchPlayerList]
+  individualsMatchResults: [IndividualMatchResult]
   matchInfo: MatchInfo
   homeCaptain: PlayerInfoOrNot
   awayCaptain: PlayerInfoOrNot
@@ -108,6 +140,10 @@ type MatchSystemPlayer {
   matchSystem: MatchSystem
 }
 
+type Mutation {
+  login(password: String, username: String): LoginResults
+}
+
 type NoPlayerIdRegisteredException {
   message: String
 }
@@ -124,6 +160,7 @@ type PlayerInfo {
   vttl_index: Float
   nationalNumber: String
   club: Club
+  elo: Float
 }
 
 union PlayerInfoOrNot = PlayerInfo | NoPlayerIdRegisteredException

@@ -14,8 +14,9 @@ import {
   RelationId
 } from 'typeorm';
 import {PlayerClub} from './playerClub';
-import {Field, ID, ObjectType} from 'type-graphql';
+import {Authorized, Field, ID, ObjectType} from 'type-graphql';
 import {Club} from './club';
+import {UserRights} from '../middlewares/auth-checker';
 
 @ObjectType()
 @Entity('playerinfo', {schema: 'tabt'})
@@ -47,6 +48,7 @@ export class PlayerInfo {
   last_name: string;
 
   @Field()
+  @Authorized([UserRights.Admin])
   @Column('varchar', {
     nullable: false,
     length: 60,
@@ -183,6 +185,8 @@ export class PlayerInfo {
   @Field(() => Club)
   club: Club;
 
-  player_club: PlayerClub;
+  @Field(() => Number, {nullable: true})
+  elo: number | null;
 
+  player_club: PlayerClub;
 }

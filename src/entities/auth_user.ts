@@ -2,7 +2,7 @@ import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, M
 
 @Entity('auth_user', { schema: 'tabt' })
 @Index('k_username', ['username'], { unique: true })
-export class auth_user {
+export class AuthUser {
   @Column('varchar', {
     nullable: false,
     primary: true,

@@ -13,4 +13,12 @@ export class PlayerInfoResolver {
 		return context.clubMemberLoader.load(playerInfo.id);
 	}
 
+	@FieldResolver(returns => Number, {nullable: true})
+	async elo(@Root() playerInfo: PlayerInfo, @Ctx() context: GraphQlContext): Promise<number | null> {
+		const lastElo = await context.playerELOLoader.load(playerInfo.id);
+		return lastElo?.points;
+	}
+
+
+
 }

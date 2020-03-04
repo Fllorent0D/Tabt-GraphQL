@@ -1,4 +1,4 @@
-import {createUnionType, Field, ObjectType} from "type-graphql";
+import {ArgumentValidationError, createUnionType, Field, ObjectType} from "type-graphql";
 import {PlayerInfo} from '../entities/player-info';
 import {GraphQLError} from 'graphql';
 
@@ -9,12 +9,10 @@ export class NoPlayerIdRegisteredException {
 	constructor(message: string){
 		this.message = message
 	}
-
 }
 
 export const PlayerInfoOrNotUnion = createUnionType({
 	name: "PlayerInfoOrNot",
 	types: [PlayerInfo, NoPlayerIdRegisteredException],
-	resolveType: (value: PlayerInfo | undefined) => ("message" in value) ? NoPlayerIdRegisteredException : PlayerInfo
+	resolveType: (value: PlayerInfo | NoPlayerIdRegisteredException) => (value instanceof NoPlayerIdRegisteredException) ? NoPlayerIdRegisteredException : PlayerInfo
 });
-

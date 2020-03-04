@@ -6,11 +6,13 @@ import {PlayerInfo} from '../entities/player-info';
 
 @Resolver(MatchPlayerList)
 export class MatchPlayerListResolver {
-	constructor() {
-	}
 
 	@FieldResolver(() => PlayerInfo)
-	player(@Root() matchPlayerList: MatchPlayerList, @Ctx() context: GraphQlContext): Promise<PlayerInfo> {
-		return context.memberLoader.load(matchPlayerList.player_id);
+	player(@Root() matchPlayerList: MatchPlayerList, @Ctx() context: GraphQlContext): Promise<PlayerInfo | null> {
+		if(matchPlayerList.player_id){
+			return context.memberLoader.load(matchPlayerList.player_id);
+		} else {
+			return null;
+		}
 	}
 }
