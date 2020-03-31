@@ -17,6 +17,7 @@ import {PlayerClub} from './playerClub';
 import {Authorized, Field, ID, ObjectType} from 'type-graphql';
 import {Club} from './club';
 import {UserRights} from '../middlewares/auth-checker';
+import {CacheControl} from '../middlewares/cache-control';
 
 @ObjectType()
 @Entity('playerinfo', {schema: 'tabt'})
@@ -32,6 +33,7 @@ export class PlayerInfo {
   readonly id: number;
 
   @Field()
+  @CacheControl({maxAge: 60})
   @Column('varchar', {
     nullable: false,
     length: 50,
@@ -48,7 +50,6 @@ export class PlayerInfo {
   last_name: string;
 
   @Field()
-  @Authorized([UserRights.Admin])
   @Column('varchar', {
     nullable: false,
     length: 60,
@@ -76,6 +77,7 @@ export class PlayerInfo {
     nullable: true,
     name: 'birthdate'
   })
+  @Authorized([UserRights.Admin])
   birthdate: string | null;
 
   @Field()
@@ -102,21 +104,26 @@ export class PlayerInfo {
     length: 50,
     name: 'national_number'
   })
+  @Authorized([UserRights.Admin])
   nationalNumber: string | null;
 
+  @Field()
   @Column('varchar', {
     nullable: false,
     length: 100,
     name: 'address'
   })
+  @Authorized([UserRights.Admin])
   address: string;
 
+  @Field()
   @Column('smallint', {
     nullable: false,
     unsigned: true,
     default: () => "'0'",
     name: 'postcode'
   })
+  @Authorized([UserRights.Admin])
   postcode: number;
 
   @Column('enum', {
@@ -126,6 +133,7 @@ export class PlayerInfo {
   })
   sex: string | null;
 
+  @Field()
   @Column('char', {
     nullable: false,
     length: 2,
@@ -134,32 +142,40 @@ export class PlayerInfo {
   })
   nationality: string;
 
+  @Field()
   @Column('varchar', {
     nullable: true,
     length: 15,
     name: 'home_phone'
   })
+  @Authorized([UserRights.Admin])
   home_phone: string | null;
 
+  @Field()
   @Column('varchar', {
     nullable: true,
     length: 15,
     name: 'office_phone'
   })
+  @Authorized([UserRights.Admin])
   office_phone: string | null;
 
+  @Field()
   @Column('varchar', {
     nullable: true,
     length: 15,
     name: 'fax'
   })
+  @Authorized([UserRights.Admin])
   fax: string | null;
 
+  @Field()
   @Column('varchar', {
     nullable: true,
     length: 15,
     name: 'gsm'
   })
+  @Authorized([UserRights.Admin])
   gsm: string | null;
 
   @Column('text', {

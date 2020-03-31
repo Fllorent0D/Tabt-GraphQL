@@ -1,16 +1,26 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "target": "es2016",
-    "moduleResolution": "node",
+    "target": "ES2019",
     "module": "commonjs",
-    "sourceMap": true,
-    "rootDir": "src",
-    "outDir": "dist",
     "lib": [
-      "es2016", "esnext.asynciterable"
+      "es6",
+      "esnext",
+      "dom"
     ],
+    "declaration": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "strict": false,
+    "removeComments": true,
+    "moduleResolution": "node",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "esModuleInterop": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true
   }
 }

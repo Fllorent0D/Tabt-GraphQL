@@ -1,6 +1,6 @@
 import {getRepository, In} from 'typeorm';
 import {Club} from '../entities/club';
-import DataLoader = require('dataloader');
+import DataLoader from 'dataloader';
 import {PlayerInfo} from '../entities/player-info';
 import {PlayerClub} from '../entities/playerClub';
 import {CURRENT_SEASON} from '../index';

@@ -1,7 +1,7 @@
 // club_id#club_indice
 import {getRepository, In, Repository} from 'typeorm';
 import {ClubTeam} from '../entities/club-team';
-import DataLoader = require('dataloader');
+import DataLoader from 'dataloader';
 
 export const getClubTeamsBatch = async (ids: string[]) => {
 

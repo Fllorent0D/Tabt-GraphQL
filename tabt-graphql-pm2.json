@@ -1,0 +1,7 @@
+{
+  "apps" : [{
+    "name"        : "tabt-graphql",
+    "script"      : "./dist/index.js",
+    "exec_mode"   : "fork"
+  }]
+}

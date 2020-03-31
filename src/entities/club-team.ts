@@ -16,6 +16,7 @@ import {
 import {Field, ObjectType} from 'type-graphql';
 import {Division} from './division';
 import {Club} from './club';
+import {CacheControl} from '../middlewares/cache-control';
 
 @ObjectType()
 @Entity('divisionteaminfo', {schema: 'tabt'})

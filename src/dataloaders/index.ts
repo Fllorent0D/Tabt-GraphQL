@@ -1,5 +1,5 @@
 import {FindOperator, getRepository, In, Repository} from 'typeorm';
-import DataLoader = require('dataloader');
+import DataLoader from 'dataloader';
 
 import {Club} from '../entities/club';
 import {ClubCategory} from '../entities/club-category';
@@ -12,7 +12,6 @@ import {MatchInfo} from '../entities/matchInfo';
 import {PlayerInfo} from '../entities/player-info';
 import {MatchSet} from '../entities/matchSet';
 import {MatchSystemPlayer} from '../entities/matchSystemPlayer';
-import {playerelo} from '../entities/playerelo';
 import {PlayerLastELO} from '../entities/playerLastELO';
 
 export const loadManyForKeyBatchFunction = <T>(repository: Repository<T>, key: string): (ids: number[]) => Promise<T[][]> => async (ids) => {

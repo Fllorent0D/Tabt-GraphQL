@@ -1,4 +1,4 @@
-import DataLoader = require('dataloader');
+import DataLoader from 'dataloader';
 import {PlayerInfo} from '../entities/player-info';
 import {PlayerClub} from '../entities/playerClub';
 import {CURRENT_SEASON} from '../index';
@@ -20,7 +20,7 @@ export const getMembersClubBatch = async (clubsIds: number[]) => {
 		})
 		.getMany();
 
-	return clubsIds.map((clubId) => players.filter((player) => player.player_club?.club_id === clubId));
+	return clubsIds.map((clubId) => players.filter((player) => player.player_club.club_id === clubId));
 };
 export const membersClubDataloader = () => new DataLoader<number, PlayerInfo[], number>(getMembersClubBatch);
 

@@ -1,6 +1,4 @@
 import {Arg, Field, Mutation, ObjectType, Resolver} from 'type-graphql';
-import * as passport from 'passport';
-import {LocalStrategy} from 'passport-local';
 import {getRepository} from 'typeorm';
 import {AuthUser} from '../entities/auth_user';
 import * as crypto from "crypto";
@@ -27,7 +25,7 @@ export class AuthUserResolver {
 				jwtid: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
 			});
 
-			return new LoginSuccessful(token);
+			return new LoginSuccessful(token, contextUser.claims);
 		}
 
 		return new LoginUnsuccessful('Invalid credentials');

@@ -98,7 +98,5 @@ export class MatchSystem {
   @OneToMany(() => MatchSystemPlayer, game => game.matchSystem)
   players: Promise<MatchSystemPlayer[]>;
 
-  @Field(() => [Division])
-  @OneToMany(() => Division, division => division.matchSystem)
-  divisions: Promise<Division[]>;
+
 }

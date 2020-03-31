@@ -9,6 +9,7 @@ import {ClubCategory} from '../entities/club-category';
 import {Venue} from '../entities/venue';
 import {GraphQlContext} from '../index';
 import {UserRights} from '../middlewares/auth-checker';
+import {CacheControl} from '../middlewares/cache-control';
 
 @Resolver(Club)
 export class ClubResolver {
@@ -43,6 +44,7 @@ export class ClubResolver {
 	}
 
 	@FieldResolver(() => ClubCategory)
+	@CacheControl({maxAge: 60})
 	async category(@Root() club: Club, @Ctx() context: GraphQlContext) {
 		return context.categoryLoader.load(club.categoryId);
 	}

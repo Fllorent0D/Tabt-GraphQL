@@ -81,6 +81,7 @@ union LoginResults = LoginSuccessful | LoginUnsuccessful
 
 type LoginSuccessful {
   access_token: String
+  claims: [String]
 }
 
 type LoginUnsuccessful {
@@ -127,7 +128,6 @@ type MatchResult {
 type MatchSystem {
   id: ID
   players: [MatchSystemPlayer]
-  divisions: [Division]
 }
 
 type MatchSystemPlayer {
@@ -159,6 +159,13 @@ type PlayerInfo {
   index: Float
   vttl_index: Float
   nationalNumber: String
+  address: String
+  postcode: Float
+  nationality: String
+  home_phone: String
+  office_phone: String
+  fax: String
+  gsm: String
   club: Club
   elo: Float
 }

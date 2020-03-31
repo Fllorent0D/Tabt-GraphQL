@@ -18,6 +18,7 @@ import {PlayerClub} from './playerClub';
 import {Field, ID, ObjectType} from 'type-graphql';
 import {PlayerInfo} from './player-info';
 import {ClubTeam} from './club-team';
+import {CacheControl} from '../middlewares/cache-control';
 
 @ObjectType()
 @Entity('clubs', {schema: 'tabt'})

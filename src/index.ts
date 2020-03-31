@@ -45,13 +45,13 @@ import {membersClubDataloader, playerListDataloader} from './dataloaders/members
 import {clubIndexLoader, clubMemberLoader} from './dataloaders/clubs.dataloader';
 import {MatchPlayer} from './entities/matchPlayer';
 import {MatchSet} from './entities/matchSet';
-import {AuthUser} from './entities/auth_user';
-import * as crypto from 'crypto';
 import {AuthUserResolver} from './resolvers/auth-user-resolver';
 import {MatchSystemPlayer} from './entities/matchSystemPlayer';
 import {IndividualMatchResultResolver} from './resolvers/IndividualMatchResult.resolver';
 import {PlayerLastELO} from './entities/playerLastELO';
 import {customAuthChecker, UserRights} from './middlewares/auth-checker';
+import {ApolloServer} from "apollo-server-express";
+
 
 export interface GraphQlContext {
 	request: Request;
@@ -79,6 +79,11 @@ export interface GraphQlContext {
 	playerELOLoader: DataLoader<number, PlayerLastELO>
 }
 
+import express from 'express';
+import {ExpressContext} from 'apollo-server-express/dist/ApolloServer';
+import {ApolloEngine} from 'apollo-engine';
+import {GraphQLRequestContext} from 'apollo-server-types';
+require('dotenv').config();
 export const CURRENT_SEASON = 17;
 
 const start = async () => {
@@ -102,11 +107,10 @@ const start = async () => {
 		container: Container,
 		emitSchemaFile: true,
 		globalMiddlewares: [],
-		nullableByDefault: true,
+		nullableByDefault: true
 	});
 
 	useContainer(Container);
-
 	const connection: Connection = await createConnection({
 		"name": "default",
 		"type": "mysql",
@@ -117,12 +121,12 @@ const start = async () => {
 		"database": "Tabt",
 		"synchronize": false,
 		"entities": [
-			"src/entities/*.ts"
+			__dirname + "/entities/{*.ts,*.js}"
 		],
 		cache: true,
 		logging: ["info", "error", "query"]
 	});
-
+	/*
 	const server = new GraphQLServer({
 		schema,
 		context: ({request}) => ({
@@ -151,14 +155,82 @@ const start = async () => {
 			playerELOLoader: playerELOLoader()
 		} as GraphQlContext)
 	});
-	server.express.use('/graphql', verifyToken);
-	server.express.use('/voyager', voyagerMiddleware({endpointUrl: '/graphql'}));
+	*/
+	const server = new ApolloServer({
+		schema,
+		cacheControl: true,
+		tracing: true,
+		engine: {
+			apiKey: 'service:Tabt:U8ck2vW4092JTNbtWEAnMg',
+			schemaTag: 'development',
+			generateClientInfo: (requestContext: GraphQLRequestContext<ExpressContext>) => {
+				const headers = requestContext.context.req && requestContext.context.req['headers'];
+				if(headers) {
+					return {
+						clientName: headers['tabt-client-name'],
+						clientVersion: headers['tabt-client-version'],
+					};
+				} else {
+					return {
+						clientName: "Unknown Client",
+						clientVersion: "Unversioned",
+					};
+				}
+			}
+		},
+		context: (expressContext: ExpressContext) => ({
+			request: expressContext.req as Request,
+			claims: expressContext.req['jwt']?.claims,
+			authenticated: !!expressContext.req['jwt'],
+			divisionClubTeamsLoader: divisionTeamsLoader(),
+			levelDivisionLoader: levelDivisionsLoader(),
+			clubLoader: clubLoader(),
+			clubIndexLoader: clubIndexLoader(),
+			clubTeamsLoader: clubTeamsLoader(),
+			levelLoader: levelLoader(),
+			categoryLoader: clubCategoryLoader(),
+			venueLoader: clubVenuesLoader(),
+			matchResultsLoader: matchResultsLoader(),
+			divisionMatchResultsLoader: divisionMatchResultsLoader(),
+			clubTeamLoader: clubTeamLoader(),
+			matchInfoLoader: matchInfoLoader(),
+			memberLoader: memberLoader(),
+			memberClubLoader: membersClubDataloader(),
+			clubMemberLoader: clubMemberLoader(),
+			playerListLoader: playerListDataloader(),
+			matchSetsLoader: matchSetsLoader(),
+			matchSystemPlayerLoader: matchSystemPlayerLoader(),
+			divisionLoader: divisionsLoader(),
+			playerELOLoader: playerELOLoader()
+		})
+	});
+	const expressApp = express();
+	expressApp.use('/graphql', verifyToken);
+	expressApp.use('/voyager', voyagerMiddleware({endpointUrl: '/graphql'}));
+
+	server.applyMiddleware({app: expressApp, path: '/graphql'});
+
 	// Init services
 	console.log('Starting services...');
 
-	server.start({
-		endpoint: '/graphql',
-		tracing: true
-	}, () => console.log('Server is running on http://localhost:4000'));
+	// configure shared config settings
+	const port = 4000;
+	const graphqlEndpointPath = "/graphql";
+
+	// create an Apollo Engine
+	const engine = new ApolloEngine({
+		apiKey: process.env.APOLLO_ENGINE_API_KEY,
+	});
+
+	// launch the Apollo Engine
+	engine.listen(
+		{
+			port,
+			expressApp,
+			graphqlPaths: [graphqlEndpointPath],
+		},
+		() => console.log(`Server with Apollo Engine is running on http://localhost:${port}`),
+	);
+	//expressApp.listen(4000, () => console.log('Server is running on http://localhost:4000'));
 };
 start();

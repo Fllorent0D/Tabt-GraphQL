@@ -16,7 +16,7 @@ export class PlayerInfoResolver {
 	@FieldResolver(returns => Number, {nullable: true})
 	async elo(@Root() playerInfo: PlayerInfo, @Ctx() context: GraphQlContext): Promise<number | null> {
 		const lastElo = await context.playerELOLoader.load(playerInfo.id);
-		return lastElo?.points;
+		return lastElo.points;
 	}
 
 
