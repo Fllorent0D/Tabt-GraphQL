@@ -27,7 +27,7 @@ import {
 	matchInfoLoader,
 	memberLoader,
 	matchSetsLoader,
-	matchSystemPlayerLoader, divisionsLoader, playerELOLoader
+	matchSystemPlayerLoader, divisionsLoader, playerELOLoader, calendarTypeLoader
 } from './dataloaders';
 import {Request} from 'express';
 import * as DataLoader from 'dataloader';
@@ -51,7 +51,16 @@ import {IndividualMatchResultResolver} from './resolvers/IndividualMatchResult.r
 import {PlayerLastELO} from './entities/playerLastELO';
 import {customAuthChecker, UserRights} from './middlewares/auth-checker';
 import {ApolloServer} from "apollo-server-express";
-
+import express from 'express';
+import {ExpressContext} from 'apollo-server-express/dist/ApolloServer';
+import {ApolloEngine} from 'apollo-engine';
+import {GraphQLRequestContext} from 'apollo-server-types';
+import {fieldExtensionsEstimator, getComplexity, simpleEstimator} from 'graphql-query-complexity';
+import {separateOperations} from 'graphql';
+import {CalendarTypeInfo} from './entities/calendarTypeInfo';
+import {CalendarDates} from './entities/calendarDates';
+import {calendarDatesLoader} from './dataloaders/calendar-dates.dataloader';
+require('dotenv').config();
 
 export interface GraphQlContext {
 	request: Request;
@@ -76,14 +85,11 @@ export interface GraphQlContext {
 	playerListLoader: DataLoader<number, MatchPlayer[], number>;
 	matchSetsLoader: DataLoader<number, MatchSet[], number>
 	matchSystemPlayerLoader: DataLoader<number, MatchSystemPlayer[], number>,
-	playerELOLoader: DataLoader<number, PlayerLastELO>
+	playerELOLoader: DataLoader<number, PlayerLastELO>,
+	calendarTypeLoader: DataLoader<number, CalendarTypeInfo>,
+	calendarDatesLoader: DataLoader<string, CalendarDates>
 }
 
-import express from 'express';
-import {ExpressContext} from 'apollo-server-express/dist/ApolloServer';
-import {ApolloEngine} from 'apollo-engine';
-import {GraphQLRequestContext} from 'apollo-server-types';
-require('dotenv').config();
 export const CURRENT_SEASON = 17;
 
 const start = async () => {
@@ -111,6 +117,7 @@ const start = async () => {
 	});
 
 	useContainer(Container);
+
 	const connection: Connection = await createConnection({
 		"name": "default",
 		"type": "mysql",
@@ -126,39 +133,12 @@ const start = async () => {
 		cache: true,
 		logging: ["info", "error", "query"]
 	});
-	/*
-	const server = new GraphQLServer({
-		schema,
-		context: ({request}) => ({
-			request,
-			claims: request['jwt']?.claims,
-			authenticated: !!request['jwt'],
-			divisionClubTeamsLoader: divisionTeamsLoader(),
-			levelDivisionLoader: levelDivisionsLoader(),
-			clubLoader: clubLoader(),
-			clubIndexLoader: clubIndexLoader(),
-			clubTeamsLoader: clubTeamsLoader(),
-			levelLoader: levelLoader(),
-			categoryLoader: clubCategoryLoader(),
-			venueLoader: clubVenuesLoader(),
-			matchResultsLoader: matchResultsLoader(),
-			divisionMatchResultsLoader: divisionMatchResultsLoader(),
-			clubTeamLoader: clubTeamLoader(),
-			matchInfoLoader: matchInfoLoader(),
-			memberLoader: memberLoader(),
-			memberClubLoader: membersClubDataloader(),
-			clubMemberLoader: clubMemberLoader(),
-			playerListLoader: playerListDataloader(),
-			matchSetsLoader: matchSetsLoader(),
-			matchSystemPlayerLoader: matchSystemPlayerLoader(),
-			divisionLoader: divisionsLoader(),
-			playerELOLoader: playerELOLoader()
-		} as GraphQlContext)
-	});
-	*/
+
 	const server = new ApolloServer({
 		schema,
-		cacheControl: true,
+		cacheControl: {
+			defaultMaxAge: 5
+		},
 		tracing: true,
 		engine: {
 			apiKey: 'service:Tabt:U8ck2vW4092JTNbtWEAnMg',
@@ -178,6 +158,34 @@ const start = async () => {
 				}
 			}
 		},
+		plugins: [
+			{
+				requestDidStart: () => ({
+					didResolveOperation({ request, document }) {
+						const complexity = getComplexity({
+							schema,
+							query: request.operationName
+								? separateOperations(document)[request.operationName]
+								: document,
+							variables: request.variables,
+							estimators: [
+								fieldExtensionsEstimator(),
+								simpleEstimator({ defaultComplexity: 1 }),
+							],
+						});
+						// Here we can react to the calculated complexity,
+						// like compare it with max and throw error when the threshold is reached.
+						if (complexity >= 20) {
+							throw new Error(
+								`Sorry, too complicated query! ${complexity} is over 20 that is the max allowed complexity.`,
+							);
+						}
+						// And here we can e.g. subtract the complexity point from hourly API calls limit.
+						console.log("Used query complexity points:", complexity);
+					},
+				}),
+			},
+		],
 		context: (expressContext: ExpressContext) => ({
 			request: expressContext.req as Request,
 			claims: expressContext.req['jwt']?.claims,
@@ -201,8 +209,10 @@ const start = async () => {
 			matchSetsLoader: matchSetsLoader(),
 			matchSystemPlayerLoader: matchSystemPlayerLoader(),
 			divisionLoader: divisionsLoader(),
-			playerELOLoader: playerELOLoader()
-		})
+			playerELOLoader: playerELOLoader(),
+			calendarTypeLoader: calendarTypeLoader(),
+			calendarDatesLoader: calendarDatesLoader()
+		}),
 	});
 	const expressApp = express();
 	expressApp.use('/graphql', verifyToken);
@@ -215,7 +225,7 @@ const start = async () => {
 
 	// configure shared config settings
 	const port = 4000;
-	const graphqlEndpointPath = "/graphql";
+	const graphqlEndpointPath = "/";
 
 	// create an Apollo Engine
 	const engine = new ApolloEngine({

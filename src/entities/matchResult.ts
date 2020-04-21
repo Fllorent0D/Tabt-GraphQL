@@ -71,7 +71,6 @@ export class IndividualMatchSets {
 @Index('match_id', ['match_id'])
 export class MatchResult {
 
-	@Field(() => Division)
 	@Column({
 		name: 'div_id'
 	})
@@ -218,6 +217,12 @@ export class MatchResult {
 
 	@Field()
 	scoreModified: boolean;
+
+	@Field(returns => Date, {nullable: true})
+	date: Date;
+
+	@Field(returns => Division)
+	division: Division;
 
 	@Field(() => [MatchPlayerList])
 	homePlayers: MatchPlayerList[];

@@ -3,6 +3,12 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type CalendarTypeInfo {
+  id: Float
+  name: String
+  nb_team: Float
+}
+
 type Club {
   id: ID
   categoryId: ClubCategory
@@ -24,9 +30,10 @@ type ClubCategory {
 }
 
 type ClubTeam {
+  indice: String
   division: Division
   club: Club
-  indice: String
+  matches: [MatchResult]
 }
 
 """
@@ -105,7 +112,6 @@ type MatchPlayerList {
 }
 
 type MatchResult {
-  div_id: Division
   week: Float
   homeScore: Float
   awayScore: Float
@@ -115,6 +121,8 @@ type MatchResult {
   awayTeam: ClubTeam
   homeTeam: ClubTeam
   scoreModified: Boolean
+  date: DateTime
+  division: Division
   homePlayers: [MatchPlayerList]
   awayPlayers: [MatchPlayerList]
   individualsMatchResults: [IndividualMatchResult]

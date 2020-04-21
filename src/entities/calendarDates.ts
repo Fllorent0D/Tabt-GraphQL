@@ -2,7 +2,7 @@ import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, M
 
 @Entity('calendardates', { schema: 'tabt' })
 @Index('calendardate_id', ['calendardate_id'])
-export class calendardates {
+export class CalendarDates {
   @PrimaryGeneratedColumn({
     type: 'mediumint',
     unsigned: true,

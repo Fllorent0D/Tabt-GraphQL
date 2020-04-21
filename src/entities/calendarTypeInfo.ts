@@ -1,7 +1,10 @@
 import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from 'typeorm'
+import {Field, ObjectType} from 'type-graphql';
 
+@ObjectType()
 @Entity('calendartypeinfo', { schema: 'tabt' })
-export class calendartypeinfo {
+export class CalendarTypeInfo {
+  @Field()
   @PrimaryGeneratedColumn({
     type: 'int',
     unsigned: true,
@@ -9,6 +12,7 @@ export class calendartypeinfo {
   })
   id: number;
 
+  @Field()
   @Column('varchar', {
     nullable: false,
     length: 60,
@@ -16,6 +20,7 @@ export class calendartypeinfo {
   })
   name: string;
 
+  @Field()
   @Column('tinyint', {
     nullable: false,
     unsigned: true,

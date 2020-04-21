@@ -13,6 +13,8 @@ import {PlayerInfo} from '../entities/player-info';
 import {MatchSet} from '../entities/matchSet';
 import {MatchSystemPlayer} from '../entities/matchSystemPlayer';
 import {PlayerLastELO} from '../entities/playerLastELO';
+import {CalendarTypeInfo} from '../entities/calendarTypeInfo';
+import {calendarweekname} from '../../dist/entities/calendarweekname';
 
 export const loadManyForKeyBatchFunction = <T>(repository: Repository<T>, key: string): (ids: number[]) => Promise<T[][]> => async (ids) => {
 	const entities = await repository
@@ -59,3 +61,7 @@ export const matchSystemPlayerLoader = () => new DataLoader(loadManyForKeyBatchF
 // Player
 export const memberLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(PlayerInfo), 'id'));
 export const playerELOLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(PlayerLastELO), 'player_id'));
+
+// Calendar
+export const calendarTypeLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(CalendarTypeInfo), 'id'))
+export const calendarWeekNameLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(calendarweekname), 'id'))

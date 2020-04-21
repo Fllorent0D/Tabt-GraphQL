@@ -17,13 +17,11 @@ import {Field, ObjectType} from 'type-graphql';
 import {Division} from './division';
 import {Club} from './club';
 import {CacheControl} from '../middlewares/cache-control';
+import {MatchResult} from './matchResult';
 
 @ObjectType()
 @Entity('divisionteaminfo', {schema: 'tabt'})
 export class ClubTeam {
-
-  @Field(() => Division)
-  division: Division;
 
   @Column('int', {
     nullable: false,
@@ -34,8 +32,7 @@ export class ClubTeam {
   })
   div_id: number;
 
-  @Field(() => Club)
-  club: Club;
+
 
   @Column('tinyint', {
     nullable: false,
@@ -129,4 +126,15 @@ export class ClubTeam {
     name: 'in_classement'
   })
   in_classement: string;
+
+  @Field(() => Division)
+  division: Division;
+
+  @Field(() => Club)
+  club: Club;
+
+  @Field(() => [MatchResult])
+  matches: MatchResult[];
+
+
 }

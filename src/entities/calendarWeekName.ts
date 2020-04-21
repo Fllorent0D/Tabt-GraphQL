@@ -2,7 +2,8 @@ import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, M
 
 @Entity('calendarweekname', { schema: 'tabt' })
 @Index('name', ['name'])
-export class calendarweekname {
+
+export class CalendarWeekName {
   @Column('int', {
     nullable: false,
     primary: true,

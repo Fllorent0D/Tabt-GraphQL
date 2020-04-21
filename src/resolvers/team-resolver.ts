@@ -4,6 +4,7 @@ import {GraphQLError, GraphQLResolveInfo} from 'graphql';
 import {Club} from '../entities/club';
 import {Division} from '../entities/division';
 import {GraphQlContext} from '../index';
+import {MatchResult} from '../entities/matchResult';
 
 @Resolver(ClubTeam)
 export class TeamResolver {
@@ -17,5 +18,9 @@ export class TeamResolver {
     return context.divisionLoader.load(team.div_id);
   }
 
+  @FieldResolver(() => [MatchResult])
+  async matches(@Root() team: ClubTeam, @Ctx() context: GraphQlContext): Promise<MatchResult[]> {
+    return context.divisionLoader.load(team.div_id);
+  }
 
 }

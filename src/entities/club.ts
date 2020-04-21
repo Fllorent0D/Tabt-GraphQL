@@ -151,7 +151,7 @@ export class Club {
   @Field(type => [ClubTeam])
   teams: ClubTeam[];
 
-  @Field(() => [PlayerInfo])
+  @Field(() => [PlayerInfo], {complexity: 2})
   members: PlayerInfo[];
 
 

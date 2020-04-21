@@ -7,20 +7,14 @@ import {GraphQlContext} from '../index';
 import {MatchInfo} from '../entities/matchInfo';
 import {NoPlayerIdRegisteredException, PlayerInfoOrNotUnion} from '../exceptions/NoPlayerIdRegisteredException';
 import {MatchSet} from '../entities/matchSet';
+import {Division} from '../entities/division';
+import {CalendarDates} from '../entities/calendarDates';
+import moment from 'moment';
+import {Club} from '../entities/club';
 
 
-/*
-	TODO:
-	- Date of match
-
- */
 @Resolver(MatchResult)
 export class MatchResultResolver {
-	constructor(
-		@OrmRepository(MatchResult) private matchResultRepo: Repository<MatchResult>,
-		@OrmRepository(ClubTeam) private clubTeamRepo: Repository<ClubTeam>
-	) {
-	}
 
 	@FieldResolver(() => ClubTeam, {nullable: true})
 	async homeTeam(
@@ -175,4 +169,29 @@ export class MatchResultResolver {
 			return acc;
 		}, []);
 	}
+
+
+	@FieldResolver(() => Date)
+	async date(@Root() match: MatchResult, @Ctx() context: GraphQlContext): Promise<Date> {
+		const matchInfo: MatchInfo = await context.matchInfoLoader.load(match.match_id);
+		if (!matchInfo.home_club || !matchInfo.away_club) {
+			return null;
+		}
+		const division: Division = await context.divisionLoader.load(match.div_id);
+		const dates: CalendarDates = await context.calendarDatesLoader.load(`${division.calendardate_id}#${match.week}`)
+		const homeTeam: ClubTeam = await context.clubTeamLoader.load(`${matchInfo.home_club}#${matchInfo.home_indice}`);
+		const matchDate = moment(dates.date, 'YYYY-MM-DD');
+		if(homeTeam.hour){
+			const [hour, minutes, seconds] = homeTeam.hour.split(':').map(Number);
+			matchDate.hour(hour).minutes(minutes).second(seconds)
+		}
+
+		return matchDate.toDate()
+	}
+
+	@FieldResolver(returns => Division)
+	async division(@Root() match: MatchResult, @Ctx() context: GraphQlContext): Promise<Division> {
+		return context.divisionLoader.load(match.div_id);
+	}
+
 }
