@@ -1,7 +1,8 @@
 import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from 'typeorm'
+import {Field, ObjectType} from 'type-graphql';
 
 @Entity('playerstatus', { schema: 'tabt' })
-export class playerstatus {
+export class PlayerStatus {
   @Column('tinyint', {
     nullable: false,
     primary: true,
@@ -24,5 +25,5 @@ export class playerstatus {
     default: () => "'I'",
     name: 'status'
   })
-  status: string;
+  statusId: string;
 }

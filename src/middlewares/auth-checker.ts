@@ -18,5 +18,5 @@ export const customAuthChecker: AuthChecker<GraphQlContext, UserRights> = ({root
 		return context.authenticated;
 	}
 
-	return context.claims.some(role => roles.includes(role));
+	return context.claims?.some(role => roles.includes(role));
 };

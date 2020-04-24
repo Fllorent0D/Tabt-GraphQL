@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from 'typeorm'
 
 @Entity('classementinfo', { schema: 'tabt' })
-export class classementinfo {
+export class ClassementInfo {
   @Column('smallint', {
     nullable: false,
     primary: true,

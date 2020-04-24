@@ -18,6 +18,7 @@ import {Division} from './division';
 import {ClubTeam} from './club-team';
 import {PlayerInfo} from './player-info';
 import {NoPlayerIdRegisteredException, PlayerInfoOrNotUnion} from '../exceptions/NoPlayerIdRegisteredException';
+import {Club} from './club';
 
 @ObjectType()
 export class IndividualMatchResult {
@@ -215,6 +216,12 @@ export class MatchResult {
 	@Field(() => ClubTeam, {nullable: true})
 	homeTeam: ClubTeam;
 
+	@Field(() => Club, {nullable: true})
+	awayClub: Club;
+
+	@Field(() => Club, {nullable: true})
+	homeClub: Club;
+
 	@Field()
 	scoreModified: boolean;
 
@@ -237,6 +244,7 @@ export class MatchResult {
 @ObjectType()
 export class MatchPlayerList {
 	player_id: number;
+	division_id: number;
 
 	@Field(() => PlayerInfo)
 	player: PlayerInfo;
@@ -249,4 +257,7 @@ export class MatchPlayerList {
 
 	@Field()
     victory: number;
+
+	@Field()
+	ranking?: string;
 }

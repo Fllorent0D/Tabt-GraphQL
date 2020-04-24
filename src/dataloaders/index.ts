@@ -15,6 +15,10 @@ import {MatchSystemPlayer} from '../entities/matchSystemPlayer';
 import {PlayerLastELO} from '../entities/playerLastELO';
 import {CalendarTypeInfo} from '../entities/calendarTypeInfo';
 import {calendarweekname} from '../../dist/entities/calendarweekname';
+import {PlayerStatus} from '../entities/playerStatus';
+import {PlayerStatusInfo} from '../entities/playerStatusInfo';
+import {DivisionCategory} from '../entities/division-category';
+import {PlayerELOHistory} from '../entities/playerELOHistory';
 
 export const loadManyForKeyBatchFunction = <T>(repository: Repository<T>, key: string): (ids: number[]) => Promise<T[][]> => async (ids) => {
 	const entities = await repository
@@ -50,6 +54,7 @@ export const clubTeamsLoader = () => new DataLoader(loadManyForKeyBatchFunction(
 //Divisions
 export const levelDivisionsLoader = () => new DataLoader(loadManyForKeyBatchFunction(getRepository(Division), 'level_id'));
 export const divisionsLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(Division), 'id'));
+export const categoryDivisionsLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(DivisionCategory), 'id'));
 
 //MatchResult
 export const matchResultsLoader = () => new DataLoader(loadManyForKeyBatchFunction(getRepository(MatchResult), 'match_id'));
@@ -61,7 +66,12 @@ export const matchSystemPlayerLoader = () => new DataLoader(loadManyForKeyBatchF
 // Player
 export const memberLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(PlayerInfo), 'id'));
 export const playerELOLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(PlayerLastELO), 'player_id'));
+export const playerELOHistoryLoader = () => new DataLoader(loadManyForKeyBatchFunction(getRepository(PlayerELOHistory), 'player_id'));
 
 // Calendar
 export const calendarTypeLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(CalendarTypeInfo), 'id'))
 export const calendarWeekNameLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(calendarweekname), 'id'))
+
+//Player status
+export const playerStatusLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(PlayerStatus), 'player_id'))
+

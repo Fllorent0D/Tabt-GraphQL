@@ -27,7 +27,12 @@ import {
 	matchInfoLoader,
 	memberLoader,
 	matchSetsLoader,
-	matchSystemPlayerLoader, divisionsLoader, playerELOLoader, calendarTypeLoader
+	matchSystemPlayerLoader,
+	divisionsLoader,
+	playerELOLoader,
+	calendarTypeLoader,
+	playerStatusLoader,
+	categoryDivisionsLoader, playerELOHistoryLoader
 } from './dataloaders';
 import {Request} from 'express';
 import * as DataLoader from 'dataloader';
@@ -41,13 +46,13 @@ import {clubTeamLoader} from './dataloaders/teams.dataloader';
 import {MatchInfo} from './entities/matchInfo';
 import {PlayerInfo} from './entities/player-info';
 import {MatchPlayerListResolver} from './resolvers/match-player-list-resolver';
-import {membersClubDataloader, playerListDataloader} from './dataloaders/members.dataloader';
+import {membersClubDataloader, playerListDataloader, playerRankingsDataloader} from './dataloaders/members.dataloader';
 import {clubIndexLoader, clubMemberLoader} from './dataloaders/clubs.dataloader';
 import {MatchPlayer} from './entities/matchPlayer';
 import {MatchSet} from './entities/matchSet';
 import {AuthUserResolver} from './resolvers/auth-user-resolver';
 import {MatchSystemPlayer} from './entities/matchSystemPlayer';
-import {IndividualMatchResultResolver} from './resolvers/IndividualMatchResult.resolver';
+import {IndividualMatchResultResolver} from './resolvers/individual-match-result-resolver';
 import {PlayerLastELO} from './entities/playerLastELO';
 import {customAuthChecker, UserRights} from './middlewares/auth-checker';
 import {ApolloServer} from "apollo-server-express";
@@ -60,6 +65,12 @@ import {separateOperations} from 'graphql';
 import {CalendarTypeInfo} from './entities/calendarTypeInfo';
 import {CalendarDates} from './entities/calendarDates';
 import {calendarDatesLoader} from './dataloaders/calendar-dates.dataloader';
+import {clubTeamMatchesLoader} from './dataloaders/match-info.dataloader';
+import {PlayerStatus} from './entities/playerStatus';
+import {PlayerClassement} from './entities/playerClassement';
+import {DivisionCategory} from './entities/division-category';
+import {PlayerELOHistory} from './entities/playerELOHistory';
+import {PlayerEloHistoryResolver} from './resolvers/player-elo-history-resolver';
 require('dotenv').config();
 
 export interface GraphQlContext {
@@ -69,6 +80,7 @@ export interface GraphQlContext {
 	divisionClubTeamsLoader: DataLoader<number, ClubTeam[], number>;
 	levelDivisionLoader: DataLoader<number, Division[], number>;
 	divisionLoader: DataLoader<number, Division, number>;
+	categoryDivisionLoader: DataLoader<number, DivisionCategory, number>,
 	clubLoader: DataLoader<number, Club, number>;
 	clubIndexLoader: DataLoader<string, Club, string>;
 	clubTeamsLoader: DataLoader<number, ClubTeam[], number>;
@@ -87,7 +99,11 @@ export interface GraphQlContext {
 	matchSystemPlayerLoader: DataLoader<number, MatchSystemPlayer[], number>,
 	playerELOLoader: DataLoader<number, PlayerLastELO>,
 	calendarTypeLoader: DataLoader<number, CalendarTypeInfo>,
-	calendarDatesLoader: DataLoader<string, CalendarDates>
+	calendarDatesLoader: DataLoader<string, CalendarDates>,
+	clubTeamMatchesLoader: DataLoader<string, MatchResult[]>
+	playerStatusLoader: DataLoader<number, PlayerStatus>,
+	playerRankingsLoader: DataLoader<number, PlayerClassement[]>
+	playerELOHistoryLoader: DataLoader<number, PlayerELOHistory[]>
 }
 
 export const CURRENT_SEASON = 17;
@@ -108,7 +124,8 @@ const start = async () => {
 			TeamResolver,
 			MatchPlayerListResolver,
 			AuthUserResolver,
-			IndividualMatchResultResolver
+			IndividualMatchResultResolver,
+			PlayerEloHistoryResolver
 		],
 		container: Container,
 		emitSchemaFile: true,
@@ -209,9 +226,14 @@ const start = async () => {
 			matchSetsLoader: matchSetsLoader(),
 			matchSystemPlayerLoader: matchSystemPlayerLoader(),
 			divisionLoader: divisionsLoader(),
+			categoryDivisionLoader: categoryDivisionsLoader(),
 			playerELOLoader: playerELOLoader(),
 			calendarTypeLoader: calendarTypeLoader(),
-			calendarDatesLoader: calendarDatesLoader()
+			calendarDatesLoader: calendarDatesLoader(),
+			clubTeamMatchesLoader: clubTeamMatchesLoader(),
+			playerStatusLoader: playerStatusLoader(),
+			playerRankingsLoader: playerRankingsDataloader(),
+			playerELOHistoryLoader: playerELOHistoryLoader()
 		}),
 	});
 	const expressApp = express();

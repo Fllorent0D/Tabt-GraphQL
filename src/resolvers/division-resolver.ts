@@ -7,6 +7,7 @@ import {Level} from '../entities/level';
 import {ClubCategory} from '../entities/club-category';
 import {GraphQlContext} from '../index';
 import {MatchResult} from '../entities/matchResult';
+import {DivisionCategory} from '../entities/division-category';
 
 @Resolver(Division)
 export class DivisionResolver {
@@ -35,9 +36,9 @@ export class DivisionResolver {
     return context.levelLoader.load(division.level_id);
   }
 
-  @FieldResolver(() => ClubCategory)
-  async category(@Root() division: Division, @Ctx() context: any): Promise<ClubCategory> {
-    return context.categoryLoader.load(division.category_id);
+  @FieldResolver(() => DivisionCategory)
+  async category(@Root() division: Division, @Ctx() context: GraphQlContext): Promise<DivisionCategory> {
+    return context.categoryDivisionLoader.load(division.category_id);
   }
   @FieldResolver(() => [MatchResult])
   async matches(@Root() division: Division, @Ctx() context: GraphQlContext): Promise<MatchResult[]> {

@@ -40,6 +40,30 @@ export class MatchResultResolver {
 		return context.clubTeamLoader.load(`${matchInfo.away_club}#${matchInfo.away_indice}`);
 	}
 
+	@FieldResolver(() => ClubTeam, {nullable: true})
+	async homeClub(
+		@Root() matchResult: MatchResult,
+		@Ctx() context: GraphQlContext): Promise<Club | null> {
+		const matchInfo = await context.matchInfoLoader.load(matchResult.match_id);
+		if (!matchInfo) {
+			return null;
+		}
+
+		return context.clubLoader.load(matchInfo.home_club);
+	}
+
+	@FieldResolver(() => Club, {nullable: true})
+	async awayClub(
+		@Root() matchResult: MatchResult,
+		@Ctx() context: GraphQlContext): Promise<Club | null> {
+		const matchInfo = await context.matchInfoLoader.load(matchResult.match_id);
+		if (!matchInfo) {
+			return null;
+		}
+
+		return context.clubLoader.load(matchInfo.away_club);
+	}
+
 	@FieldResolver(() => Boolean)
 	scoreModified(@Root() matchResult: MatchResult) {
 		return matchResult.score_modified === 'Y';
@@ -90,6 +114,7 @@ export class MatchResultResolver {
 	async awayPlayers(@Root()match: MatchResult, @Ctx() context: GraphQlContext): Promise<MatchPlayerList[]> {
 		const matchPlayer = await context.playerListLoader.load(match.match_id);
 		return matchPlayer.map<MatchPlayerList>((player) => ({
+			division_id: match.div_id,
 			player_id: player.away_player_id,
 			isWalkover: player.away_wo === 1,
 			player: null,
@@ -102,6 +127,7 @@ export class MatchResultResolver {
 	async homePlayers(@Root()match: MatchResult, @Ctx() context: GraphQlContext): Promise<MatchPlayerList[]> {
 		const matchPlayer = await context.playerListLoader.load(match.match_id);
 		return matchPlayer.map<MatchPlayerList>((player, index) => ({
+			division_id: match.div_id,
 			player_id: player.home_player_id,
 			isWalkover: player.home_wo === 1,
 			player: null,

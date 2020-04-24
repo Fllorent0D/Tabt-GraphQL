@@ -154,4 +154,8 @@ export class MatchInfo {
     name: 'end_time'
   })
   end_time: Date | null;
+
+
+  //Do not use
+  match?: MatchResult;
 }

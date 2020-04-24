@@ -4,6 +4,9 @@ import {PlayerClub} from '../entities/playerClub';
 import {CURRENT_SEASON} from '../index';
 import {getRepository, In} from 'typeorm';
 import {MatchPlayer} from '../entities/matchPlayer';
+import {PlayerClassement} from '../entities/playerClassement';
+import {PlayerCategory} from '../entities/playerCategory';
+import {ClassementInfo} from '../entities/classementInfo';
 
 
 export const getMembersClubBatch = async (clubsIds: number[]) => {
@@ -36,4 +39,27 @@ export const getPlayerListMatch = async (matchIds: number[]): Promise<MatchPlaye
 	return matchIds.map((id: number) => players.filter(pm => pm.match_id === id));
 };
 export const playerListDataloader = () => new DataLoader(getPlayerListMatch);
+
+export const playerRankingsBatch = async (playerIds: number[]): Promise<PlayerClassement[][]> => {
+	const players = await getRepository(PlayerClassement)
+		.createQueryBuilder('pcl')
+		.leftJoinAndMapOne(
+			'pcl.player_category',
+			PlayerCategory,
+			'pc',
+			'pcl.category = pc.id')
+		.leftJoinAndMapOne(
+			'pcl.player_classement',
+			ClassementInfo,
+			'ci',
+			'pcl.classement_id = ci.id')
+		.where({
+			'player_id': In(playerIds),
+			'season': CURRENT_SEASON,
+		})
+		.getMany();
+
+	return playerIds.map((id: number) => players.filter(pm => pm.player_id === id));
+};
+export const playerRankingsDataloader = () => new DataLoader(playerRankingsBatch);
 

@@ -20,7 +20,7 @@ export class TeamResolver {
 
   @FieldResolver(() => [MatchResult])
   async matches(@Root() team: ClubTeam, @Ctx() context: GraphQlContext): Promise<MatchResult[]> {
-    return context.divisionLoader.load(team.div_id);
+    return context.clubTeamMatchesLoader.load(`${team.club_id}#${team.indice}`);
   }
 
 }

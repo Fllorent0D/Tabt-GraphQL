@@ -109,6 +109,7 @@ type MatchPlayerList {
   isWalkover: Boolean
   position: Float
   victory: Float
+  ranking: String
 }
 
 type MatchResult {
@@ -120,6 +121,8 @@ type MatchResult {
   match_id: ID
   awayTeam: ClubTeam
   homeTeam: ClubTeam
+  awayClub: Club
+  homeClub: Club
   scoreModified: Boolean
   date: DateTime
   division: Division
@@ -156,6 +159,11 @@ type NoPlayerIdRegisteredException {
   message: String
 }
 
+type PlayerELOHistory {
+  date: DateTime
+  points: Float
+}
+
 type PlayerInfo {
   id: ID
   first_name: String
@@ -176,9 +184,19 @@ type PlayerInfo {
   gsm: String
   club: Club
   elo: Float
+  rankings: [PlayerRanking]
+  status: String
+  eloHistory: [PlayerELOHistory]
 }
 
 union PlayerInfoOrNot = PlayerInfo | NoPlayerIdRegisteredException
+
+type PlayerRanking {
+  ranking: String
+  sex: String
+  categoryName: String
+  categoryShortName: String
+}
 
 type Query {
   club(clubId: String): Club

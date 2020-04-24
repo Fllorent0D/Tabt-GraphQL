@@ -18,6 +18,8 @@ import {Authorized, Field, ID, ObjectType} from 'type-graphql';
 import {Club} from './club';
 import {UserRights} from '../middlewares/auth-checker';
 import {CacheControl} from '../middlewares/cache-control';
+import {PlayerRanking} from './playerClassement';
+import {PlayerELOHistory} from './playerELOHistory';
 
 @ObjectType()
 @Entity('playerinfo', {schema: 'tabt'})
@@ -205,4 +207,14 @@ export class PlayerInfo {
   elo: number | null;
 
   player_club: PlayerClub;
+
+  @Field(() => [PlayerRanking])
+  rankings: PlayerRanking[];
+
+  @Field()
+  status: string;
+
+  @Field(() => [PlayerELOHistory])
+  eloHistory: PlayerELOHistory[]
+
 }
