@@ -1,4 +1,5 @@
 # TabT-GraphQL server
+![](https://github.com/Fllorent0D/Tabt-GraphQL/workflows/Build/badge.svg)
 > Graph-QL replacement of the TabT Soap Api.
 
 This is a GraphQL server that allows you to fetch data from TabT. 
