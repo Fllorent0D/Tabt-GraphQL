@@ -1,8 +1,8 @@
-import {Ctx, Field, FieldResolver, Resolver, Root} from 'type-graphql';
+import {Arg, Ctx, Field, FieldResolver, Query, Resolver, Root} from 'type-graphql';
 import {PlayerInfo} from '../entities/player-info';
 import {OrmRepository} from 'typeorm-typedi-extensions';
 import {PlayerClub} from '../entities/playerClub';
-import {Repository} from 'typeorm';
+import {getRepository, Repository} from 'typeorm';
 import {Club} from '../entities/club';
 import {GraphQlContext} from '../index';
 import {PlayerRanking} from '../entities/playerClassement';
@@ -10,6 +10,15 @@ import {PlayerELOHistory} from '../entities/playerELOHistory';
 
 @Resolver(PlayerInfo)
 export class PlayerInfoResolver {
+	@Query(() => [PlayerInfo], {description: "Returns list of players"})
+	async players(@Arg('indice')id: number): Promise<PlayerInfo[]> {
+		const query = getRepository(PlayerInfo).createQueryBuilder();
+		if (id) {
+			query.where({vttl_index: id});
+		}
+		return query.getMany();
+	}
+
 	@FieldResolver(returns => Club)
 	async club(@Root() playerInfo: PlayerInfo, @Ctx() context: GraphQlContext): Promise<Club> {
 		return context.clubMemberLoader.load(playerInfo.id);
@@ -42,7 +51,7 @@ export class PlayerInfoResolver {
 	@FieldResolver(returns => [PlayerELOHistory], {nullable: true})
 	async eloHistory(@Root() playerInfo: PlayerInfo, @Ctx() context: GraphQlContext): Promise<PlayerELOHistory[]> {
 		const elos = await context.playerELOHistoryLoader.load(playerInfo.id);
-		return elos;
+		return elos.sort((a, b) => a > b ? -1 : a < b ? 1 : 0).slice(0, 9);
 	}
 
 

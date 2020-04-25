@@ -1,26 +1,36 @@
-import {Ctx, FieldResolver, Info, Resolver, Root} from 'type-graphql';
+import {Arg, Ctx, FieldResolver, Info, Query, Resolver, Root} from 'type-graphql';
 import {ClubTeam} from '../entities/club-team';
 import {GraphQLError, GraphQLResolveInfo} from 'graphql';
 import {Club} from '../entities/club';
 import {Division} from '../entities/division';
 import {GraphQlContext} from '../index';
 import {MatchResult} from '../entities/matchResult';
+import {getRepository} from 'typeorm';
 
 @Resolver(ClubTeam)
 export class TeamResolver {
-  @FieldResolver(() => Club)
-  async club(@Root() team: ClubTeam, @Ctx() context: GraphQlContext): Promise<Club> {
-    return context.clubLoader.load(team.club_id);
-  }
 
-  @FieldResolver(() => Division)
-  async division(@Root() team: ClubTeam, @Ctx() context: GraphQlContext): Promise<Division> {
-    return context.divisionLoader.load(team.div_id);
-  }
+	@Query(() => [ClubTeam])
+	async teams(
+		@Ctx() context: GraphQlContext,
+		@Arg('clubId', {nullable: false}) clubId?: string
+	): Promise<ClubTeam[]> {
+		return context.clubTeamsLoader.load(Number(clubId));
+	}
 
-  @FieldResolver(() => [MatchResult])
-  async matches(@Root() team: ClubTeam, @Ctx() context: GraphQlContext): Promise<MatchResult[]> {
-    return context.clubTeamMatchesLoader.load(`${team.club_id}#${team.indice}`);
-  }
+	@FieldResolver(() => Club)
+	async club(@Root() team: ClubTeam, @Ctx() context: GraphQlContext): Promise<Club> {
+		return context.clubLoader.load(team.club_id);
+	}
+
+	@FieldResolver(() => Division)
+	async division(@Root() team: ClubTeam, @Ctx() context: GraphQlContext): Promise<Division> {
+		return context.divisionLoader.load(team.div_id);
+	}
+
+	@FieldResolver(() => [MatchResult])
+	async matches(@Root() team: ClubTeam, @Ctx() context: GraphQlContext): Promise<MatchResult[]> {
+		return context.clubTeamMatchesLoader.load(`${team.club_id}#${team.indice}`);
+	}
 
 }

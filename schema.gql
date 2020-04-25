@@ -129,6 +129,7 @@ type MatchResult {
   homePlayers: [MatchPlayerList]
   awayPlayers: [MatchPlayerList]
   individualsMatchResults: [IndividualMatchResult]
+  score: String
   matchInfo: MatchInfo
   homeCaptain: PlayerInfoOrNot
   awayCaptain: PlayerInfoOrNot
@@ -201,10 +202,14 @@ type PlayerRanking {
 type Query {
   club(clubId: String): Club
   clubs: [Club]
-  level(id: Float): Level
+
+  """Returns list of players"""
+  players(indice: Float): [PlayerInfo]
+  level(id: Float!): Level
   levels: [Level]
   divisions: [Division]
   division(divisionId: Float): Division
+  teams(clubId: String!): [ClubTeam]
 }
 
 type Venue {

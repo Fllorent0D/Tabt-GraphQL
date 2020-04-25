@@ -239,6 +239,9 @@ export class MatchResult {
 
 	@Field(() => [IndividualMatchResult])
 	individualsMatchResults: IndividualMatchResult[];
+
+	@Field(() => String)
+	score: string;
 }
 
 @ObjectType()

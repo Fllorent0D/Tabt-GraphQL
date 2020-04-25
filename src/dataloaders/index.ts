@@ -16,7 +16,6 @@ import {PlayerLastELO} from '../entities/playerLastELO';
 import {CalendarTypeInfo} from '../entities/calendarTypeInfo';
 import {calendarweekname} from '../../dist/entities/calendarweekname';
 import {PlayerStatus} from '../entities/playerStatus';
-import {PlayerStatusInfo} from '../entities/playerStatusInfo';
 import {DivisionCategory} from '../entities/division-category';
 import {PlayerELOHistory} from '../entities/playerELOHistory';
 

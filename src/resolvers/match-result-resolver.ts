@@ -215,9 +215,14 @@ export class MatchResultResolver {
 		return matchDate.toDate()
 	}
 
-	@FieldResolver(returns => Division)
+	@FieldResolver(() => Division)
 	async division(@Root() match: MatchResult, @Ctx() context: GraphQlContext): Promise<Division> {
 		return context.divisionLoader.load(match.div_id);
+	}
+
+	@FieldResolver(() => String)
+	score(@Root() match: MatchResult): string {
+		return `${match.homeScore}-${match.awayScore}`;
 	}
 
 }
