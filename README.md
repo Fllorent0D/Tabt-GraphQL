@@ -22,7 +22,15 @@ node ./dist/index.js
 ```sh
 pm2 start ./dist/index.js
 ```
-
+```dotenv
+APOLLO_ENGINE_API_KEY=service:Tabt:xxxxxx
+APOLLO_SCHEMA_TAG=development
+DB_HOST=localhost
+DB_PORT=3306
+DB_USERNAME=root
+DB_PASSWORD=myRootpwd32
+DB_NAME=Tabt
+```
 
 ## Development setup
 

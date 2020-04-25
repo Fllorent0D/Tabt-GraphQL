@@ -136,11 +136,11 @@ const start = async () => {
 	const connection: Connection = await createConnection({
 		"name": "default",
 		"type": "mysql",
-		"host": "localhost",
-		"port": 3306,
-		"username": "root",
-		"password": "myRootpwd32",
-		"database": "Tabt",
+		"host": process.env.DB_HOST,
+		"port": Number(process.env.DB_PORT),
+		"username": process.env.DB_USERNAME,
+		"password": process.env.DB_PASSWORD,
+		"database": process.env.DB_NAME,
 		"synchronize": false,
 		"entities": [
 			__dirname + "/entities/{*.ts,*.js}"
@@ -156,8 +156,8 @@ const start = async () => {
 		},
 		tracing: true,
 		engine: {
-			apiKey: 'service:Tabt:U8ck2vW4092JTNbtWEAnMg',
-			schemaTag: 'development',
+			apiKey: process.env.APOLLO_ENGINE_API_KEY,
+			schemaTag: process.env.APOLLO_SCHEMA_TAG,
 			generateClientInfo: (requestContext: GraphQLRequestContext<ExpressContext>) => {
 				const headers = requestContext.context.req && requestContext.context.req['headers'];
 				if(headers) {
