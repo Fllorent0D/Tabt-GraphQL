@@ -18,10 +18,10 @@ export class AuthUserResolver {
 				claims: user.perms.split(',')
 			};
 
-			const token = jwt.sign(contextUser, 'secret', {
+			const token = jwt.sign(contextUser, process.env.JWT_SECRET_SALT, {
 				audience: user.user_id,
 				algorithm: 'HS256',
-				expiresIn: '6h',
+				expiresIn: process.env.JWT_EXPIRE_TIME,
 				jwtid: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
 			});
 

@@ -146,7 +146,7 @@ const start = async () => {
 			__dirname + "/entities/{*.ts,*.js}"
 		],
 		cache: true,
-		logging: ["info", "error", "query"]
+		logging: ["error", "query"]
 	});
 
 	const server = new ApolloServer({
@@ -155,9 +155,10 @@ const start = async () => {
 			defaultMaxAge: 5
 		},
 		tracing: true,
-		engine: {
+		engine: Boolean(process.env.USE_APOLLO_ENGINE) ? {
 			apiKey: process.env.APOLLO_ENGINE_API_KEY,
 			schemaTag: process.env.APOLLO_SCHEMA_TAG,
+			debugPrintReports: true,
 			generateClientInfo: (requestContext: GraphQLRequestContext<ExpressContext>) => {
 				const headers = requestContext.context.req && requestContext.context.req['headers'];
 				if(headers) {
@@ -172,7 +173,7 @@ const start = async () => {
 					};
 				}
 			}
-		},
+		} : null,
 		plugins: [
 			{
 				requestDidStart: () => ({
@@ -234,6 +235,7 @@ const start = async () => {
 			playerELOHistoryLoader: playerELOHistoryLoader()
 		}),
 	});
+
 	const expressApp = express();
 	expressApp.use('/graphql', verifyToken);
 	expressApp.use('/voyager', voyagerMiddleware({endpointUrl: '/graphql'}));
@@ -244,23 +246,6 @@ const start = async () => {
 	console.log('Starting services...');
 
 	// configure shared config settings
-	const port = 4000;
-	const graphqlEndpointPath = "/";
-
-	// create an Apollo Engine
-	const engine = new ApolloEngine({
-		apiKey: process.env.APOLLO_ENGINE_API_KEY,
-	});
-
-	// launch the Apollo Engine
-	engine.listen(
-		{
-			port,
-			expressApp,
-			graphqlPaths: [graphqlEndpointPath],
-		},
-		() => console.log(`Server with Apollo Engine is running on http://localhost:${port}`),
-	);
-	//expressApp.listen(4000, () => console.log('Server is running on http://localhost:4000'));
+	expressApp.listen(process.env.PORT, () => console.log('Server is running on http://localhost:4000'));
 };
 start();

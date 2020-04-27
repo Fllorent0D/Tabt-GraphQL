@@ -18,6 +18,7 @@ node ./dist/index.js
 ```
 
 ```dotenv
+USE_APOLLO_ENGINE=1
 APOLLO_ENGINE_API_KEY=service:Tabt:xxxxxx
 APOLLO_SCHEMA_TAG=development
 DB_HOST=localhost
@@ -25,6 +26,8 @@ DB_PORT=3306
 DB_USERNAME=root
 DB_PASSWORD=myRootpwd32
 DB_NAME=Tabt
+JWT_SECRET_SALT=secret
+JWT_EXPIRE_TIME=6h
 ```
 
 ### Start with pm2
