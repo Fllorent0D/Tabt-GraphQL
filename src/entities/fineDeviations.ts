@@ -1,19 +1,19 @@
 import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from 'typeorm'
 
-@Entity('tournamentregularityrankinginfo', { schema: 'tabt' })
-export class tournamentregularityrankinginfo {
+@Entity('finedeviations', { schema: 'tabt' })
+export class FineDeviations {
+
   @Column('int', {
     nullable: false,
-    primary: true,
     unsigned: true,
-    name: 'id'
+    name: 'deviation_type'
   })
-  id: number;
+  deviation_type: number;
 
-  @Column('varchar', {
+  @Column('mediumint', {
     nullable: false,
-    length: 100,
-    name: 'name'
+    name: 'fine_id'
   })
-  name: string;
+  @PrimaryColumn()
+  fine_id: number;
 }

@@ -137,6 +137,22 @@ export class MatchResult {
 	})
 	awaySets: number;
 
+	@Field()
+	@Column('smallint', {
+		unsigned: true,
+		default: () => "'0'",
+		name: 'points_home'
+	})
+	points_home: number;
+
+	@Field()
+	@Column('smallint', {
+		unsigned: true,
+		default: () => "'0'",
+		name: 'points_away'
+	})
+	points_away: number;
+
 	@Field(() => ID)
 	@PrimaryColumn('int', {
 		nullable: false,

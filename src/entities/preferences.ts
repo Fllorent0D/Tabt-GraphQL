@@ -33,7 +33,7 @@ export class preferences {
   @Column('enum', {
     nullable: false,
     default: () => "'string'",
-    enum: ['string', 'yesno'],
+    enum: ['string', 'yesno', 'int'],
     name: 'type'
   })
   type: string;

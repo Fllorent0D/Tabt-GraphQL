@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from 'typeorm'
 
 @Entity('playerbel', { schema: 'tabt' })
-@Index('playerbel_date', ['first_season', 'date'])
+@Index('playerbel_date', ['first_season', 'date', 'class_category'])
 export class playerbel {
   @Column('tinyint', {
     nullable: false,

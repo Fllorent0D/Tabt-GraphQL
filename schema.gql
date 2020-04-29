@@ -118,6 +118,8 @@ type MatchResult {
   awayScore: Float
   homeSets: Float
   awaySets: Float
+  points_home: Float
+  points_away: Float
   match_id: ID
   awayTeam: ClubTeam
   homeTeam: ClubTeam

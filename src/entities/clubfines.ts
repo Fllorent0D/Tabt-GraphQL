@@ -2,6 +2,7 @@ import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, M
 
 @Entity('clubfines', { schema: 'tabt' })
 @Index('club_id', ['club_id'])
+@Index('clubfines_season', ['season', 'week_name', 'div_id', 'match_nb'])
 export class clubfines {
   @PrimaryGeneratedColumn({
     type: 'int',

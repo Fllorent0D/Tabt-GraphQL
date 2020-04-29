@@ -17,12 +17,20 @@ import {
 @Entity('apicurrentquota', {schema: 'tabt'})
 export class apicurrentquota {
   @Column('int', {
-    nullable: true,
+    nullable: false,
     unsigned: true,
     name: 'id'
   })
   @PrimaryColumn()
   id: number | null;
+
+  @Column('double', {
+    nullable: false,
+    precision: 2,
+    name: 'site_id'
+  })
+  @PrimaryColumn()
+  site_id: number;
 
   @Column('double', {
     nullable: false,
