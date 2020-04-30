@@ -1,5 +1,5 @@
 import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from 'typeorm'
-import {Club} from './club';
+import {Club} from './Club';
 import {Field, ID, ObjectType} from 'type-graphql';
 
 @ObjectType()

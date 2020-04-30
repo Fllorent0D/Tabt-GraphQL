@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from 'typeorm'
 
 @Entity('tournamentmanagers', { schema: 'tabt' })
-export class tournamentmanagers {
+export class TournamentManagers {
   @PrimaryGeneratedColumn({
     type: 'int',
     unsigned: true,

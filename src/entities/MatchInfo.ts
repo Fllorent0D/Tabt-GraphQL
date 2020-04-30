@@ -14,8 +14,8 @@ import {
   RelationId
 } from 'typeorm';
 import {Field, ID, ObjectType} from 'type-graphql';
-import {MatchResult} from './matchResult';
-import {PlayerInfo} from './player-info';
+import {MatchResult} from './MatchResult';
+import {PlayerInfo} from './PlayerInfo';
 
 @ObjectType()
 @Entity('matchinfo', {schema: 'tabt'})

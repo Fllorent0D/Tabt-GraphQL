@@ -1,8 +1,8 @@
 import {getRepository, In} from 'typeorm';
-import {Club} from '../entities/club';
+import {Club} from '../entities/Club';
 import DataLoader from 'dataloader';
-import {PlayerInfo} from '../entities/player-info';
-import {PlayerClub} from '../entities/playerClub';
+import {PlayerInfo} from '../entities/PlayerInfo';
+import {PlayerClub} from '../entities/PlayerClub';
 import {CURRENT_SEASON} from '../index';
 
 /* Load club by index */

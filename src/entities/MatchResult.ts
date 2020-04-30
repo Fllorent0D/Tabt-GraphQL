@@ -14,11 +14,11 @@ import {
 	RelationId
 } from 'typeorm';
 import {Field, ID, ObjectType} from 'type-graphql';
-import {Division} from './division';
-import {ClubTeam} from './club-team';
-import {PlayerInfo} from './player-info';
+import {Division} from './Division';
+import {ClubTeam} from './ClubTeam';
+import {PlayerInfo} from './PlayerInfo';
 import {NoPlayerIdRegisteredException, PlayerInfoOrNotUnion} from '../exceptions/NoPlayerIdRegisteredException';
-import {Club} from './club';
+import {Club} from './Club';
 
 @ObjectType()
 export class IndividualMatchResult {

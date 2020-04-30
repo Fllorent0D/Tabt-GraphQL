@@ -13,12 +13,12 @@ import {
 	PrimaryGeneratedColumn,
 	RelationId
 } from "typeorm";
-import {PlayerInfo} from './player-info';
+import {PlayerInfo} from './PlayerInfo';
 
 
 @Entity("playerwrid", {schema: "Tabt"})
 @Index("playerwrid_playerinfo_FK", ["player"])
-export class PlayerWRId {
+export class PlayerWorldRank {
 
 	@ManyToOne(() => PlayerInfo, (playerinfo: PlayerInfo) => playerinfo.playerwrs, {
 		nullable: false,

@@ -1,10 +1,10 @@
 import {Arg, Ctx, FieldResolver, Info, Query, Resolver, Root} from 'type-graphql';
-import {ClubTeam} from '../entities/club-team';
+import {ClubTeam} from '../entities/ClubTeam';
 import {GraphQLError, GraphQLResolveInfo} from 'graphql';
-import {Club} from '../entities/club';
-import {Division} from '../entities/division';
+import {Club} from '../entities/Club';
+import {Division} from '../entities/Division';
 import {GraphQlContext} from '../index';
-import {MatchResult} from '../entities/matchResult';
+import {MatchResult} from '../entities/MatchResult';
 import {getRepository} from 'typeorm';
 
 @Resolver(ClubTeam)

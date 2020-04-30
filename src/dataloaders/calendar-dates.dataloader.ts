@@ -1,6 +1,6 @@
 import {getRepository, In} from 'typeorm';
 import DataLoader from 'dataloader';
-import {CalendarDates} from '../entities/calendarDates';
+import {CalendarDates} from '../entities/CalendarDates';
 
 const calendarDatesBatch = async (ids: string[]): Promise<CalendarDates[]> => {
 	const whereConditions = ids.map((id) => {

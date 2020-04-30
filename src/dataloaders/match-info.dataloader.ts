@@ -1,11 +1,11 @@
-import {CalendarDates} from '../entities/calendarDates';
+import {CalendarDates} from '../entities/CalendarDates';
 import {getRepository, In} from 'typeorm';
 import DataLoader from 'dataloader';
-import {MatchInfo} from '../entities/matchInfo';
-import {Club} from '../entities/club';
-import {PlayerClub} from '../entities/playerClub';
+import {MatchInfo} from '../entities/MatchInfo';
+import {Club} from '../entities/Club';
+import {PlayerClub} from '../entities/PlayerClub';
 import {CURRENT_SEASON} from '../index';
-import {MatchResult} from '../entities/matchResult';
+import {MatchResult} from '../entities/MatchResult';
 
 const clubTeamMatchesBatch = async (ids: string[]): Promise<MatchResult[][]> => {
 	const whereConditions = ids.reduce((acc, id) => {

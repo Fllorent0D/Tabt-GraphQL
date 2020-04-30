@@ -14,7 +14,7 @@ import {
   RelationId
 } from 'typeorm';
 import {Field, ID, ObjectType} from 'type-graphql';
-import {Division} from './division';
+import {Division} from './Division';
 
 @ObjectType()
 @Entity('levelinfo', {schema: 'tabt'})

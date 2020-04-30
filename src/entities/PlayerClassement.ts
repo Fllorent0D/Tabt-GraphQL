@@ -13,9 +13,9 @@ import {
 	PrimaryGeneratedColumn,
 	RelationId
 } from 'typeorm';
-import {PlayerCategory} from './playerCategory';
+import {PlayerCategory} from './PlayerCategory';
 import {Field, ObjectType} from 'type-graphql';
-import {ClassementInfo} from './classementInfo';
+import {ClassementInfo} from './ClassementInfo';
 
 @Entity('playerclassement', {schema: 'tabt'})
 export class PlayerClassement {

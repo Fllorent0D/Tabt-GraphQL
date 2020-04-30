@@ -1,6 +1,6 @@
 import {Arg, Field, Mutation, ObjectType, Resolver} from 'type-graphql';
 import {getRepository} from 'typeorm';
-import {AuthUser} from '../entities/auth_user';
+import {AuthUser} from '../entities/AuthUser';
 import * as crypto from "crypto";
 import * as jwt from 'jsonwebtoken';
 import {LoginResult, LoginSuccessful, LoginUnsuccessful} from '../exceptions/InvalidPasswordException';

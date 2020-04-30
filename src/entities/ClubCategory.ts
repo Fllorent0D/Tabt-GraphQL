@@ -13,9 +13,9 @@ import {
   PrimaryGeneratedColumn,
   RelationId
 } from 'typeorm';
-import {Club} from './club';
+import {Club} from './Club';
 import {Field, ID, ObjectType} from 'type-graphql';
-import {Level} from './level';
+import {Level} from './Level';
 
 @ObjectType()
 @Entity('clubcategories', {schema: 'tabt'})

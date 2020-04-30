@@ -1,13 +1,13 @@
 import {Arg, Ctx, FieldResolver, Info, Query, Resolver, Root} from 'type-graphql';
-import {Division} from '../entities/division';
+import {Division} from '../entities/Division';
 import {OrmRepository} from 'typeorm-typedi-extensions';
 import {Repository} from 'typeorm';
-import {ClubTeam} from '../entities/club-team';
-import {Level} from '../entities/level';
-import {ClubCategory} from '../entities/club-category';
+import {ClubTeam} from '../entities/ClubTeam';
+import {Level} from '../entities/Level';
+import {ClubCategory} from '../entities/ClubCategory';
 import {GraphQlContext} from '../index';
-import {MatchResult} from '../entities/matchResult';
-import {DivisionCategory} from '../entities/division-category';
+import {MatchResult} from '../entities/MatchResult';
+import {DivisionCategory} from '../entities/DivisionCategory';
 
 @Resolver(Division)
 export class DivisionResolver {

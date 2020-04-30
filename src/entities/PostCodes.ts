@@ -1,29 +1,25 @@
 import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from 'typeorm'
 
-@Entity('playerwrinfo', { schema: 'tabt' })
-export class playerwrinfo {
+@Entity('postcodes', { schema: 'tabt' })
+export class PostCodes {
   @PrimaryGeneratedColumn({
     type: 'int',
     unsigned: true,
-    name: 'wr_id'
+    name: 'id'
   })
-  wr_id: number;
+  id: number;
 
-  @Column('tinyint', {
+  @Column('int', {
     nullable: false,
-    name: 'playercategory'
+    unsigned: true,
+    default: () => "'0'",
+    name: 'postcode'
   })
-  playercategory: number;
+  postcode: number;
 
-  @Column('date', {
+  @Column('varchar', {
     nullable: false,
-    name: 'date'
-  })
-  date: string;
-
-  @Column('char', {
-    nullable: false,
-    length: 7,
+    length: 100,
     name: 'name'
   })
   name: string;

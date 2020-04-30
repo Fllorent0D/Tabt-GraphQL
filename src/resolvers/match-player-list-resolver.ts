@@ -1,10 +1,10 @@
 import {Ctx, FieldResolver, Resolver, Root} from 'type-graphql';
 
-import {MatchPlayerList} from '../entities/matchResult';
+import {MatchPlayerList} from '../entities/MatchResult';
 import {GraphQlContext} from '../index';
-import {PlayerInfo} from '../entities/player-info';
-import {PlayerClassement} from '../entities/playerClassement';
-import {DivisionCategory} from '../entities/division-category';
+import {PlayerInfo} from '../entities/PlayerInfo';
+import {PlayerClassement} from '../entities/PlayerClassement';
+import {DivisionCategory} from '../entities/DivisionCategory';
 
 @Resolver(MatchPlayerList)
 export class MatchPlayerListResolver {

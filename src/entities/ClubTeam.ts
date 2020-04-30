@@ -14,10 +14,10 @@ import {
   RelationId
 } from 'typeorm';
 import {Field, ObjectType} from 'type-graphql';
-import {Division} from './division';
-import {Club} from './club';
+import {Division} from './Division';
+import {Club} from './Club';
 import {CacheControl} from '../middlewares/cache-control';
-import {MatchResult} from './matchResult';
+import {MatchResult} from './MatchResult';
 
 @ObjectType()
 @Entity('divisionteaminfo', {schema: 'tabt'})

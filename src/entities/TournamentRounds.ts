@@ -2,7 +2,7 @@ import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, M
 
 @Entity('tournamentrounds', { schema: 'tabt' })
 @Index('round_id', ['round_id'], { unique: true })
-export class tournamentrounds {
+export class TournamentRounds {
   @Column('int', {
     nullable: false,
     primary: true,

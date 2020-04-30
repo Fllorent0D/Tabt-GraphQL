@@ -1,12 +1,12 @@
 import {Arg, Ctx, Field, FieldResolver, Query, Resolver, Root} from 'type-graphql';
-import {PlayerInfo} from '../entities/player-info';
+import {PlayerInfo} from '../entities/PlayerInfo';
 import {OrmRepository} from 'typeorm-typedi-extensions';
-import {PlayerClub} from '../entities/playerClub';
+import {PlayerClub} from '../entities/PlayerClub';
 import {getRepository, Repository} from 'typeorm';
-import {Club} from '../entities/club';
+import {Club} from '../entities/Club';
 import {GraphQlContext} from '../index';
-import {PlayerRanking} from '../entities/playerClassement';
-import {PlayerELOHistory} from '../entities/playerELOHistory';
+import {PlayerRanking} from '../entities/PlayerClassement';
+import {PlayerELOHistory} from '../entities/PlayerELOHistory';
 
 @Resolver(PlayerInfo)
 export class PlayerInfoResolver {

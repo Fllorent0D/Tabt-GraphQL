@@ -1,16 +1,16 @@
-import {IndividualMatchResult, MatchPlayerList, MatchResult} from '../entities/matchResult';
+import {IndividualMatchResult, MatchPlayerList, MatchResult} from '../entities/MatchResult';
 import {Ctx, FieldResolver, Resolver, Root} from 'type-graphql';
 import {OrmRepository} from 'typeorm-typedi-extensions';
 import {Repository} from 'typeorm';
-import {ClubTeam} from '../entities/club-team';
+import {ClubTeam} from '../entities/ClubTeam';
 import {GraphQlContext} from '../index';
-import {MatchInfo} from '../entities/matchInfo';
+import {MatchInfo} from '../entities/MatchInfo';
 import {NoPlayerIdRegisteredException, PlayerInfoOrNotUnion} from '../exceptions/NoPlayerIdRegisteredException';
-import {MatchSet} from '../entities/matchSet';
-import {Division} from '../entities/division';
-import {CalendarDates} from '../entities/calendarDates';
+import {MatchSet} from '../entities/MatchSet';
+import {Division} from '../entities/Division';
+import {CalendarDates} from '../entities/CalendarDates';
 import moment from 'moment';
-import {Club} from '../entities/club';
+import {Club} from '../entities/Club';
 
 
 @Resolver(MatchResult)

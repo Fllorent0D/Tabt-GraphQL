@@ -1,6 +1,6 @@
 import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from 'typeorm'
-import {Club} from './club';
-import {PlayerInfo} from './player-info';
+import {Club} from './Club';
+import {PlayerInfo} from './PlayerInfo';
 
 @Entity('playerclub', { schema: 'tabt' })
 @Index('season_club', ['season', 'club_id'])

@@ -1,10 +1,10 @@
-import {Level} from '../entities/level';
+import {Level} from '../entities/Level';
 import {Arg, Ctx, Query, Resolver, Info, FieldResolver, Root} from 'type-graphql';
 import {OrmRepository} from 'typeorm-typedi-extensions';
 import {Repository} from 'typeorm';
 import {Context} from 'graphql-cli';
 import {GraphQLResolveInfo} from 'graphql';
-import {Division} from '../entities/division';
+import {Division} from '../entities/Division';
 import {GraphQlContext} from '../index';
 
 @Resolver(Level)

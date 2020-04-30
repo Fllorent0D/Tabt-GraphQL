@@ -1,5 +1,5 @@
 import {ArgumentValidationError, createUnionType, Field, ObjectType} from "type-graphql";
-import {PlayerInfo} from '../entities/player-info';
+import {PlayerInfo} from '../entities/PlayerInfo';
 import {GraphQLError} from 'graphql';
 
 @ObjectType()

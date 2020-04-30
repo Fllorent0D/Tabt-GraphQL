@@ -4,7 +4,7 @@ import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, M
 @Index('serie_id', ['serie_id'])
 @Index('player_id', ['player_id'])
 @Index('opponent_id', ['opponent_id'])
-export class tournamentresults {
+export class TournamentResults {
   @PrimaryGeneratedColumn({
     type: 'int',
     unsigned: true,

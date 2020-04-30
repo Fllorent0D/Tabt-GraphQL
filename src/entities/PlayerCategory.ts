@@ -13,7 +13,7 @@ import {
 	PrimaryGeneratedColumn,
 	RelationId
 } from 'typeorm';
-import {PlayerCategoryStatus} from './playerCategoryStatus';
+import {PlayerCategoryStatus} from './PlayerCategoryStatus';
 
 @Entity('playercategories', {schema: 'tabt'})
 export class PlayerCategory {

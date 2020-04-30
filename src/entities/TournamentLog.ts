@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn, RelationId } from 'typeorm'
 
 @Entity('tournamentlog', { schema: 'tabt' })
-export class tournamentlog {
+export class TournamentLog {
   @Column('int', {
     nullable: false,
     primary: true,

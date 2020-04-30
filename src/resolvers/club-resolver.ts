@@ -2,11 +2,11 @@ import {Arg, Authorized, Ctx, FieldResolver, Info, Query, Resolver, Root} from '
 import {OrmRepository} from 'typeorm-typedi-extensions';
 import {Repository} from 'typeorm';
 
-import {Club} from '../entities/club';
-import {PlayerInfo} from '../entities/player-info';
-import {ClubTeam} from '../entities/club-team';
-import {ClubCategory} from '../entities/club-category';
-import {Venue} from '../entities/venue';
+import {Club} from '../entities/Club';
+import {PlayerInfo} from '../entities/PlayerInfo';
+import {ClubTeam} from '../entities/ClubTeam';
+import {ClubCategory} from '../entities/ClubCategory';
+import {Venue} from '../entities/Venue';
 import {GraphQlContext} from '../index';
 import {UserRights} from '../middlewares/auth-checker';
 import {CacheControl} from '../middlewares/cache-control';

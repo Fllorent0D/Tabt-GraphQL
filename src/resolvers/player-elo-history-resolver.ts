@@ -1,5 +1,5 @@
 import {FieldResolver, Resolver, Root} from 'type-graphql';
-import {PlayerELOHistory} from '../entities/playerELOHistory';
+import {PlayerELOHistory} from '../entities/PlayerELOHistory';
 import moment from 'moment';
 
 @Resolver(PlayerELOHistory)

@@ -1,7 +1,7 @@
 import {Ctx, FieldResolver, Resolver, Root} from 'type-graphql';
-import {ClubCategory} from '../entities/club-category';
+import {ClubCategory} from '../entities/ClubCategory';
 import {OrmRepository} from 'typeorm-typedi-extensions';
-import {Level} from '../entities/level';
+import {Level} from '../entities/Level';
 import {In, Repository} from 'typeorm';
 
 @Resolver(ClubCategory)

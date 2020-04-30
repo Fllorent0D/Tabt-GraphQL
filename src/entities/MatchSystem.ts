@@ -14,8 +14,8 @@ import {
   RelationId
 } from 'typeorm';
 import {Field, ID, ObjectType} from 'type-graphql';
-import {Division} from './division';
-import {MatchSystemPlayer} from './matchSystemPlayer';
+import {Division} from './Division';
+import {MatchSystemPlayer} from './MatchSystemPlayer';
 
 @ObjectType()
 @Entity('matchtypeinfo', {schema: 'tabt'})

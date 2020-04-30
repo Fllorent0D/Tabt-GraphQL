@@ -1,23 +1,23 @@
 import {FindOperator, getRepository, In, Repository} from 'typeorm';
 import DataLoader from 'dataloader';
 
-import {Club} from '../entities/club';
-import {ClubCategory} from '../entities/club-category';
-import {Venue} from '../entities/venue';
-import {Level} from '../entities/level';
-import {ClubTeam} from '../entities/club-team';
-import {Division} from '../entities/division';
-import {MatchResult} from '../entities/matchResult';
-import {MatchInfo} from '../entities/matchInfo';
-import {PlayerInfo} from '../entities/player-info';
-import {MatchSet} from '../entities/matchSet';
-import {MatchSystemPlayer} from '../entities/matchSystemPlayer';
-import {PlayerLastELO} from '../entities/playerLastELO';
-import {CalendarTypeInfo} from '../entities/calendarTypeInfo';
-import {PlayerStatus} from '../entities/playerStatus';
-import {DivisionCategory} from '../entities/division-category';
-import {PlayerELOHistory} from '../entities/playerELOHistory';
-import {CalendarWeekName} from '../entities/calendarWeekName';
+import {Club} from '../entities/Club';
+import {ClubCategory} from '../entities/ClubCategory';
+import {Venue} from '../entities/Venue';
+import {Level} from '../entities/Level';
+import {ClubTeam} from '../entities/ClubTeam';
+import {Division} from '../entities/Division';
+import {MatchResult} from '../entities/MatchResult';
+import {MatchInfo} from '../entities/MatchInfo';
+import {PlayerInfo} from '../entities/PlayerInfo';
+import {MatchSet} from '../entities/MatchSet';
+import {MatchSystemPlayer} from '../entities/MatchSystemPlayer';
+import {PlayerLastELO} from '../entities/PlayerLastELO';
+import {CalendarTypeInfo} from '../entities/CalendarTypeInfo';
+import {PlayerStatus} from '../entities/PlayerStatus';
+import {DivisionCategory} from '../entities/DivisionCategory';
+import {PlayerELOHistory} from '../entities/PlayerELOHistory';
+import {CalendarWeekName} from '../entities/CalendarWeekName';
 
 export const loadManyForKeyBatchFunction = <T>(repository: Repository<T>, key: string): (ids: number[]) => Promise<T[][]> => async (ids) => {
 	const entities = await repository

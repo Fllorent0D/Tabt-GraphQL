@@ -14,8 +14,8 @@ import {
 	RelationId
 } from "typeorm";
 import {seasoninfo} from "./seasoninfo";
-import {PlayerInfo} from './player-info';
-import {PlayerCategory} from './playerCategory';
+import {PlayerInfo} from './PlayerInfo';
+import {PlayerCategory} from './PlayerCategory';
 
 
 @Entity("playercategorystatus", {schema: "Tabt"})

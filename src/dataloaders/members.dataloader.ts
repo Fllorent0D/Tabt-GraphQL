@@ -1,12 +1,12 @@
 import DataLoader from 'dataloader';
-import {PlayerInfo} from '../entities/player-info';
-import {PlayerClub} from '../entities/playerClub';
+import {PlayerInfo} from '../entities/PlayerInfo';
+import {PlayerClub} from '../entities/PlayerClub';
 import {CURRENT_SEASON} from '../index';
 import {getRepository, In} from 'typeorm';
-import {MatchPlayer} from '../entities/matchPlayer';
-import {PlayerClassement} from '../entities/playerClassement';
-import {PlayerCategory} from '../entities/playerCategory';
-import {ClassementInfo} from '../entities/classementInfo';
+import {MatchPlayer} from '../entities/MatchPlayer';
+import {PlayerClassement} from '../entities/PlayerClassement';
+import {PlayerCategory} from '../entities/PlayerCategory';
+import {ClassementInfo} from '../entities/ClassementInfo';
 
 
 export const getMembersClubBatch = async (clubsIds: number[]) => {

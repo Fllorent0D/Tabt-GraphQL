@@ -13,8 +13,8 @@ import {
 	PrimaryGeneratedColumn,
 	RelationId
 } from "typeorm";
-import {TournamentRegularityRankingInfo} from "./tournamentRegularityRankingInfo";
-import {TournamentStandardRounds} from './tournamentStandardRounds';
+import {TournamentRegularityRankingInfo} from "./TournamentRegularityRankingInfo";
+import {TournamentStandardRounds} from './TournamentStandardRounds';
 
 
 @Entity("tournamentregularityrankings", {schema: "Tabt"})

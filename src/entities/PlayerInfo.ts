@@ -13,15 +13,15 @@ import {
 	PrimaryGeneratedColumn,
 	RelationId
 } from 'typeorm';
-import {PlayerClub} from './playerClub';
+import {PlayerClub} from './PlayerClub';
 import {Authorized, Field, ID, ObjectType} from 'type-graphql';
-import {Club} from './club';
+import {Club} from './Club';
 import {UserRights} from '../middlewares/auth-checker';
 import {CacheControl} from '../middlewares/cache-control';
-import {PlayerRanking} from './playerClassement';
-import {PlayerELOHistory} from './playerELOHistory';
-import {PlayerCategoryStatus} from './playerCategoryStatus';
-import {PlayerWRId} from './playerWRId';
+import {PlayerRanking} from './PlayerClassement';
+import {PlayerELOHistory} from './PlayerELOHistory';
+import {PlayerCategoryStatus} from './PlayerCategoryStatus';
+import {PlayerWorldRank} from './PlayerWorldRank';
 
 @ObjectType()
 @Entity('playerinfo', {schema: 'tabt'})
@@ -225,10 +225,10 @@ export class PlayerInfo {
 	})
 	playercategorystatuss: PlayerCategoryStatus[];
 
-	@OneToMany(() => PlayerWRId, (playerwrid: PlayerWRId) => playerwrid.player, {
+	@OneToMany(() => PlayerWorldRank, (playerwrid: PlayerWorldRank) => playerwrid.player, {
 		onDelete: 'RESTRICT',
 		onUpdate: 'RESTRICT'
 	})
-	playerwrs: PlayerWRId[];
+	playerwrs: PlayerWorldRank[];
 
 }

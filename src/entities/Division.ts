@@ -14,12 +14,12 @@ import {
   RelationId
 } from 'typeorm';
 import {Field, ID, ObjectType} from 'type-graphql';
-import {ClubTeam} from './club-team';
+import {ClubTeam} from './ClubTeam';
 
-import {DivisionCategory} from './division-category';
-import {Level} from './level';
-import {MatchSystem} from './matchSystem';
-import {MatchResult} from './matchResult';
+import {DivisionCategory} from './DivisionCategory';
+import {Level} from './Level';
+import {MatchSystem} from './MatchSystem';
+import {MatchResult} from './MatchResult';
 
 @ObjectType()
 @Entity('divisioninfo', {schema: 'tabt'})

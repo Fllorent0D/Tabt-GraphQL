@@ -2,7 +2,7 @@ import { BaseEntity, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, M
 
 @Entity('tournamentplayers', { schema: 'tabt' })
 @Index('serie_id', ['serie_id'])
-export class tournamentplayers {
+export class TournamentPlayers {
   @PrimaryGeneratedColumn({
     type: 'int',
     unsigned: true,

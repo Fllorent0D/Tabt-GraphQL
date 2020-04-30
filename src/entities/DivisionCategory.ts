@@ -15,7 +15,7 @@ import {
 } from 'typeorm';
 import {Field, ObjectType} from 'type-graphql';
 
-import {Division} from './division';
+import {Division} from './Division';
 
 @ObjectType()
 @Entity('divisioncategories', {schema: 'tabt'})
