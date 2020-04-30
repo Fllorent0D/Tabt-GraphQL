@@ -55,6 +55,6 @@ export class TournamentStandardRounds {
 		onDelete: 'RESTRICT',
 		onUpdate: 'RESTRICT'
 	})
-	tournamentregularityrankingss: TournamentRegularityRankings[];
+	tournamentRegularityRankings: TournamentRegularityRankings[];
 
 }

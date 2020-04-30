@@ -22,14 +22,14 @@ import {TournamentStandardRounds} from './TournamentStandardRounds';
 @Index("roundid_tournamentstandardrounds_FK", ["round"])
 export class TournamentRegularityRankings {
 
-	@ManyToOne(() => TournamentRegularityRankingInfo, (tournamentregularityrankinginfo: TournamentRegularityRankingInfo) => tournamentregularityrankinginfo.tournamentregularityrankingss, {
+	@ManyToOne(() => TournamentRegularityRankingInfo, (tournamentregularityrankinginfo: TournamentRegularityRankingInfo) => tournamentregularityrankinginfo.tournamentRegularityRankings, {
 		nullable: false,
 		onDelete: 'RESTRICT',
 		onUpdate: 'RESTRICT',
 		primary: true
 	})
 	@JoinColumn({name: 'regularityranking_id'})
-	regularityranking: TournamentRegularityRankingInfo | null;
+	regularityRanking: TournamentRegularityRankingInfo | null;
 
 	@Column("int", {
 		nullable: true,
@@ -48,10 +48,11 @@ export class TournamentRegularityRankings {
 	max_participants: number | null;
 
 
-	@ManyToOne(() => TournamentStandardRounds, (tournamentstandardrounds: TournamentStandardRounds) => tournamentstandardrounds.tournamentregularityrankingss, {
+	@ManyToOne(() => TournamentStandardRounds, (tournamentstandardrounds: TournamentStandardRounds) => tournamentstandardrounds.tournamentRegularityRankings, {
 		nullable: false,
 		onDelete: 'RESTRICT',
-		onUpdate: 'RESTRICT'
+		onUpdate: 'RESTRICT',
+		primary: true,
 	})
 	@JoinColumn({name: 'round_id'})
 	round: TournamentStandardRounds | null;

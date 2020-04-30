@@ -36,10 +36,10 @@ export class TournamentRegularityRankingInfo {
 	name: string;
 
 
-	@OneToMany(() => TournamentRegularityRankings, (tournamentregularityrankings: TournamentRegularityRankings) => tournamentregularityrankings.regularityranking, {
+	@OneToMany(() => TournamentRegularityRankings, (tournamentRegularityRankings: TournamentRegularityRankings) => tournamentRegularityRankings.regularityRanking, {
 		onDelete: 'RESTRICT',
 		onUpdate: 'RESTRICT'
 	})
-	tournamentregularityrankingss: TournamentRegularityRankings[];
+	tournamentRegularityRankings: TournamentRegularityRankings[];
 
 }
