@@ -34,14 +34,13 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_STAGING_PRIVATEKEY }}
           ARGS: "-rltgoDzvO --delete"
-          SOURCE: "dist/"
           REMOTE_HOST: ${{ secrets.SSH_STAGING_HOST }}
           REMOTE_USER: ${{ secrets.SSH_STAGING_USER }}
           TARGET: ${{ secrets.SSH_STAGING_TARGET }}
-      - name: restarting pm2 server
+      - name: restarting stagged tabt instance
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_STAGING_HOST }}
           username: ${{ secrets.SSH_STAGING_USER }}
           key: ${{ secrets.SSH_STAGING_PRIVATEKEY }}
-          script: pm2 reload all
+          script: cd /home/github-deploy/tabt && pm2 restart tabt-graphql-pm2.json
