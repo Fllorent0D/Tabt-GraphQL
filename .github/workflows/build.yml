@@ -38,7 +38,7 @@ jobs:
           REMOTE_HOST: ${{ secrets.SSH_STAGING_HOST }}
           REMOTE_USER: ${{ secrets.SSH_STAGING_USER }}
           TARGET: ${{ secrets.SSH_STAGING_TARGET }}
-      - name: executing remote ssh commands using ssh key
+      - name: restarting pm2 server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_STAGING_HOST }}
