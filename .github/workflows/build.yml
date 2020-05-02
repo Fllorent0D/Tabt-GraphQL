@@ -29,22 +29,22 @@ jobs:
       - name: Build
         run: npm run build
       - name: Upload schema
-          env:
-            APOLLO_KEY: ${{ secrets.APOLLO_KEY }}
-          run: npx apollo service:push --variant=development
+        env:
+          APOLLO_KEY: ${{ secrets.APOLLO_KEY }}
+        run: npx apollo service:push --variant=development
       - name: Deploy to Server
-          uses: easingthemes/ssh-deploy@v2.1.1
-          env:
-            SSH_PRIVATE_KEY: ${{ secrets.SSH_STAGING_PRIVATEKEY }}
-            ARGS: "-rltgoDzvO --delete"
-            SOURCE: "dist/"
-            REMOTE_HOST: ${{ secrets.SSH_STAGING_HOST }}
-            REMOTE_USER: ${{ secrets.SSH_STAGING_USER }}
-            TARGET: ${{ secrets.SSH_STAGING_TARGET }}
+        uses: easingthemes/ssh-deploy@v2.1.1
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_STAGING_PRIVATEKEY }}
+          ARGS: "-rltgoDzvO --delete"
+          SOURCE: "dist/"
+          REMOTE_HOST: ${{ secrets.SSH_STAGING_HOST }}
+          REMOTE_USER: ${{ secrets.SSH_STAGING_USER }}
+          TARGET: ${{ secrets.SSH_STAGING_TARGET }}
       - name: executing remote ssh commands using ssh key
-          uses: appleboy/ssh-action@master
-          with:
-            host: ${{ secrets.SSH_STAGING_HOST }}
-            username: ${{ secrets.SSH_STAGING_USER }}
-            key: ${{ secrets.SSH_STAGING_PRIVATEKEY }}
-            script: pm2 reload all
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_STAGING_HOST }}
+          username: ${{ secrets.SSH_STAGING_USER }}
+          key: ${{ secrets.SSH_STAGING_PRIVATEKEY }}
+          script: pm2 reload all
