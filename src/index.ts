@@ -104,7 +104,7 @@ export interface GraphQlContext {
 	playerELOHistoryLoader: DataLoader<number, PlayerELOHistory[]>
 }
 
-export const CURRENT_SEASON = 17;
+export const CURRENT_SEASON = process.env.CURRENT_SEASON;
 
 const start = async () => {
 

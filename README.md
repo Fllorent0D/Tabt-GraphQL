@@ -28,6 +28,7 @@ DB_PASSWORD=myRootpwd32
 DB_NAME=Tabt
 JWT_SECRET_SALT=secret
 JWT_EXPIRE_TIME=6h
+CURRENT_SEASON=17
 ```
 
 ### Start with pm2
