@@ -18,7 +18,7 @@ import {TournamentStandardRounds} from './TournamentStandardRounds';
 
 
 @Entity("tournamentregularityrankings", {schema: "Tabt"})
-@Index("regularityrankingid_tournamentregularityrankinginfo_FK", ["regularityranking"])
+@Index("regularityrankingid_tournamentregularityrankinginfo_FK", ["regularityRanking"])
 @Index("roundid_tournamentstandardrounds_FK", ["round"])
 export class TournamentRegularityRankings {
 
