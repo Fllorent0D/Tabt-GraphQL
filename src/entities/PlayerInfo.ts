@@ -28,7 +28,6 @@ import {PlayerWorldRank} from './PlayerWorldRank';
 @Index('vttl_index', ['vttl_index'], {unique: true})
 export class PlayerInfo {
 
-	@Field(() => ID)
 	@PrimaryGeneratedColumn({
 		type: 'int',
 		unsigned: true,
@@ -86,7 +85,6 @@ export class PlayerInfo {
 	@Authorized([UserRights.Admin])
 	birthdate: string | null;
 
-	@Field()
 	@Column('mediumint', {
 		nullable: false,
 		unsigned: true,
@@ -95,7 +93,7 @@ export class PlayerInfo {
 	})
 	index: number;
 
-	@Field()
+	@Field(() => ID)
 	@Column('int', {
 		nullable: true,
 		unique: true,
