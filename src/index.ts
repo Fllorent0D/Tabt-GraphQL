@@ -69,12 +69,14 @@ import {PlayerClassement} from './entities/PlayerClassement';
 import {DivisionCategory} from './entities/DivisionCategory';
 import {PlayerELOHistory} from './entities/PlayerELOHistory';
 import {PlayerEloHistoryResolver} from './resolvers/player-elo-history-resolver';
+import {GraphQLDatabaseLoader} from '@mando75/typeorm-graphql-loader';
 require('dotenv').config();
 
 export interface GraphQlContext {
 	request: Request;
 	claims: UserRights[],
 	authenticated: boolean,
+	dataloaderTest: GraphQLDatabaseLoader;
 	divisionClubTeamsLoader: DataLoader<number, ClubTeam[], number>;
 	levelDivisionLoader: DataLoader<number, Division[], number>;
 	divisionLoader: DataLoader<number, Division, number>;
@@ -205,6 +207,7 @@ const start = async () => {
 		context: (expressContext: ExpressContext) => ({
 			request: expressContext.req as Request,
 			claims: expressContext.req['jwt']?.claims,
+			dataloaderTest: new GraphQLDatabaseLoader(connection, {primaryKeyColumn: "1"}),
 			authenticated: !!expressContext.req['jwt'],
 			divisionClubTeamsLoader: divisionTeamsLoader(),
 			levelDivisionLoader: levelDivisionsLoader(),

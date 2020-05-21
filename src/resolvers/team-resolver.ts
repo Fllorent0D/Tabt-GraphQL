@@ -18,19 +18,8 @@ export class TeamResolver {
 		return context.clubTeamsLoader.load(Number(clubId));
 	}
 
-	@FieldResolver(() => Club)
-	async club(@Root() team: ClubTeam, @Ctx() context: GraphQlContext): Promise<Club> {
-		return context.clubLoader.load(team.club_id);
-	}
-
-	@FieldResolver(() => Division)
-	async division(@Root() team: ClubTeam, @Ctx() context: GraphQlContext): Promise<Division> {
-		return context.divisionLoader.load(team.div_id);
-	}
-
 	@FieldResolver(() => [MatchResult])
 	async matches(@Root() team: ClubTeam, @Ctx() context: GraphQlContext): Promise<MatchResult[]> {
 		return context.clubTeamMatchesLoader.load(`${team.club_id}#${team.indice}`);
 	}
-
 }

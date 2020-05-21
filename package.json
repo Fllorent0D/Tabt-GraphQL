@@ -13,6 +13,7 @@
   "author": "Florent Cardoen",
   "license": "ISC",
   "dependencies": {
+    "@mando75/typeorm-graphql-loader": "^1.0.0",
     "@types/graphql": "^14.2.2",
     "@types/node": "^12.6.2",
     "apollo-cache-control": "^0.9.0",

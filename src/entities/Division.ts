@@ -340,6 +340,7 @@ export class Division {
   matches: MatchResult[];
 
   @Field(type => [ClubTeam])
+  @OneToMany(() => ClubTeam, clubTeam => clubTeam.division)
   teams: ClubTeam[];
 
   @Field(() => Level)

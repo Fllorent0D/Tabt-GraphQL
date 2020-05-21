@@ -23,17 +23,6 @@ import {MatchResult} from './MatchResult';
 @Entity('divisionteaminfo', {schema: 'tabt'})
 export class ClubTeam {
 
-  @Column('int', {
-    nullable: false,
-    primary: true,
-    unsigned: true,
-    default: () => "'0'",
-    name: 'div_id'
-  })
-  div_id: number;
-
-
-
   @Column('tinyint', {
     nullable: false,
     primary: true,
@@ -50,15 +39,6 @@ export class ClubTeam {
     name: 'team_id'
   })
   team_id: number;
-
-  @Column('smallint', {
-    nullable: true,
-    primary: true,
-    unsigned: true,
-    default: () => "'0'",
-    name: 'club_id'
-  })
-  club_id: number | null;
 
   @Field()
   @Column('char', {
@@ -128,13 +108,16 @@ export class ClubTeam {
   in_classement: string;
 
   @Field(() => Division)
+  @ManyToOne(() => Division, (division) => division.teams)
+  @JoinColumn({name: 'div_id'})
   division: Division;
 
+  @ManyToOne(() => Club, (club) => club.teams, {eager: true})
   @Field(() => Club)
+  @JoinColumn({name: 'club_id'})
   club: Club;
 
   @Field(() => [MatchResult])
   matches: MatchResult[];
-
 
 }

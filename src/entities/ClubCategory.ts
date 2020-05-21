@@ -69,6 +69,5 @@ export class ClubCategory {
 
   @Field(() => [Club])
   @OneToMany(type => Club, club => club.category)
-  clubs: Promise<Club[]>;
-
+  clubs: Club[];
 }

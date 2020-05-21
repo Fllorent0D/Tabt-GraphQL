@@ -18,7 +18,7 @@ import {Division} from './Division';
 
 @ObjectType()
 @Entity('levelinfo', {schema: 'tabt'})
-export class Level {
+export class Level extends BaseEntity{
   @Field(() => ID)
   @PrimaryGeneratedColumn({
     type: 'tinyint',

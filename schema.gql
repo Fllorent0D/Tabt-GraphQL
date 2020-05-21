@@ -11,7 +11,6 @@ type CalendarTypeInfo {
 
 type Club {
   id: ID
-  categoryId: ClubCategory
   category: ClubCategory
   name: String
   short_name: String
@@ -216,7 +215,6 @@ type Query {
 
 type Venue {
   id: ID
-  clubId: Club
   name: String
   address: String
   zip: Float
@@ -224,4 +222,5 @@ type Venue {
   phone: String
   fax: String
   comment: String
+  club: [Club]
 }

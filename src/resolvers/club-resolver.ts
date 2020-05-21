@@ -1,15 +1,13 @@
-import {Arg, Authorized, Ctx, FieldResolver, Info, Query, Resolver, Root} from 'type-graphql';
+import {Arg, Ctx, FieldResolver, Info, Query, Resolver, Root} from 'type-graphql';
 import {OrmRepository} from 'typeorm-typedi-extensions';
 import {Repository} from 'typeorm';
 
 import {Club} from '../entities/Club';
 import {PlayerInfo} from '../entities/PlayerInfo';
-import {ClubTeam} from '../entities/ClubTeam';
 import {ClubCategory} from '../entities/ClubCategory';
-import {Venue} from '../entities/Venue';
 import {GraphQlContext} from '../index';
-import {UserRights} from '../middlewares/auth-checker';
 import {CacheControl} from '../middlewares/cache-control';
+import {GraphQLResolveInfo} from 'graphql';
 
 @Resolver(Club)
 export class ClubResolver {
@@ -22,13 +20,18 @@ export class ClubResolver {
 	@Query(() => Club)
 	async club(
 		@Arg('clubId') clubIndex: string,
+		@Info() info: GraphQLResolveInfo,
 		@Ctx() context: GraphQlContext): Promise<Club> {
-		return context.clubIndexLoader.load(clubIndex);
+		return context.dataloaderTest.loadEntity(Club, 'club').where('club.id = :id', {id: clubIndex}).info(info).loadOne();
 	}
 
 	@Query(() => [Club])
-	async clubs(): Promise<Club[]> {
-		return this.clubRepository.find();
+	async clubs(
+		@Info() info: GraphQLResolveInfo,
+		@Ctx() context: GraphQlContext
+	): Promise<Club[]> {
+		return context.dataloaderTest.loadEntity(Club).info(info).loadMany();
+		//return this.clubRepository.find();
 	}
 
 	@FieldResolver(() => [PlayerInfo])
@@ -37,21 +40,11 @@ export class ClubResolver {
 		return context.memberClubLoader.load(club.id);
 	}
 
-	@FieldResolver(() => [ClubTeam])
-	async teams(@Root() club: Club, @Ctx() context: GraphQlContext
-	): Promise<ClubTeam[]> {
-		return context.clubTeamsLoader.load(club.id);
-	}
-
-	@FieldResolver(() => ClubCategory)
-	@CacheControl({maxAge: 60})
-	async category(@Root() club: Club, @Ctx() context: GraphQlContext) {
-		return context.categoryLoader.load(club.categoryId);
-	}
-
-	@FieldResolver(() => [Venue])
-	async address(@Root()club: Club, @Ctx() context: GraphQlContext) {
-		return context.venueLoader.load(club.id);
-	}
-
+	/*
+		@FieldResolver(() => ClubCategory)
+		@CacheControl({maxAge: 60})
+		async category(@Root() club: Club, @Ctx() context: GraphQlContext) {
+			return context.categoryLoader.load(club.categoryId);
+		}
+	*/
 }

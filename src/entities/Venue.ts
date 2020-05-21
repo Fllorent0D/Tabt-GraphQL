@@ -13,11 +13,13 @@ export class Venue {
   })
   id: number;
 
+  /*
   @Field(() => Club)
   @Column({
     name: 'club_id'
   })
   clubId: number;
+*/
 
   @Column('tinyint', {
     nullable: false,
@@ -82,4 +84,10 @@ export class Venue {
     name: 'comment'
   })
   comment: string | null;
+
+  @ManyToOne(() => Club, (club) => club.address)
+  @JoinColumn({name: 'club_id'})
+  @Field(() => [Club])
+  club: Club[] | null
+
 }
