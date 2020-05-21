@@ -100,7 +100,7 @@ export class PlayerInfo {
 		unsigned: true,
 		name: 'vttl_index'
 	})
-	vttl_index: number | null;
+	unique_index: number | null;
 
 	@Field()
 	@Column('varchar', {
