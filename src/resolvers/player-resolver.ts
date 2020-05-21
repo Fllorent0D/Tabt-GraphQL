@@ -11,7 +11,7 @@ import {PlayerELOHistory} from '../entities/PlayerELOHistory';
 @Resolver(PlayerInfo)
 export class PlayerInfoResolver {
 	@Query(() => [PlayerInfo], {description: "Returns list of players"})
-	async players(@Arg('indice')id: number): Promise<PlayerInfo[]> {
+	async players(@Arg('unique_index')id: number): Promise<PlayerInfo[]> {
 		const query = getRepository(PlayerInfo).createQueryBuilder();
 		if (id) {
 			query.where({vttl_index: id});
