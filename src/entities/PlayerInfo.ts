@@ -54,6 +54,7 @@ export class PlayerInfo {
 	last_name: string;
 
 	@Field()
+	@Authorized([UserRights.Admin])
 	@Column('varchar', {
 		nullable: false,
 		length: 60,
@@ -62,6 +63,7 @@ export class PlayerInfo {
 	email: string;
 
 	@Field()
+	@Authorized([UserRights.Admin])
 	@Column('varchar', {
 		nullable: true,
 		name: 'emailcc'
