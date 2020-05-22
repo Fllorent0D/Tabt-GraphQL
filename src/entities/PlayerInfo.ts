@@ -135,6 +135,7 @@ export class PlayerInfo {
 		enum: ['M', 'F'],
 		name: 'sex'
 	})
+	@Authorized([UserRights.Admin])
 	sex: string | null;
 
 	@Field()
@@ -144,6 +145,7 @@ export class PlayerInfo {
 		default: () => "'BE'",
 		name: 'nationality'
 	})
+	@Authorized([UserRights.Admin])
 	nationality: string;
 
 	@Field()
