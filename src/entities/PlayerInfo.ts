@@ -25,7 +25,7 @@ import {PlayerWorldRank} from './PlayerWorldRank';
 
 @ObjectType()
 @Entity('playerinfo', {schema: 'tabt'})
-@Index('vttl_index', ['vttl_index'], {unique: true})
+@Index('unique_index', ['unique_index'], {unique: true})
 export class PlayerInfo {
 
 	@PrimaryGeneratedColumn({

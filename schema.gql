@@ -168,15 +168,13 @@ type PlayerELOHistory {
 }
 
 type PlayerInfo {
-  id: ID
   first_name: String
   last_name: String
   email: String
   emailcc: String
   photo_filename: String
   birthdate: String
-  index: Float
-  vttl_index: Float
+  unique_index: ID
   nationalNumber: String
   address: String
   postcode: Float
@@ -206,7 +204,7 @@ type Query {
   clubs: [Club]
 
   """Returns list of players"""
-  players(indice: Float): [PlayerInfo]
+  players(unique_index: Float): [PlayerInfo]
   level(id: Float!): Level
   levels: [Level]
   divisions: [Division]

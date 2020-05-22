@@ -14,7 +14,7 @@ export class PlayerInfoResolver {
 	async players(@Arg('unique_index')id: number): Promise<PlayerInfo[]> {
 		const query = getRepository(PlayerInfo).createQueryBuilder();
 		if (id) {
-			query.where({vttl_index: id});
+			query.where({unique_index: id});
 		}
 		return query.getMany();
 	}
