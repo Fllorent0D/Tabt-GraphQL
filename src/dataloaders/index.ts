@@ -71,6 +71,3 @@ export const playerELOHistoryLoader = () => new DataLoader(loadManyForKeyBatchFu
 export const calendarTypeLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(CalendarTypeInfo), 'id'))
 export const calendarWeekNameLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(CalendarWeekName), 'id'))
 
-//Player status
-export const playerStatusLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(PlayerStatus), 'player_id'))
-

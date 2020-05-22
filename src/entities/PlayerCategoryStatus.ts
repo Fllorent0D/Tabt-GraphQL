@@ -13,7 +13,7 @@ import {
 	PrimaryGeneratedColumn,
 	RelationId
 } from "typeorm";
-import {seasoninfo} from "./seasoninfo";
+import {SeasonInfo} from "./SeasonInfo";
 import {PlayerInfo} from './PlayerInfo';
 import {PlayerCategory} from './PlayerCategory';
 
@@ -24,14 +24,14 @@ import {PlayerCategory} from './PlayerCategory';
 @Index("playercategorystatus_playercategories_FK", ["category"])
 export class PlayerCategoryStatus {
 
-	@ManyToOne(() => seasoninfo, (seasoninfo: seasoninfo) => seasoninfo.playercategorystatuss, {
+	@ManyToOne(() => SeasonInfo, (seasoninfo: SeasonInfo) => seasoninfo.playercategorystatuss, {
 		nullable: false,
 		onDelete: 'RESTRICT',
 		onUpdate: 'RESTRICT',
 		primary: true
 	})
 	@JoinColumn({name: 'season'})
-	season: seasoninfo | null;
+	season: SeasonInfo | null;
 
 
 	@ManyToOne(() => PlayerInfo, (playerinfo: PlayerInfo) => playerinfo.playercategorystatuss, {

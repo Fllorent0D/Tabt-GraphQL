@@ -29,7 +29,6 @@ import {
 	divisionsLoader,
 	playerELOLoader,
 	calendarTypeLoader,
-	playerStatusLoader,
 	categoryDivisionsLoader, playerELOHistoryLoader
 } from './dataloaders';
 import {Request} from 'express';
@@ -44,7 +43,12 @@ import {clubTeamLoader} from './dataloaders/teams.dataloader';
 import {MatchInfo} from './entities/MatchInfo';
 import {PlayerInfo} from './entities/PlayerInfo';
 import {MatchPlayerListResolver} from './resolvers/match-player-list-resolver';
-import {membersClubDataloader, playerListDataloader, playerRankingsDataloader} from './dataloaders/members.dataloader';
+import {
+	membersClubDataloader,
+	playerListDataloader,
+	playerRankingsDataloader,
+	playerStatusLoader
+} from './dataloaders/members.dataloader';
 import {clubIndexLoader, clubMemberLoader} from './dataloaders/clubs.dataloader';
 import {MatchPlayer} from './entities/MatchPlayer';
 import {MatchSet} from './entities/MatchSet';
@@ -69,10 +73,13 @@ import {PlayerClassement} from './entities/PlayerClassement';
 import {DivisionCategory} from './entities/DivisionCategory';
 import {PlayerELOHistory} from './entities/PlayerELOHistory';
 import {PlayerEloHistoryResolver} from './resolvers/player-elo-history-resolver';
+import {seasonRequest} from './middlewares/season-request';
+import {SeasonInfo} from './entities/SeasonInfo';
 require('dotenv').config();
 
 export interface GraphQlContext {
 	request: Request;
+	season: SeasonInfo;
 	claims: UserRights[],
 	authenticated: boolean,
 	divisionClubTeamsLoader: DataLoader<number, ClubTeam[], number>;
@@ -103,8 +110,6 @@ export interface GraphQlContext {
 	playerRankingsLoader: DataLoader<number, PlayerClassement[]>
 	playerELOHistoryLoader: DataLoader<number, PlayerELOHistory[]>
 }
-
-export const CURRENT_SEASON = process.env.CURRENT_SEASON;
 
 const start = async () => {
 
@@ -183,42 +188,49 @@ const start = async () => {
 				}),
 			},
 		],
-		context: (expressContext: ExpressContext) => ({
-			request: expressContext.req as Request,
-			claims: expressContext.req['jwt']?.claims,
-			authenticated: !!expressContext.req['jwt'],
-			divisionClubTeamsLoader: divisionTeamsLoader(),
-			levelDivisionLoader: levelDivisionsLoader(),
-			clubLoader: clubLoader(),
-			clubIndexLoader: clubIndexLoader(),
-			clubTeamsLoader: clubTeamsLoader(),
-			levelLoader: levelLoader(),
-			categoryLoader: clubCategoryLoader(),
-			venueLoader: clubVenuesLoader(),
-			matchResultsLoader: matchResultsLoader(),
-			divisionMatchResultsLoader: divisionMatchResultsLoader(),
-			clubTeamLoader: clubTeamLoader(),
-			matchInfoLoader: matchInfoLoader(),
-			memberLoader: memberLoader(),
-			memberClubLoader: membersClubDataloader(),
-			clubMemberLoader: clubMemberLoader(),
-			playerListLoader: playerListDataloader(),
-			matchSetsLoader: matchSetsLoader(),
-			matchSystemPlayerLoader: matchSystemPlayerLoader(),
-			divisionLoader: divisionsLoader(),
-			categoryDivisionLoader: categoryDivisionsLoader(),
-			playerELOLoader: playerELOLoader(),
-			calendarTypeLoader: calendarTypeLoader(),
-			calendarDatesLoader: calendarDatesLoader(),
-			clubTeamMatchesLoader: clubTeamMatchesLoader(),
-			playerStatusLoader: playerStatusLoader(),
-			playerRankingsLoader: playerRankingsDataloader(),
-			playerELOHistoryLoader: playerELOHistoryLoader()
-		}),
+		context: (expressContext: ExpressContext) => {
+			const season = expressContext.req['season'] as SeasonInfo;
+
+			return {
+				request: expressContext.req as Request,
+				claims: expressContext.req['jwt']?.claims,
+				season: season,
+				authenticated: !!expressContext.req['jwt'],
+				divisionClubTeamsLoader: divisionTeamsLoader(),
+				levelDivisionLoader: levelDivisionsLoader(),
+				clubLoader: clubLoader(),
+				clubIndexLoader: clubIndexLoader(),
+				clubTeamsLoader: clubTeamsLoader(),
+				levelLoader: levelLoader(),
+				categoryLoader: clubCategoryLoader(),
+				venueLoader: clubVenuesLoader(),
+				matchResultsLoader: matchResultsLoader(),
+				divisionMatchResultsLoader: divisionMatchResultsLoader(),
+				clubTeamLoader: clubTeamLoader(),
+				matchInfoLoader: matchInfoLoader(),
+				memberLoader: memberLoader(),
+				memberClubLoader: membersClubDataloader(season),
+				clubMemberLoader: clubMemberLoader(season),
+				playerListLoader: playerListDataloader(),
+				matchSetsLoader: matchSetsLoader(),
+				matchSystemPlayerLoader: matchSystemPlayerLoader(),
+				divisionLoader: divisionsLoader(),
+				categoryDivisionLoader: categoryDivisionsLoader(),
+				playerELOLoader: playerELOLoader(),
+				calendarTypeLoader: calendarTypeLoader(),
+				calendarDatesLoader: calendarDatesLoader(),
+				clubTeamMatchesLoader: clubTeamMatchesLoader(),
+				playerStatusLoader: playerStatusLoader(season),
+				playerRankingsLoader: playerRankingsDataloader(season),
+				playerELOHistoryLoader: playerELOHistoryLoader()
+			}
+		},
 	});
 
 	const expressApp = express();
 	expressApp.use('/graphql', verifyToken);
+	expressApp.use('/graphql', seasonRequest);
+
 	expressApp.use('/voyager', voyagerMiddleware({endpointUrl: '/graphql'}));
 
 	server.applyMiddleware({app: expressApp, path: '/graphql'});
