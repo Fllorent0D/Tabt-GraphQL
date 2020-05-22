@@ -155,25 +155,6 @@ const start = async () => {
 			defaultMaxAge: 5
 		},
 		tracing: true,
-		engine: Boolean(process.env.USE_APOLLO_ENGINE) ? {
-			apiKey: process.env.APOLLO_ENGINE_API_KEY,
-			schemaTag: process.env.APOLLO_SCHEMA_TAG,
-			debugPrintReports: true,
-			generateClientInfo: (requestContext: GraphQLRequestContext<ExpressContext>) => {
-				const headers = requestContext.context.req && requestContext.context.req['headers'];
-				if(headers) {
-					return {
-						clientName: headers['tabt-client-name'],
-						clientVersion: headers['tabt-client-version'],
-					};
-				} else {
-					return {
-						clientName: "Unknown Client",
-						clientVersion: "Unversioned",
-					};
-				}
-			}
-		} : null,
 		plugins: [
 			{
 				requestDidStart: () => ({

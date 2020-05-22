@@ -27,10 +27,6 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
-      - name: Upload schema
-        env:
-          APOLLO_KEY: ${{ secrets.APOLLO_KEY }}
-        run: npx apollo service:push --variant=development
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v2.1.1
         env:
