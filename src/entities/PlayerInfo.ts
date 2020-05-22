@@ -70,14 +70,6 @@ export class PlayerInfo {
 	emailcc: string | null;
 
 	@Field()
-	@Column('varchar', {
-		nullable: true,
-		length: 100,
-		name: 'photo_filename'
-	})
-	photo_filename: string | null;
-
-	@Field()
 	@Column('date', {
 		nullable: true,
 		name: 'birthdate'
