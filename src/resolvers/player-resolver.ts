@@ -42,10 +42,10 @@ export class PlayerInfoResolver {
 		return mapped;
 	}
 
-	@FieldResolver(returns => String, {nullable: true})
-	async status(@Root() playerInfo: PlayerInfo, @Ctx() context: GraphQlContext): Promise<string | null> {
+	@FieldResolver(returns => String)
+	async status(@Root() playerInfo: PlayerInfo, @Ctx() context: GraphQlContext): Promise<string> {
 		const playerStatus = await context.playerStatusLoader.load(playerInfo.id);
-		return playerStatus?.statusId;
+		return playerStatus?.statusId || 'A';
 	}
 
 	@FieldResolver(returns => [PlayerELOHistory], {nullable: true})
