@@ -19,8 +19,8 @@ This is a GraphQL server that allows you to fetch data from a TabT instance.
 ```sh
 git clone https://github.com/Fllorent0D/Tabt-GraphQL
 NODE_ENV='production' npm install
-NODE_ENV='production' npm run build
-NODE_ENV='production' nodejs ./dist/index.js
+npm run build
+nodejs ./dist/index.js
 ```
 
 A environment file (```.env```) must be created:
