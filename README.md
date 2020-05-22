@@ -1,26 +1,31 @@
 # TabT-GraphQL server
-![](https://github.com/Fllorent0D/Tabt-GraphQL/workflows/Build/badge.svg)
-> Graph-QL replacement of the TabT Soap Api.
 
-This is a GraphQL server that allows you to fetch data from TabT. 
+[![Build status][build-badge]][build-url]
+[![License][license-badge]][license-url]
+
+> GraphQL replacement of the TabT SOAP API.
+
+This is a GraphQL server that allows you to fetch data from a TabT instance.
 
 ![](voyager.png)
 
-## Installation
+## Prerequisites
 
-This server run with Node 10 & higher. A .env file must be created.
+- A running TabT instance (http://tabt.frenoy.net/)
+- Node 10 or higher (https://nodejs.org/)
+
+## Installation
 
 ```sh
 git clone https://github.com/Fllorent0D/Tabt-GraphQL
-npm install
-npm run build
-node ./dist/index.js
+NODE_ENV='production' npm install
+NODE_ENV='production' npm run build
+NODE_ENV='production' nodejs ./dist/index.js
 ```
 
+A environment file (```.env```) must be created:
+
 ```dotenv
-USE_APOLLO_ENGINE=1
-APOLLO_ENGINE_API_KEY=service:Tabt:xxxxxx
-APOLLO_SCHEMA_TAG=development
 DB_HOST=localhost
 DB_PORT=3306
 DB_USERNAME=root
@@ -40,6 +45,8 @@ pm2 start ./dist/index.js
 ## Development setup
 
 ```sh
+git clone https://github.com/Fllorent0D/Tabt-GraphQL
+npm install
 npm run start
 ```
 
@@ -59,3 +66,8 @@ Cardoen Florent – [@Fllorent0D](https://twitter.com/fllorent0D) – f.cardoen@
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
 5. Create a new Pull Request
+
+[build-badge]: https://github.com/Fllorent0D/Tabt-GraphQL/workflows/Build/badge.svg
+[build-url]: https://github.com/Fllorent0D/Tabt-GraphQL/actions?query=workflow%3A%22Build+and+deploy+staging%22
+[license-badge]: https://img.shields.io/badge/License-GPL--3-blue.svg?style=flat
+[license-url]: LICENSE
