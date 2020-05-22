@@ -1,9 +1,8 @@
 import {getRepository, In} from 'typeorm';
 import {Club} from '../entities/Club';
 import DataLoader from 'dataloader';
-import {PlayerInfo} from '../entities/PlayerInfo';
 import {PlayerClub} from '../entities/PlayerClub';
-import {CURRENT_SEASON} from '../index';
+import {SeasonInfo} from '../entities/SeasonInfo';
 
 /* Load club by index */
 const clubIndexBatch = async (indexes: string[]) => {
@@ -21,7 +20,7 @@ export const clubIndexLoader = () => new DataLoader(clubIndexBatch);
 
 /* Club of Player dataloader - Load player of club  */
 
-const clubMemberBatch = async (playerIds: number[]): Promise<Club[]> => {
+const clubMemberBatch = async (playerIds: number[], season: SeasonInfo): Promise<Club[]> => {
 
 	const clubs = await getRepository(Club)
 		.createQueryBuilder('cl')
@@ -30,13 +29,13 @@ const clubMemberBatch = async (playerIds: number[]): Promise<Club[]> => {
 			PlayerClub,
 			'player_club',
 			'cl.id = player_club.club_id')
-		.where({
-			'player_club.season': CURRENT_SEASON,
-			'player_club.player_id': In(playerIds)
+		.andWhere('player_club.season = :season AND player_club.player_id IN (:playerIds)', {
+			season: season.id,
+			playerIds: playerIds
 		})
 		.getMany();
 
 	return playerIds.map((id) => clubs.find((club) => club.players_club.find(pc => pc.player_id === id)));
 };
 
-export const clubMemberLoader = () => new DataLoader(clubMemberBatch);
+export const clubMemberLoader = (season: SeasonInfo) => new DataLoader((ids: number[]) => clubMemberBatch(ids, season));

@@ -16,7 +16,7 @@ import {
 import {PlayerCategoryStatus} from './PlayerCategoryStatus';
 
 @Entity('seasoninfo', {schema: 'tabt'})
-export class seasoninfo {
+export class SeasonInfo {
 	@Column('tinyint', {
 		nullable: false,
 		primary: true,
