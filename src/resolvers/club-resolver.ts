@@ -23,7 +23,7 @@ export class ClubResolver {
 	async club(
 		@Arg('clubId') clubIndex: string,
 		@Ctx() context: GraphQlContext): Promise<Club> {
-		return context.clubIndexLoader.load(clubIndex);
+		return context.clubIndiceLoader.load(clubIndex);
 	}
 
 	@Query(() => [Club])

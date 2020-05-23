@@ -49,7 +49,7 @@ export class MatchResultResolver {
 			return null;
 		}
 
-		return context.clubLoader.load(matchInfo.home_club);
+		return context.clubIdLoader.load(matchInfo.home_club);
 	}
 
 	@FieldResolver(() => Club, {nullable: true})
@@ -61,7 +61,7 @@ export class MatchResultResolver {
 			return null;
 		}
 
-		return context.clubLoader.load(matchInfo.away_club);
+		return context.clubIdLoader.load(matchInfo.away_club);
 	}
 
 	@FieldResolver(() => Boolean)

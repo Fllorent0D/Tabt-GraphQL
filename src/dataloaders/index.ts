@@ -39,7 +39,7 @@ export const loadOneForKeyBatchFunction = <T>(repository: Repository<T>, key: st
 
 
 // Club
-export const clubLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(Club), 'id'));
+export const clubIdLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(Club), 'id'));
 export const clubCategoryLoader = () => new DataLoader(loadOneForKeyBatchFunction(getRepository(ClubCategory), 'id'));
 export const clubVenuesLoader = () => new DataLoader(loadManyForKeyBatchFunction(getRepository(Venue), 'clubId'));
 // export const clubMembersLoader = () => new DataLoader();
