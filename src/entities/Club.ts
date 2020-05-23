@@ -23,7 +23,6 @@ import {CacheControl} from '../middlewares/cache-control';
 @ObjectType()
 @Entity('clubs', {schema: 'tabt'})
 export class Club {
-  @Field(() => ID)
   @PrimaryGeneratedColumn({
     type: 'smallint',
     unsigned: true,
@@ -31,7 +30,6 @@ export class Club {
   })
   readonly id: number;
 
-  @Field(() => ClubCategory)
   @Column({name: "category"})
   categoryId: number;
 
@@ -59,7 +57,7 @@ export class Club {
     length: 10,
     name: 'indice'
   })
-  indice: string | null;
+  index: string | null;
 
   @Field()
   @Column('varchar', {
