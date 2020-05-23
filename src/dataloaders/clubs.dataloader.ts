@@ -5,17 +5,25 @@ import {PlayerClub} from '../entities/PlayerClub';
 import {SeasonInfo} from '../entities/SeasonInfo';
 
 /* Load club by index */
-const clubIndexBatch = async (indexes: string[]) => {
+const clubIndiceBatch = async (indices: string[], season: SeasonInfo) => {
 
 	const clubs = await getRepository(Club)
 		.createQueryBuilder()
-		.where({'index': In(indexes)})
+		.where(
+			'indice IN (:indices) ' +
+			'AND IFNULL(first_season, 0) <= :season ' +
+			'AND IFNULL(last_season, :season) >= :season',
+			{
+				indices: indices,
+				season: season.id
+			}
+		)
 		.getMany();
 
-	return indexes.map((index) => clubs.find((club) => club.indice === index));
+	return indices.map((index) => clubs.find((club) => club.indice === index));
 };
 
-export const clubIndexLoader = () => new DataLoader(clubIndexBatch);
+export const clubIndiceLoader = (season: SeasonInfo) => new DataLoader((ids: string[]) => clubIndiceBatch(ids, season));
 
 
 /* Club of Player dataloader - Load player of club  */

@@ -14,7 +14,6 @@ import {ClubTeam} from './entities/ClubTeam';
 import {TeamResolver} from './resolvers/team-resolver';
 import {
 	clubCategoryLoader,
-	clubLoader,
 	clubTeamsLoader,
 	clubVenuesLoader,
 	levelDivisionsLoader,
@@ -29,7 +28,7 @@ import {
 	divisionsLoader,
 	playerELOLoader,
 	calendarTypeLoader,
-	categoryDivisionsLoader, playerELOHistoryLoader
+	categoryDivisionsLoader, playerELOHistoryLoader, clubIdLoader
 } from './dataloaders';
 import {Request} from 'express';
 import * as DataLoader from 'dataloader';
@@ -49,7 +48,7 @@ import {
 	playerRankingsDataloader,
 	playerStatusLoader
 } from './dataloaders/members.dataloader';
-import {clubIndexLoader, clubMemberLoader} from './dataloaders/clubs.dataloader';
+import {clubIndiceLoader, clubMemberLoader} from './dataloaders/clubs.dataloader';
 import {MatchPlayer} from './entities/MatchPlayer';
 import {MatchSet} from './entities/MatchSet';
 import {AuthUserResolver} from './resolvers/auth-user-resolver';
@@ -86,8 +85,8 @@ export interface GraphQlContext {
 	levelDivisionLoader: DataLoader<number, Division[], number>;
 	divisionLoader: DataLoader<number, Division, number>;
 	categoryDivisionLoader: DataLoader<number, DivisionCategory, number>,
-	clubLoader: DataLoader<number, Club, number>;
-	clubIndexLoader: DataLoader<string, Club, string>;
+	clubIdLoader: DataLoader<number, Club, number>;
+	clubIndiceLoader: DataLoader<string, Club, string>;
 	clubTeamsLoader: DataLoader<number, ClubTeam[], number>;
 	levelLoader: DataLoader<number, Level, number>;
 	categoryLoader: DataLoader<number, ClubCategory, number>;
@@ -198,8 +197,8 @@ const start = async () => {
 				authenticated: !!expressContext.req['jwt'],
 				divisionClubTeamsLoader: divisionTeamsLoader(),
 				levelDivisionLoader: levelDivisionsLoader(),
-				clubLoader: clubLoader(),
-				clubIndexLoader: clubIndexLoader(),
+				clubIdLoader: clubIdLoader(),
+				clubIndiceLoader: clubIndiceLoader(season),
 				clubTeamsLoader: clubTeamsLoader(),
 				levelLoader: levelLoader(),
 				categoryLoader: clubCategoryLoader(),
