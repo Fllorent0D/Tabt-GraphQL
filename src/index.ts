@@ -48,7 +48,7 @@ import {
 	playerRankingsDataloader,
 	playerStatusLoader
 } from './dataloaders/members.dataloader';
-import {clubIndiceLoader, clubMemberLoader} from './dataloaders/clubs.dataloader';
+import {clubIndexLoader, clubMemberLoader} from './dataloaders/clubs.dataloader';
 import {MatchPlayer} from './entities/MatchPlayer';
 import {MatchSet} from './entities/MatchSet';
 import {AuthUserResolver} from './resolvers/auth-user-resolver';
@@ -86,7 +86,7 @@ export interface GraphQlContext {
 	divisionLoader: DataLoader<number, Division, number>;
 	categoryDivisionLoader: DataLoader<number, DivisionCategory, number>,
 	clubIdLoader: DataLoader<number, Club, number>;
-	clubIndiceLoader: DataLoader<string, Club, string>;
+	clubIndexLoader: DataLoader<string, Club, string>;
 	clubTeamsLoader: DataLoader<number, ClubTeam[], number>;
 	levelLoader: DataLoader<number, Level, number>;
 	categoryLoader: DataLoader<number, ClubCategory, number>;
@@ -198,7 +198,7 @@ const start = async () => {
 				divisionClubTeamsLoader: divisionTeamsLoader(),
 				levelDivisionLoader: levelDivisionsLoader(),
 				clubIdLoader: clubIdLoader(),
-				clubIndiceLoader: clubIndiceLoader(season),
+				clubIndexLoader: clubIndexLoader(season),
 				clubTeamsLoader: clubTeamsLoader(),
 				levelLoader: levelLoader(),
 				categoryLoader: clubCategoryLoader(),
