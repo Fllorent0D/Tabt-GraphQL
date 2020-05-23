@@ -25,7 +25,7 @@ import {PlayerWorldRank} from './PlayerWorldRank';
 
 @ObjectType()
 @Entity('playerinfo', {schema: 'tabt'})
-@Index('unique_index', ['unique_index'], {unique: true})
+@Index('index', ['index'], {unique: true})
 export class PlayerInfo {
 
 	@PrimaryGeneratedColumn({
@@ -77,14 +77,6 @@ export class PlayerInfo {
 	@Authorized([UserRights.Admin])
 	birthdate: string | null;
 
-	@Column('mediumint', {
-		nullable: false,
-		unsigned: true,
-		default: () => "'0'",
-		name: 'index'
-	})
-	index: number;
-
 	@Field(() => ID)
 	@Column('int', {
 		nullable: true,
@@ -92,7 +84,7 @@ export class PlayerInfo {
 		unsigned: true,
 		name: 'vttl_index'
 	})
-	unique_index: number | null;
+	index: number | null;
 
 	@Field()
 	@Column('varchar', {

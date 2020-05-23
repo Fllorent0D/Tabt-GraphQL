@@ -11,10 +11,10 @@ import {PlayerELOHistory} from '../entities/PlayerELOHistory';
 @Resolver(PlayerInfo)
 export class PlayerInfoResolver {
 	@Query(() => [PlayerInfo], {description: "Returns list of players"})
-	async players(@Arg('unique_index')id: number): Promise<PlayerInfo[]> {
+	async players(@Arg('index')id: number): Promise<PlayerInfo[]> {
 		const query = getRepository(PlayerInfo).createQueryBuilder();
 		if (id) {
-			query.where({unique_index: id});
+			query.where({index: id});
 		}
 		return query.getMany();
 	}
