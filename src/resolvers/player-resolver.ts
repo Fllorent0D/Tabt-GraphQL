@@ -10,13 +10,18 @@ import {PlayerELOHistory} from '../entities/PlayerELOHistory';
 
 @Resolver(PlayerInfo)
 export class PlayerInfoResolver {
-	@Query(() => [PlayerInfo], {description: "Returns list of players"})
-	async players(@Arg('index')id: number): Promise<PlayerInfo[]> {
+	@Query(
+		() => PlayerInfo,
+		{description: "Returns details of a specific player"}
+	)
+	async player(
+		@Arg('index', {nullable: false}) id: number
+	): Promise<PlayerInfo> {
 		const query = getRepository(PlayerInfo).createQueryBuilder();
 		if (id) {
 			query.where({index: id});
 		}
-		return query.getMany();
+		return query.getOne();
 	}
 
 	@FieldResolver(returns => Club)

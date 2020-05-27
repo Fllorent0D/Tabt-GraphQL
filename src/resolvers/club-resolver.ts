@@ -21,14 +21,9 @@ export class ClubResolver {
 
 	@Query(() => Club, {description: "Returns details about a specific club"})
 	async club(
-		@Arg('index') clubIndex: string,
+		@Arg('index', {nullable: false}) clubIndex: string,
 		@Ctx() context: GraphQlContext): Promise<Club> {
 		return context.clubIndexLoader.load(clubIndex);
-	}
-
-	@Query(() => [Club])
-	async clubs(): Promise<Club[]> {
-		return this.clubRepository.find();
 	}
 
 	@FieldResolver(() => [PlayerInfo])
